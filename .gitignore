@@ -1,0 +1,21 @@
+
+# Configuración con credenciales
+.env
+
+# Dependencias de Composer
+/vendor/
+
+# PDFs de cotizaciones generados
+/pdfs/
+
+# Imágenes de productos
+/assets/img/productos/
+
+# Logs del sistema
+/logs/
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+.vscode/
