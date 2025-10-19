@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Inicio - Medical Works</title>
-  <link rel="stylesheet" href="../assets/css/styles.css">
+  <link rel="stylesheet" href="../assets/css/header.css">
+  <link rel="stylesheet" href="../assets/css/footer.css">
 </head>
 <body>
     <?php
@@ -13,14 +14,14 @@
 ?>
   
  <main>
-    <!-- Si no tienes contenido todavía, deja esto vacío.
-         main tiene flex:1 en CSS y empujará el footer abajo. -->
+  
   </main>
 
 
 <?php 
   include_once('../includes/footer.php');
 ?>
-  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/header.js"></script>
+  <script src="../assets/js/footer.js"></script>
 </body>
 </html>
