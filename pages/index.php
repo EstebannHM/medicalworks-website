@@ -14,11 +14,17 @@
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/carousel.css">
     <link rel="stylesheet" href="../assets/css/product-card.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <link rel="stylesheet" href="../assets/css/footer.css">
     <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
 <body>
 
+    <?php
+        include_once('../includes/header.php');
+    ?>
+  
     <main>
         <div class="swiper hero-swiper">
             <div class="swiper-wrapper">
@@ -93,10 +99,16 @@
             </div>
         </section>
     </main>
+  
+    <?php 
+        include_once('../includes/footer.php');
+    ?>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="../assets/js/carousel.js"></script>
     <script src="../assets/js/product-card.js"></script>
+    <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/footer.js"></script>
 
 </body>
 
