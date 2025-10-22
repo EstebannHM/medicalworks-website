@@ -1,0 +1,133 @@
+.site-footer {
+  box-sizing: border-box;
+  width: 100%;
+  background: #0f1020;
+  color: #dfe4ee;
+  padding: 36px 16px 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-col {
+  min-width: 180px;
+  flex: 1 1 220px;
+}
+
+.footer-brand .footer-logo img {
+  height: 48px;
+  width: auto;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.footer-links h4,
+.footer-contact h4 {
+  color: #e8eefc;
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.footer-links ul,
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin: 6px 0;
+}
+
+.footer-links a {
+  color: #cbd6ee;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.contact-list li {
+  margin: 6px 0;
+}
+
+.footer-social {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+}
+
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #cbd6ee;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+}
+
+.social-icon:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+
+.site-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  max-width: 1200px;
+  margin: 18px auto 0;
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #9fb0da;
+  font-size: 13px;
+}
+
+.footer-legal a {
+  margin-left: 12px;
+  color: #9fb0da;
+  text-decoration: none;
+}
+
+.footer-legal a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+  .site-footer-container {
+    padding-bottom: 6px;
+    gap: 16px;
+  }
+
+  .site-footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .footer-brand,
+  .footer-links,
+  .footer-contact {
+    flex: 1 1 100%;
+  }
+}
