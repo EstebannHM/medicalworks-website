@@ -19,7 +19,11 @@ $currentPage = basename($_SERVER['SCRIPT_NAME']);
 
     <div class="navbar-actions">
       <a class="cart" href="../pages/cart.php" aria-label="Ver carrito">
-        <img src="../assets/img/carritoCompra.jpg" alt="Carrito de compras" class="cart-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" alt="Carrito de compras">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+        </svg>
       </a>
       <a class="btn-cotizacion" href="../pages/quote.php">Generar cotización</a>
     </div>

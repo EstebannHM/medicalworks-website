@@ -9,7 +9,7 @@
  * 
  */
 
-require_once __DIR__ . '/../includes/db_connection.php';
+require_once __DIR__ . '/../config/config.php';
 
 /**
  * Obtiene productos de la base de datos

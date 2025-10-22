@@ -10,8 +10,8 @@
 
     <title>Medical Works - Inicio</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="../assets/css/carousel.css">
     <link rel="stylesheet" href="../assets/css/product-card.css">
     <link rel="stylesheet" href="../assets/css/header.css">
@@ -104,11 +104,13 @@
         include_once('../includes/footer.php');
     ?>
 
+    <!-- Librerías externas -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Scripts del proyecto -->
     <script src="../assets/js/carousel.js"></script>
     <script src="../assets/js/product-card.js"></script>
     <script src="../assets/js/header.js"></script>
-    <script src="../assets/js/footer.js"></script>
 
 </body>
 
