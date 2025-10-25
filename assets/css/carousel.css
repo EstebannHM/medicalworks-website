@@ -17,7 +17,7 @@
 }
 
 /* Overlay oscuro sobre la imagen */
-.swiper-slide::before {
+.hero-swiper .swiper-slide::before {
     content: '';
     position: absolute;
     top: 0;
@@ -133,7 +133,123 @@
     border-radius: 6px;
 }
 
-/* Responsive */
+
+/*
+
+======== PROVIDERS ========
+
+*/
+
+
+.providers-section {
+    padding: 80px 0;
+    background: #ffffff; /* Fondo blanco limpio */
+}
+
+.providers-section h2 {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+
+.providers-section .section-subtitle {
+    text-align: center;
+    font-size: 18px;
+    color: #475569;
+    margin-bottom: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.providers-swiper {
+    width: 100%;
+    padding: 20px 0 60px;
+    position: relative;
+    height: auto;
+}
+
+.providers-swiper .swiper-wrapper {
+    align-items: center;
+}
+
+
+.provider-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    text-align: center;
+    height: auto;
+    min-height: 120px;
+    max-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    position: relative;
+    overflow: visible;
+    cursor: pointer;
+    border: solid 0.5px #d9dde2;
+}
+
+.provider-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.provider-card .provider-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.provider-card:hover .provider-logo {
+    transform: scale(1.05);
+}
+
+.provider-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+    transition: all 0.3s ease;
+    line-height: 1.3;
+    overflow: hidden;
+}
+
+.provider-card:hover .provider-name {
+    color: #0EA5E9;
+}
+
+/* Paginación para proveedores */
+.providers-swiper .swiper-pagination {
+    bottom: 20px !important;
+}
+
+.providers-swiper .swiper-pagination-bullet {
+    background: #cbd5e1;
+    opacity: 1;
+}
+
+.providers-swiper .swiper-pagination-bullet-active {
+    background: #0EA5E9;
+    width: 24px;
+    border-radius: 6px;
+}
+
+@media (max-width: 1149px) {
+    .provider-card h3 {
+        font-size: 13px;
+    }
+}
+
 @media (max-width: 768px) {
     .hero-swiper {
         height: 50vh;
