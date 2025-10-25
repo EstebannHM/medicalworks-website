@@ -8,8 +8,9 @@
 # PDFs de cotizaciones generados
 /pdfs/
 
-# Imágenes de productos
+# Imágenes de productos y proveedores
 /assets/img/productos/
+/assets/img/providers/
 
 # Logs del sistema
 /logs/
