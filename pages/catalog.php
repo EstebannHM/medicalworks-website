@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/header.css">
     <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/whatsapp-fab.css">
     <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
@@ -25,6 +26,7 @@
 
     <?php
     include_once('../includes/footer.php');
+    include_once('../includes/whatsapp-button.php');
     ?>
 
     <script src="../assets/js/header.js"></script>
