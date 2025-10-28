@@ -26,6 +26,9 @@
 
     <?php
     include_once('../includes/footer.php');
+    ?>
+
+    <?php
     include_once('../includes/whatsapp-button.php');
     ?>
 
