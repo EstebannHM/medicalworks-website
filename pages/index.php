@@ -81,7 +81,7 @@
                     <?php
 
                     require_once __DIR__ . '/../includes/product-card.php';
-                    require_once __DIR__ . '/../api/products.php';
+                    require_once __DIR__ . '/../api/product_consulta.php';
 
                     $products = getProducts($pdo, ['limit' => 8]);
 

@@ -1,0 +1,260 @@
+/**
+ * Estilos para el Catálogo
+ * Medical Works
+ */
+
+/* Hero Section */
+.catalog-hero {
+    background: linear-gradient(135deg, #2c7da0 0%, #1e5f7f 50%, #4a9b8e 100%);
+    color: white;
+    padding: 60px 20px 80px;
+    text-align: center;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.hero-badge svg {
+    width: 16px;
+    height: 16px;
+}
+
+.catalog-hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.catalog-hero .subtitle {
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 40px;
+    opacity: 0.95;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+}
+
+.stat-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Búsqueda y Filtros */
+.catalog-controls {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin: 40px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.search-wrapper {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #2c7da0;
+    box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+}
+
+.filter-section {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-label {
+    font-weight: 600;
+    color: #555;
+    font-size: 14px;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 24px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.filter-btn:hover {
+    border-color: #2c7da0;
+    color: #2c7da0;
+}
+
+.filter-btn.active {
+    background: #2c7da0;
+    color: white;
+    border-color: #2c7da0;
+}
+
+/* Sección de Productos */
+.products-section {
+    margin-bottom: 60px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}
+
+.product-count {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Loading */
+.loading-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+/* Paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    color: #333;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-btn:hover {
+    border-color: #2c7da0;
+    color: #2c7da0;
+}
+
+.page-btn.active {
+    background: #2c7da0;
+    color: white;
+    border-color: #2c7da0;
+}
+
+.page-dots {
+    padding: 0 8px;
+    color: #999;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .catalog-hero {
+        padding: 40px 20px 60px;
+    }
+
+    .catalog-hero h1 {
+        font-size: 32px;
+    }
+
+    .hero-stats {
+        gap: 30px;
+    }
+
+    .catalog-controls {
+        padding: 20px;
+    }
+
+    .filter-btn {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .page-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+}
