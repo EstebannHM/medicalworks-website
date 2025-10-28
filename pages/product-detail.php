@@ -47,4 +47,3 @@ if ($id === false || $id === null) {
 </body>
 
 </html>
-?>
