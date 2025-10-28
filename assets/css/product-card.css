@@ -319,3 +319,21 @@
         padding: 10px 14px;
     }
 }
+
+
+
+/* Evitar subrayado y cambios de apariencia cuando el nombre es enlace */
+.product-card .product-header .product-name a,
+.product-card .product-header .product-name a:visited {
+  color: inherit;                   /* mantener color heredado */
+  text-decoration: none !important; /* quitar subrayado aunque haya reglas globales */
+  font-family: inherit;             /* heredar familia */
+  font-size: inherit;               /* heredar tamaño */
+  font-weight: inherit;             /* heredar peso */
+  line-height: inherit;             /* heredar interlineado */
+  background: transparent;          /* evitar fondos */
+  display: inline;                  /* no romper layout */
+  cursor: pointer;                  /* affordance */
+}
+
+
