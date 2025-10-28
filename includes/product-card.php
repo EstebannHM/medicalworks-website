@@ -22,7 +22,7 @@ function renderProductCard($product)
         
     $idInt = isset($product['id_product']) ? (int) $product['id_product'] : 0;
     $detailLink = 'product-detail.php?id=' . rawurlencode($idInt);
-    $idStr = htmlspecialchars((string)$idInt, ENT_QUOTES, 'UTF-8');
+   
 ?>
 
 
