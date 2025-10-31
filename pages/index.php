@@ -25,7 +25,7 @@
 
     <?php
     include_once('../includes/header.php');
-      ?>
+    ?>
 
     <main>
         <!-- HERO  -->
@@ -82,16 +82,16 @@
                     <?php
 
                     require_once __DIR__ . '/../includes/product-card.php';
-                    require_once __DIR__ . '/../api/product_consulta.php';
+                    require_once __DIR__ . '/../includes/function/product.php';
 
-                    $products = getProducts($pdo, ['limit' => 8]);
+                    $products = getProducts($pdo, ['ids' => '1,2,3,4,5,6,7,8']);
 
                     if (count($products) > 0) {
                         foreach ($products as $product) {
                             renderProductCard($product);
                         }
                     } else {
-                        echo '<p style="text-align: center; grid-column: 1/-1;">No hay productos disponibles.</p>';
+                        echo '<p style="text-align: center; grid-column: 1/-1;">No hay productos destacados actualmente.</p>';
                     }
                     ?>
                 </div>
