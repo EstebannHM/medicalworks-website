@@ -1,0 +1,3 @@
+*.php linguist-language=PHP
+#Para mayor seguridad ya que vendor no está subido
+vendor/* linguist-vendored 
