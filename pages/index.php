@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="../assets/css/product-card.css">
     <link rel="stylesheet" href="../assets/css/header.css">
     <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/whatsapp-fab.css">
     <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
@@ -81,16 +82,16 @@
                     <?php
 
                     require_once __DIR__ . '/../includes/product-card.php';
-                    require_once __DIR__ . '/../api/products.php';
+                    require_once __DIR__ . '/../includes/function/product.php';
 
-                    $products = getProducts($pdo, ['limit' => 8]);
+                    $products = getProducts($pdo, ['ids' => '1,2,3,4,5,6,7,8']);
 
                     if (count($products) > 0) {
                         foreach ($products as $product) {
                             renderProductCard($product);
                         }
                     } else {
-                        echo '<p style="text-align: center; grid-column: 1/-1;">No hay productos disponibles.</p>';
+                        echo '<p style="text-align: center; grid-column: 1/-1;">No hay productos destacados actualmente.</p>';
                     }
                     ?>
                 </div>
@@ -214,6 +215,7 @@
 
     <?php
     include_once('../includes/footer.php');
+    include_once('../includes/whatsapp-button.php');
     ?>
 
     <!-- Librerías externas -->
