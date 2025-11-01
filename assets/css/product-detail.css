@@ -155,7 +155,7 @@
 }
 
 .product-detail .btn-add-cart {
-  background: #0d9488;
+  background: #0EA5E9;
   color: #ffffff;
   border: none;
   padding: 0.75rem 2rem;
@@ -171,7 +171,7 @@
 }
 
 .product-detail .btn-add-cart:hover {
-  background: #0f766e;
+  background: #0284C7;
 }
 
 .product-detail .btn-add-cart:active {

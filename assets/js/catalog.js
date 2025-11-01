@@ -86,16 +86,25 @@ function renderPagination() {
 function createProductCard(p) {
     const sku = p.sku || `MED-${String(p.id_product).padStart(3, '0')}`;
     const desc = p.description.length > 100 ? p.description.substring(0, 100) + '...' : p.description;
+    const detailLink = `product-detail.php?id=${encodeURIComponent(p.id_product)}`;
     
     return `
         <div class="product-card" data-product-id="${p.id_product}">
             <div class="product-image">
-                <img src="/assets/img/${p.image_path}" alt="${p.name}" loading="lazy">
+                <a href="${detailLink}" data-product-id=${p.id_product}>
+                    <img src="/assets/img/${p.image_path}" 
+                        alt="${p.name}" 
+                        loading="lazy">
+                </a>
             </div>
             <div class="product-info">
                 <div class="product-header">
                     <span class="product-id">ID: ${sku}</span>
-                    <h3 class="product-name">${p.name}</h3>
+                    <h3 class="product-name">
+                        <a href="${detailLink}" data-product-id=${p.id_product}>
+                            ${p.name}
+                        </a>
+                    </h3>
                     <p class="product-description">${desc}</p>
                 </div>
                 <div class="product-actions">

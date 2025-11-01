@@ -33,17 +33,6 @@ function renderProductDetail(array $product): void {
                         <p><?= $fullDescription ?></p>
                     </div>
                 </details>
-
-                <details class="accordion-item">
-                    <summary>Ingredientes</summary>
-                    <div class="accordion-content">
-                        <ul>
-                            <li>Ingrediente 1</li>
-                            <li>Ingrediente 2</li>
-                            <li>Ingrediente 3</li>
-                        </ul>
-                    </div>
-                </details>
             </div>
         </div>
 

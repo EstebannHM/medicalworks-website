@@ -25,10 +25,8 @@ function renderProductCard($product)
    
 ?>
 
-
     <div class="product-card" data-product-id="<?php echo $id; ?>">
         <span class="product-badge">Destacado</span>
-
         <div class="product-image">
            <a href="<?php echo htmlspecialchars($detailLink, ENT_QUOTES, 'UTF-8'); ?>" data-product-id="<?php echo $id; ?>">
                 <img src="../assets/img/<?php echo $image; ?>"
@@ -36,16 +34,13 @@ function renderProductCard($product)
                     loading="lazy">
             </a>
         </div>
-
         <div class="product-info">
             <div class="product-header">
                 <span class="product-id">ID: <?php echo $sku; ?></span>
                 <h3 class="product-name">
-                    
                     <a href="<?php echo htmlspecialchars($detailLink, ENT_QUOTES, 'UTF-8'); ?>" data-product-id="<?php echo $id; ?>">
                         <?php echo $name; ?>
                     </a>
-
                 </h3>
                 <p class="product-description"><?php echo $shortDescription; ?></p>
             </div>

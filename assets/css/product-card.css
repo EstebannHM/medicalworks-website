@@ -122,6 +122,11 @@
     text-decoration: none;
     background: transparent;
     color: #1E293B;
+    transition: color 0.3s ease;
+}
+
+.product-name a:hover {
+    color: #3997E2; /* Gris más claro */
 }
 
 .product-description {
@@ -130,7 +135,6 @@
     line-height: 1.5;
     margin: 0;
 }
-
 
 /* Acciones del producto (cantidad y agregar carrito)*/
 
