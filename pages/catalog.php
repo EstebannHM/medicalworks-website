@@ -90,11 +90,8 @@
 
                 <div class="filter-section">
                     <span class="filter-label">Categoría:</span>
-                    <button class="filter-btn active">Todos</button>
-                    <button class="filter-btn">Diagnóstico</button>
-                    <button class="filter-btn">Protección</button>
-                    <button class="filter-btn">Mobiliario</button>
-                    <button class="filter-btn">Emergencia</button>
+                    <button class="filter-btn active" data-category="all">Todos</button>
+                    <div id="categoriesContainer"><!-- aquí se insertarán los botones dinámicos --></div>
                 </div>
             </div>
 
@@ -110,7 +107,7 @@
 
                 <div id="productsContainer" style="display: none;">
                     <div class="products-grid" id="productsGrid"></div>
-                    
+
                     <div class="pagination" id="pagination"></div>
                 </div>
             </div>
