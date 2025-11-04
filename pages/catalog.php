@@ -121,8 +121,8 @@
     ?>
 
     <script src="../assets/js/header.js"></script>
-    <script src="/assets/js/product-card.js"></script>
-    <script src="/assets/js/catalog.js"></script>
+    <script src="../assets/js/product-card.js"></script>
+    <script src="../assets/js/catalog.js"></script>
 
 </body>
 
