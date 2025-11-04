@@ -207,52 +207,6 @@
   gap: 0.75rem;
 }
 
-
-.product-detail .product-accordion {
-  margin-top: 1rem;
-  width: 100%;
-}
-.product-detail .product-accordion .accordion-item {
-  border-top: 1px solid #e5e7eb;
-}
-.product-detail .product-accordion .accordion-item:last-child {
-  border-bottom: 1px solid #e5e7eb;
-}
-.product-detail .product-accordion summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 0.75rem 0.5rem;
-  font-weight: 600;
-  color: #374151;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.product-detail .product-accordion summary::-webkit-details-marker {
-  display: none;
-}
-.product-detail .product-accordion summary::after {
-  content: '▾';
-  font-size: 0.8rem;
-  color: #6b7280;
-  transition: transform 0.2s ease;
-}
-.product-detail .product-accordion .accordion-item[open] summary {
-  background-color: #e8f6f9; /* similar a tu referencia */
-}
-.product-detail .product-accordion .accordion-item[open] summary::after {
-  transform: rotate(180deg);
-}
-.product-detail .product-accordion .accordion-content {
-  padding: 0.75rem 0.5rem 1rem 0.5rem;
-  color: #4b5563;
-  line-height: 1.6;
-  background: #ffffff;
-}
-.product-detail .product-accordion .accordion-content p {
-  margin: 0;
-}
-
 .product-detail .product-media {
   flex: 0 0 320px;
   max-width: 320px;
