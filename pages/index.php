@@ -222,6 +222,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- Scripts del proyecto -->
+    <script src="../assets/js/cart-badge.js"></script>
     <script src="../assets/js/carousel.js"></script>
     <script src="../assets/js/product-card.js"></script>
     <script src="../assets/js/header.js"></script>

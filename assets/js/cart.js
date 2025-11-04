@@ -16,6 +16,8 @@ async function loadCart() {
       renderCart(data.cart);
       updateSummary(data.cartCount, data.totalItems);
 
+      updateCartBadge(data.totalItems);
+
       // Reutilizar la función global de product-card.js
       if (typeof updateCartBadge === 'function') {
         updateCartBadge(data.totalItems);

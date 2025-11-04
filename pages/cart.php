@@ -67,6 +67,7 @@
     include_once('../includes/whatsapp-button.php');
     ?>
 
+    <script src="../assets/js/cart-badge.js"></script>
     <script src="../assets/js/header.js"></script>
     <script src="../assets/js/cart.js"></script>
 

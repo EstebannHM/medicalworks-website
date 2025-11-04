@@ -86,7 +86,7 @@
                                 >
                                 <span class="error-message" id="phone-error"></span>
                             </div>
-
+                            
                             <div class="form-actions">
                                 <button type="button" class="btn-secondary" onclick="window.location.href='cart.php'">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
