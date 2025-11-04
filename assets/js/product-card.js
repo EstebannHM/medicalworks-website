@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.body; //Todo elemento dentro del body
+    const container = document.body;
+    
+    // Cargar contador del carrito al iniciar
+    updateCartBadge();
     
     // Delegación para todos los botones de cantidad y carrito
     container.addEventListener('click', function(e) {
@@ -25,16 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Agregar al carrito
         if (target.classList.contains('btn-add-cart')) {
             const id = target.dataset.productId;
-            const qty = document.getElementById(`quantity-${id}`).value;
-            console.log(`Producto ${id} - Cantidad: ${qty}`);
-            
-            const original = target.innerHTML;
-            target.innerHTML = '¡Agregado!';
-            target.style.background = '#10B981';
-            setTimeout(() => {
-                target.innerHTML = original;
-                target.style.background = '';
-            }, 2000);
+            const qty = parseInt(document.getElementById(`quantity-${id}`).value);
+            addToCart(id, qty, target);
         }
     });
     
@@ -47,3 +42,81 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+/**
+ * Agregar producto al carrito
+ */
+async function addToCart(productId, quantity, button) {
+    try {
+        const response = await fetch('/api/cart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'add',
+                productId: parseInt(productId),
+                quantity: parseInt(quantity)
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Feedback visual en el botón
+            const original = button.innerHTML;
+            button.innerHTML = '¡Agregado!';
+            button.style.background = '#10B981';
+            button.disabled = true;
+            
+            // Actualizar badge del carrito
+            updateCartBadge(data.totalItems);
+            
+            // Restaurar botón después de 2 segundos
+            setTimeout(() => {
+                button.innerHTML = original;
+                button.style.background = '';
+                button.disabled = false;
+            }, 2000);
+            
+        } else {
+            alert('Error: ' + data.error);
+        }
+        
+    } catch (error) {
+        console.error('Error al agregar al carrito:', error);
+        alert('Error al agregar el producto al carrito');
+    }
+}
+
+/**
+ * Actualizar badge del carrito en el header
+ */
+async function updateCartBadge(count = null) {
+    try {
+        // Si no se pasa count, obtenerlo del servidor
+        if (count === null) {
+            const response = await fetch('/api/cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'get' })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                count = data.totalItems;
+            }
+        }
+        
+        const badge = document.querySelector('.cart-badge');
+        if (badge) {
+            badge.textContent = count;
+            badge.style.display = count > 'flex';
+        }
+        
+    } catch (error) {
+        console.error('Error al actualizar badge:', error);
+    }
+}
