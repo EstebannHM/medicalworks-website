@@ -18,11 +18,6 @@ async function loadCart() {
 
       updateCartBadge(data.totalItems);
 
-      // Reutilizar la función global de product-card.js
-      if (typeof updateCartBadge === 'function') {
-        updateCartBadge(data.totalItems);
-      }
-
     }
   } catch (error) {
     console.error("Error al cargar el carrito:", error);
