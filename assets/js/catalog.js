@@ -91,30 +91,59 @@ function setupSearchListener() {
 }
 
 function setupFilterListeners(sectionIndex, filterType) {
-    const section = document.querySelectorAll('.filter-section')[sectionIndex];
-    if (!section) return;
+    if (filterType === 'category') {
+        const section = document.querySelectorAll('.filter-section')[sectionIndex];
+        if (!section) return;
 
-    section.addEventListener('click', (e) => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
+        section.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
 
-        // Marcar activo
-        section.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+            section.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
 
-        // Obtener valor del filtro
-        const value = btn.getAttribute(`data-${filterType}`);
-        
-        if (filterType === 'category') {
+            const value = btn.getAttribute('data-category');
             currentCategoryId = value === 'all' ? 'all' : parseInt(btn.getAttribute('data-category-id'), 10);
-        } else if (filterType === 'provider') {
-            currentProviderId = value === 'all' ? 'all' : parseInt(btn.getAttribute('data-provider-id'), 10);
-        }
+            applyFilters();
+        });
+    } 
+    else if (filterType === 'provider') {
+        const dropdown = document.getElementById('providerDropdown');
+        const menu = document.getElementById('providerDropdownMenu');
+        if (!dropdown || !menu) return;
 
-        // Aplicar filtros combinados
-        applyFilters();
-    });
+        dropdown.onclick = (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+            menu.classList.toggle('show');
+        };
+
+        menu.onclick = (e) => {
+            const item = e.target.closest('.dropdown-item'); //Buscar item clickeado
+            if (!item) return;
+
+            //Actualiza la seleccion
+            menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            //Actualiza el texto dentro del dropdown
+            dropdown.querySelector('.dropdown-text').textContent = item.textContent.trim();
+            //Cierra dropdown
+            dropdown.classList.remove('active');
+            menu.classList.remove('show');
+
+            //Aplica filtro
+            const value = item.getAttribute('data-provider');
+            currentProviderId = value === 'all' ? 'all' : parseInt(item.getAttribute('data-provider-id'), 10);
+            applyFilters();
+        };
+        //Cerrar dropdwon al hacer click fuera
+        document.onclick = () => {
+            dropdown.classList.remove('active');
+            menu.classList.remove('show');
+        };
+    }
 }
+
 
 function applyFilters() {
   const searchTerm =
@@ -335,7 +364,7 @@ function renderProviders(providers) {
   container.innerHTML = providers
     .map(
       (p) => `
-    <button class="filter-btn" 
+    <button class="dropdown-item" 
             data-provider-id="${p.id_provider}" 
             data-provider="${p.name}">
       ${escapeHtml(p.name)}

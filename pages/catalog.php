@@ -82,13 +82,25 @@
                 <div class="filter-section">
                     <span class="filter-label">Categoría:</span>
                     <button class="filter-btn active" data-category="all">Todos</button>
-                    <div id="categoriesContainer"><!-- aquí se insertarán los botones dinámicos --></div>
+                    <div id="categoriesContainer"></div>
                 </div>
                 <br>
                 <div class="filter-section">
                     <span class="filter-label">Proveedor:</span>
-                    <button class="filter-btn active" data-provider="all">Todos</button>
-                    <div id="providersContainer"><!-- aquí se insertarán los botones dinámicos --></div>
+                    <div class="dropdown-wrapper">
+                        <button class="dropdown-toggle" id="providerDropdown">
+                            <span class="dropdown-text">Todos los proveedores</span>
+                            <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="dropdown-menu" id="providerDropdownMenu">
+                            <button class="dropdown-item active" data-provider="all" data-provider-id="all">
+                                Todos los proveedores
+                            </button>
+                            <div id="providersContainer">></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
