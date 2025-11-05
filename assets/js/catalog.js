@@ -6,113 +6,267 @@ let allProducts = [];
 let filteredProducts = []; // ARRAY PARA PRODUCTOS FILTRADOS
 let currentPage = 1;
 const PRODUCTS_PER_PAGE = 12;
-let currentCategoryId = 'all'; // CATEGORÍA ACTUAL
-let currentProviderId = 'all'; // PROVEEDOR ACTUAL
+let currentCategoryId = "all"; // CATEGORÍA ACTUAL
+let currentProviderId = "all"; // PROVEEDOR ACTUAL
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-    loadCategories();      // carga categorías desde la API
-    loadProviders();       // carga proveedores desde la API
-    setupCategoryListeners(); // escucha clics en botones de categoría
-    setupProviderListeners(); // escucha clics en botones de proveedor
-    setupSearchListener(); // CARGAR EL LISTENER DE BÚSQUEDA
+document.addEventListener("DOMContentLoaded", () => {
+  loadProducts();
+  loadCategories(); // carga categorías desde la API
+  loadProviders(); // carga proveedores desde la API
+  setupSearchListener(); // CARGAR EL LISTENER DE BÚSQUEDA
 });
 
-
-async function loadProducts() {
-    try {
-        const res = await fetch('/api/products.php');
-        const data = await res.json();
-
-        if (data.success) {
-            allProducts = data.products;
-            filteredProducts = [...allProducts]; // INICIALIZAR FILTRADOS
-            renderPage(1);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('loading').innerHTML = '<p>Error al cargar productos</p>';
-    }
+// Utilidad simple para evitar inyecciones en nombres
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
+async function loadProducts() {
+  try {
+    const res = await fetch("/api/products.php");
+    const data = await res.json();
+
+    if (data.success) {
+      allProducts = data.products;
+      filteredProducts = [...allProducts]; // INICIALIZAR FILTRADOS
+      renderPage(1);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    document.getElementById("loading").innerHTML =
+      "<p>Error al cargar productos</p>";
+  }
+}
+
+async function loadCategories() {
+  try {
+    const res = await fetch("/api/categories.php");
+    const data = await res.json();
+
+    if (data.success && Array.isArray(data.categories)) {
+      renderCategories(data.categories);
+      setupFilterListeners(0, 'category');
+    } else {
+      console.warn("No se recibieron categorías");
+    }
+  } catch (err) {
+    console.error("Error al cargar categorías:", err);
+  }
+}
+
+async function loadProviders() {
+  try {
+    const res = await fetch("/api/providers.php");
+    const data = await res.json();
+
+    if (data.success && Array.isArray(data.providers)) {
+      renderProviders(data.providers);
+      setupFilterListeners(1, 'provider');
+    } else {
+      console.warn("No se recibieron proveedores");
+    }
+  } catch (err) {
+    console.error("Error al cargar proveedores:", err);
+  }
+}
+
+
+function setupSearchListener() {
+  const input = document.querySelector(".search-input");
+  if (!input) return;
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      applyFilters();
+    }
+  });
+
+  input.setAttribute("enterkeyhint", "search");
+}
+
+function setupFilterListeners(sectionIndex, filterType) {
+    const section = document.querySelectorAll('.filter-section')[sectionIndex];
+    if (!section) return;
+
+    section.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+
+        // Marcar activo
+        section.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Obtener valor del filtro
+        const value = btn.getAttribute(`data-${filterType}`);
+        
+        if (filterType === 'category') {
+            currentCategoryId = value === 'all' ? 'all' : parseInt(btn.getAttribute('data-category-id'), 10);
+        } else if (filterType === 'provider') {
+            currentProviderId = value === 'all' ? 'all' : parseInt(btn.getAttribute('data-provider-id'), 10);
+        }
+
+        // Aplicar filtros combinados
+        applyFilters();
+    });
+}
+
+function applyFilters() {
+  const searchTerm =
+    document.querySelector(".search-input")?.value.trim() || "";
+
+  // Partimos de todos
+  let base = [...allProducts];
+
+  // Filtrar por categoría si no es 'all'
+  if (currentCategoryId !== "all") {
+    base = base.filter(
+      (p) => Number(p.id_category) === Number(currentCategoryId)
+    );
+  }
+
+  // Filtrar por proveedor si no es 'all'
+  if (currentProviderId !== "all") {
+    base = base.filter(
+      (p) => Number(p.id_provider) === Number(currentProviderId)
+    );
+  }
+
+  // Filtrar por búsqueda si hay término
+  if (searchTerm !== "") {
+    const normalizeText = (text) =>
+      String(text)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+    const normalizedSearch = normalizeText(searchTerm);
+
+    base = base.filter((product) => {
+      const sku =
+        product.sku || `MED-${String(product.id_product).padStart(3, "0")}`;
+      const name = product.name || "";
+      const description = product.description || "";
+
+      return (
+        normalizeText(name).includes(normalizedSearch) ||
+        normalizeText(description).includes(normalizedSearch) ||
+        normalizeText(sku).includes(normalizedSearch) ||
+        String(product.id_product).includes(searchTerm)
+      );
+    });
+  }
+
+  filteredProducts = base;
+  renderPage(1, false);
+}
+
+
 function renderPage(page, shouldScroll = true) {
-    currentPage = page;
+  currentPage = page;
 
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('productsContainer').style.display = 'block';
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("productsContainer").style.display = "block";
 
-    // Calcular qué productos mostrar
-    const start = (page - 1) * PRODUCTS_PER_PAGE;
-    const end = start + PRODUCTS_PER_PAGE;
-    const pageProducts = filteredProducts.slice(start, end);
+  // Calcular qué productos mostrar
+  const start = (page - 1) * PRODUCTS_PER_PAGE;
+  const end = start + PRODUCTS_PER_PAGE;
+  const pageProducts = filteredProducts.slice(start, end);
 
-    // Renderizar productos
-    const productsGrid = document.getElementById('productsGrid');
+  // Renderizar productos
+  const productsGrid = document.getElementById("productsGrid");
 
-
-    if (pageProducts.length === 0) {
-        productsGrid.innerHTML = `
+  if (pageProducts.length === 0) {
+    productsGrid.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
                 <h3>No se encontraron productos</h3>
                 <p>Intenta con otros términos de búsqueda</p>
             </div>
         `;
-    } else {
-        productsGrid.innerHTML = pageProducts.map(p => createProductCard(p)).join('');
-    }
+  } else {
+    productsGrid.innerHTML = pageProducts
+      .map((p) => createProductCard(p))
+      .join("");
+  }
 
+  // Actualizar contador
+  const total = filteredProducts.length;
+  document.getElementById("pageInfo").textContent = `${start + 1}-${Math.min(
+    end,
+    total
+  )} de ${total} productos`;
+  document.getElementById(
+    "totalInfo"
+  ).textContent = `Total: ${total} productos`;
 
-    // Actualizar contador
-    const total = filteredProducts.length;
-    document.getElementById('pageInfo').textContent =
-        `${start + 1}-${Math.min(end, total)} de ${total} productos`;
-    document.getElementById('totalInfo').textContent =
-        `Total: ${total} productos`;
+  // Renderizar botones de paginación
+  renderPagination();
 
-    // Renderizar botones de paginación
-    renderPagination();
-
-    if (shouldScroll) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  if (shouldScroll) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 }
 
 function renderPagination() {
-    const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
-    let buttons = [];
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+  let buttons = [];
 
-    // Botón anterior
-    if (currentPage > 1) {
-        buttons.push(`<button class="page-btn" onclick="renderPage(${currentPage - 1})">‹</button>`);
+  // Botón anterior
+  if (currentPage > 1) {
+    buttons.push(
+      `<button class="page-btn" onclick="renderPage(${
+        currentPage - 1
+      })">‹</button>`
+    );
+  }
+
+  // Botones numéricos con puntos
+  for (let i = 1; i <= totalPages; i++) {
+    // Mostrar: primera, última, actual y vecinas
+    if (
+      i === 1 ||
+      i === totalPages ||
+      (i >= currentPage - 1 && i <= currentPage + 1)
+    ) {
+      const active = i === currentPage ? "active" : "";
+      buttons.push(
+        `<button class="page-btn ${active}" onclick="renderPage(${i})">${i}</button>`
+      );
     }
-
-    // Botones numéricos con puntos
-    for (let i = 1; i <= totalPages; i++) {
-        // Mostrar: primera, última, actual y vecinas
-        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
-            const active = i === currentPage ? 'active' : '';
-            buttons.push(`<button class="page-btn ${active}" onclick="renderPage(${i})">${i}</button>`);
-        }
-        // Agregar puntos solo una vez
-        else if (i === currentPage - 2 || i === currentPage + 2) {
-            buttons.push(`<span class="page-dots">...</span>`);
-        }
+    // Agregar puntos solo una vez
+    else if (i === currentPage - 2 || i === currentPage + 2) {
+      buttons.push(`<span class="page-dots">...</span>`);
     }
+  }
 
-    // Botón siguiente
-    if (currentPage < totalPages) {
-        buttons.push(`<button class="page-btn" onclick="renderPage(${currentPage + 1})">›</button>`);
-    }
+  // Botón siguiente
+  if (currentPage < totalPages) {
+    buttons.push(
+      `<button class="page-btn" onclick="renderPage(${
+        currentPage + 1
+      })">›</button>`
+    );
+  }
 
-    document.getElementById('pagination').innerHTML = buttons.join('');
+  document.getElementById("pagination").innerHTML = buttons.join("");
 }
 
 function createProductCard(p) {
-    const sku = p.sku || `MED-${String(p.id_product).padStart(3, '0')}`;
-    const desc = p.description.length > 100 ? p.description.substring(0, 100) + '...' : p.description;
-    const detailLink = `product-detail.php?id=${encodeURIComponent(p.id_product)}`;
+  const sku = p.sku || `MED-${String(p.id_product).padStart(3, "0")}`;
+  const desc =
+    p.description.length > 100
+      ? p.description.substring(0, 100) + "..."
+      : p.description;
+  const detailLink = `product-detail.php?id=${encodeURIComponent(
+    p.id_product
+  )}`;
 
-    return `
+  return `
         <div class="product-card" data-product-id="${p.id_product}">
             <div class="product-image">
                 <a href="${detailLink}" data-product-id=${p.id_product}>
@@ -154,181 +308,39 @@ function createProductCard(p) {
     `;
 }
 
-// Cargar categorías desde la API
-async function loadCategories() {
-    try {
-        const res = await fetch('/api/categories.php');
-        const data = await res.json();
-
-        if (data.success && Array.isArray(data.categories)) {
-            renderCategories(data.categories);
-        } else {
-            console.warn('No se recibieron categorías');
-        }
-    } catch (err) {
-        console.error('Error al cargar categorías:', err);
-    }
-}
 
 // Renderizar botones de categorías
 function renderCategories(categories) {
-    const container = document.getElementById('categoriesContainer');
-    if (!container) return;
+  const container = document.getElementById("categoriesContainer");
+  if (!container) return;
 
-    container.innerHTML = categories.map(c => `
+  container.innerHTML = categories
+    .map(
+      (c) => `
     <button class="filter-btn" 
             data-category-id="${c.id_category}" 
             data-category="${c.name}">
       ${escapeHtml(c.name)}
     </button>
-  `).join('');
-}
-
-// Utilidad simple para evitar inyecciones en nombres
-function escapeHtml(str) {
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-// Configurar listener para búsqueda
-function setupSearchListener() {
-    const input = document.querySelector('.search-input');
-    if (!input) return;
-
-    input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            applyFilters(); // combina búsqueda + categoría
-        }
-    });
-
-    input.setAttribute('enterkeyhint', 'search');
-}
-
-function setupCategoryListeners() {
-    const section = document.querySelectorAll('.filter-section')[0]; // Primera sección (categorías)
-    if (!section) return;
-
-    section.addEventListener('click', (e) => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
-
-        // Marcar activo
-        section.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        // Tomar categoría seleccionada
-        const category = btn.getAttribute('data-category'); // 'all' en botón Todos
-        if (category === 'all') {
-            currentCategoryId = 'all';
-        } else {
-            currentCategoryId = parseInt(btn.getAttribute('data-category-id'), 10);
-        }
-
-        // Aplicar filtros combinados (categoría + proveedor + búsqueda)
-        applyFilters();
-    });
-}
-
-function applyFilters() {
-    const searchTerm = document.querySelector('.search-input')?.value.trim() || '';
-
-    // Partimos de todos
-    let base = [...allProducts];
-
-    // Filtrar por categoría si no es 'all'
-    if (currentCategoryId !== 'all') {
-        base = base.filter(p => Number(p.id_category) === Number(currentCategoryId));
-    }
-
-    // Filtrar por proveedor si no es 'all'
-    if (currentProviderId !== 'all') {
-        base = base.filter(p => Number(p.id_provider) === Number(currentProviderId));
-    }
-
-    // Filtrar por búsqueda si hay término
-    if (searchTerm !== '') {
-        const normalizeText = (text) =>
-            String(text).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-        const normalizedSearch = normalizeText(searchTerm);
-
-        base = base.filter(product => {
-            const sku = product.sku || `MED-${String(product.id_product).padStart(3, '0')}`;
-            const name = product.name || '';
-            const description = product.description || '';
-
-            return (
-                normalizeText(name).includes(normalizedSearch) ||
-                normalizeText(description).includes(normalizedSearch) ||
-                normalizeText(sku).includes(normalizedSearch) ||
-                String(product.id_product).includes(searchTerm)
-            );
-        });
-    }
-
-    filteredProducts = base;
-    renderPage(1, false);
-}
-
-// Cargar proveedores desde la API
-async function loadProviders() {
-    try {
-        const res = await fetch('/api/providers.php');
-        const data = await res.json();
-
-        if (data.success && Array.isArray(data.providers)) {
-            // Filtrar solo proveedores activos (status = 1)
-            const activeProviders = data.providers.filter(p => p.status === 1);
-            renderProviders(activeProviders);
-        } else {
-            console.warn('No se recibieron proveedores');
-        }
-    } catch (err) {
-        console.error('Error al cargar proveedores:', err);
-    }
+  `
+    )
+    .join("");
 }
 
 // Renderizar botones de proveedores
 function renderProviders(providers) {
-    const container = document.getElementById('providersContainer');
-    if (!container) return;
+  const container = document.getElementById("providersContainer");
+  if (!container) return;
 
-    container.innerHTML = providers.map(p => `
+  container.innerHTML = providers
+    .map(
+      (p) => `
     <button class="filter-btn" 
             data-provider-id="${p.id_provider}" 
             data-provider="${p.name}">
       ${escapeHtml(p.name)}
     </button>
-  `).join('');
-}
-
-// Configurar listener para proveedores
-function setupProviderListeners() {
-    const section = document.querySelectorAll('.filter-section')[1]; // Segunda sección (proveedores)
-    if (!section) return;
-
-    section.addEventListener('click', (e) => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
-
-        // Marcar activo
-        section.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        // Tomar proveedor seleccionado
-        const provider = btn.getAttribute('data-provider'); // 'all' en botón Todos
-        if (provider === 'all') {
-            currentProviderId = 'all';
-        } else {
-            currentProviderId = parseInt(btn.getAttribute('data-provider-id'), 10);
-        }
-
-        // Aplicar filtros combinados (categoría + proveedor + búsqueda)
-        applyFilters();
-    });
+  `
+    )
+    .join("");
 }
