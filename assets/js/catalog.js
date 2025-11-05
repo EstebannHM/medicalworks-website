@@ -7,11 +7,14 @@ let filteredProducts = []; // ARRAY PARA PRODUCTOS FILTRADOS
 let currentPage = 1;
 const PRODUCTS_PER_PAGE = 12;
 let currentCategoryId = 'all'; // CATEGORÍA ACTUAL
+let currentProviderId = 'all'; // PROVEEDOR ACTUAL
 
 document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
     loadCategories();      // carga categorías desde la API
+    loadProviders();       // carga proveedores desde la API
     setupCategoryListeners(); // escucha clics en botones de categoría
+    setupProviderListeners(); // escucha clics en botones de proveedor
     setupSearchListener(); // CARGAR EL LISTENER DE BÚSQUEDA
 });
 
@@ -207,7 +210,7 @@ function setupSearchListener() {
 }
 
 function setupCategoryListeners() {
-    const section = document.querySelector('.filter-section');
+    const section = document.querySelectorAll('.filter-section')[0]; // Primera sección (categorías)
     if (!section) return;
 
     section.addEventListener('click', (e) => {
@@ -226,7 +229,7 @@ function setupCategoryListeners() {
             currentCategoryId = parseInt(btn.getAttribute('data-category-id'), 10);
         }
 
-        // Aplicar filtros combinados (categoría + búsqueda)
+        // Aplicar filtros combinados (categoría + proveedor + búsqueda)
         applyFilters();
     });
 }
@@ -240,6 +243,11 @@ function applyFilters() {
     // Filtrar por categoría si no es 'all'
     if (currentCategoryId !== 'all') {
         base = base.filter(p => Number(p.id_category) === Number(currentCategoryId));
+    }
+
+    // Filtrar por proveedor si no es 'all'
+    if (currentProviderId !== 'all') {
+        base = base.filter(p => Number(p.id_provider) === Number(currentProviderId));
     }
 
     // Filtrar por búsqueda si hay término
@@ -265,4 +273,62 @@ function applyFilters() {
 
     filteredProducts = base;
     renderPage(1, false);
+}
+
+// Cargar proveedores desde la API
+async function loadProviders() {
+    try {
+        const res = await fetch('/api/providers.php');
+        const data = await res.json();
+
+        if (data.success && Array.isArray(data.providers)) {
+            // Filtrar solo proveedores activos (status = 1)
+            const activeProviders = data.providers.filter(p => p.status === 1);
+            renderProviders(activeProviders);
+        } else {
+            console.warn('No se recibieron proveedores');
+        }
+    } catch (err) {
+        console.error('Error al cargar proveedores:', err);
+    }
+}
+
+// Renderizar botones de proveedores
+function renderProviders(providers) {
+    const container = document.getElementById('providersContainer');
+    if (!container) return;
+
+    container.innerHTML = providers.map(p => `
+    <button class="filter-btn" 
+            data-provider-id="${p.id_provider}" 
+            data-provider="${p.name}">
+      ${escapeHtml(p.name)}
+    </button>
+  `).join('');
+}
+
+// Configurar listener para proveedores
+function setupProviderListeners() {
+    const section = document.querySelectorAll('.filter-section')[1]; // Segunda sección (proveedores)
+    if (!section) return;
+
+    section.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+
+        // Marcar activo
+        section.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Tomar proveedor seleccionado
+        const provider = btn.getAttribute('data-provider'); // 'all' en botón Todos
+        if (provider === 'all') {
+            currentProviderId = 'all';
+        } else {
+            currentProviderId = parseInt(btn.getAttribute('data-provider-id'), 10);
+        }
+
+        // Aplicar filtros combinados (categoría + proveedor + búsqueda)
+        applyFilters();
+    });
 }

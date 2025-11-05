@@ -93,6 +93,12 @@
                     <button class="filter-btn active" data-category="all">Todos</button>
                     <div id="categoriesContainer"><!-- aquí se insertarán los botones dinámicos --></div>
                 </div>
+                <br>
+                <div class="filter-section">
+                    <span class="filter-label">Proveedor:</span>
+                    <button class="filter-btn active" data-provider="all">Todos</button>
+                    <div id="providersContainer"><!-- aquí se insertarán los botones dinámicos --></div>
+                </div>
             </div>
 
             <div class="products-section">

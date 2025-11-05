@@ -13,6 +13,7 @@ function sanitizeProduct($product) {
         'description' => htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8'),
         'image_path' => htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8'),
         'id_category' => (int)$product['id_category'],
+        'id_provider' => (int)$product['id_provider'],
         'sku' => isset($product['sku']) 
             ? htmlspecialchars($product['sku'], ENT_QUOTES, 'UTF-8') 
             : null,
