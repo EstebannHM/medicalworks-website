@@ -14,75 +14,65 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
+    gap: 80px; 
     margin-bottom: 60px;
 }
 
 .step {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 12px;
-    padding: 16px 32px;
-    background: #E2E8F0;
-    border-radius: 50px;
-    flex: 1;
-    min-width: 180px;
     transition: all 0.3s ease;
 }
 
 .step-number {
-    width: 32px;
-    height: 32px;
+    width: 48px; 
+    height: 48px;
     border-radius: 50%;
-    background: white;
-    color: #64748B;
+    background: #E5E7EB;
+    color: #6B7280;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
+    font-weight: 600;
+    font-size: 18px;
     transition: all 0.3s ease;
     flex-shrink: 0;
 }
 
 .step-label {
-    font-size: 16px;
-    color: #475569;
+    font-size: 14px;
+    color: #6B7280;
     font-weight: 500;
     transition: color 0.3s ease;
     white-space: nowrap;
 }
 
-.step.active {
-    background: #0EA5E9;
-}
-
 .step.active .step-number {
-    background: white;
-    color: #0EA5E9;
+    background: #0EA5E9;
+    color: white;
 }
 
 .step.active .step-label {
-    color: white;
+    color: #0EA5E9;
     font-weight: 600;
-}
-
-.step.completed {
-    background: #E2E8F0;
 }
 
 .step.completed .step-number {
     background: #10B981;
     color: white;
+    font-size: 0;
 }
 
-.step.completed .step-number::after {
+.step.completed .step-number::before {
     content: '✓';
-    font-size: 18px;
+    font-size: 24px; 
 }
 
 .step.completed .step-label {
-    color: #475569;
+    color: #10B981;
+    font-weight: 600; 
 }
 
 .steps-content {
@@ -403,30 +393,25 @@
 
 @media (max-width: 768px) {
     .quote-main {
-        padding: 24px 0 60px;
+        padding: 40px 0 80px;
     }
 
     .steps-indicator {
-        gap: 8px;
-    }
-
-    .step {
-        min-width: 0;
-        padding: 12px 20px;
-    }
-
-    .step-label {
-        font-size: 14px;
+        gap: 30px; 
     }
 
     .step-number {
-        width: 28px;
-        height: 28px;
-        font-size: 14px;
+        width: 44px; 
+        height: 44px;
+        font-size: 16px;
+    }
+
+    .step-label {
+        font-size: 13px;
     }
 
     .step-card {
-        padding: 24px;
+        padding: 30px;
     }
 
     .step-card h2 {
@@ -462,20 +447,17 @@
 
 @media (max-width: 480px) {
     .steps-indicator {
-        gap: 6px;
-    }
-
-    .step {
-        padding: 10px 12px;
+        gap: 20px; 
     }
 
     .step-label {
-        display: none;
+        font-size: 12px; 
     }
 
     .step-number {
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
+        font-size: 15px;
     }
 
     .form-control {
