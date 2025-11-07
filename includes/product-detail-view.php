@@ -12,27 +12,11 @@ function renderProductDetail(array $product): void {
     $image = htmlspecialchars($product['image_path']);
     $sku = isset($product['sku']) ? htmlspecialchars($product['sku']) : 'MED-' . str_pad($id, 3, '0', STR_PAD_LEFT);
 
-    // Limitar descripción a 100 caracteres
-    $shortDescription = strlen($description) > 100
-        ? substr($description, 0, 100) . '...'
-        : $description;
-
-    $fullDescription = htmlspecialchars($product['description']);
-
 ?>
     <div class="product-detail" data-product-id="<?= $id ?>">
         <div class="product-media">
             <div class="product-image">
                 <img src="../assets/img/<?= $image ?>" alt="<?= $name ?>" loading="lazy">
-            </div>
-
-            <div class="product-accordion">
-                <details class="accordion-item">
-                    <summary>Detalles</summary>
-                    <div class="accordion-content">
-                        <p><?= $fullDescription ?></p>
-                    </div>
-                </details>
             </div>
         </div>
 
@@ -40,7 +24,7 @@ function renderProductDetail(array $product): void {
             <div class="product-header">
                 <span class="product-id">SKU: <?= $sku ?></span>
                 <h3 class="product-name"><?= $name ?></h3>
-                <p class="product-description"><?= $shortDescription ?></p>
+                <p class="product-description"><?= $description ?></p>
             </div>
 
             <div class="product-actions">

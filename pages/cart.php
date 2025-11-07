@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/header.css">
     <link rel="stylesheet" href="../assets/css/footer.css">
+    <link rel="stylesheet" href="../assets/css/cart.css">
     <link rel="stylesheet" href="../assets/css/whatsapp-fab.css">
     <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
@@ -22,6 +23,43 @@
 
     <main>
 
+        <div class="cart-container">
+            <!-- Columna izquierda: Tabla de productos -->
+            <div>
+                <div class="cart-header">
+                    <h1>Carrito de Compras</h1>
+                    <p class="cart-subtitle"><span id="cartCount">0</span> productos en tu carrito</p>
+                </div>
+
+                <div class="cart-table" id="cartContent">
+                </div>
+            </div>
+
+            <!-- Columna derecha: Resumen -->
+            <div class="cart-summary">
+                <h2>Resumen</h2>
+
+                <div class="summary-row">
+                    <label>Total de productos:</label>
+                    <span class="value" id="totalProducts">0</span>
+                </div>
+
+                <div class="summary-row">
+                    <label>Cantidad total:</label>
+                    <span class="value"><span id="totalQuantity">0</span> unidades</span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <a href="/pages/quote.php" class="btn-generate">
+                    Generar cotización
+                </a>
+
+                <a href="/pages/catalog.php" class="btn-continue">
+                    Continuar comprando
+                </a>
+            </div>
+        </div>
     </main>
 
     <?php
@@ -29,7 +67,9 @@
     include_once('../includes/whatsapp-button.php');
     ?>
 
+    <script src="../assets/js/cart-badge.js"></script>
     <script src="../assets/js/header.js"></script>
+    <script src="../assets/js/cart.js"></script>
 
 </body>
 
