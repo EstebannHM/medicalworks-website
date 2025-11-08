@@ -246,7 +246,7 @@ function loadSummary() {
     loadCartProducts();
 }
 
-function loadCartProducts() {
+async function loadCartProducts() {
     // Por ahora, muestra un mensaje
     
     const productsContainer = document.getElementById('products-summary');
@@ -254,16 +254,56 @@ function loadCartProducts() {
     
     if (!productsContainer) return;
 
-    // mensaje temporal
-    productsContainer.innerHTML = `
-        <p class="empty-message">
-            Los productos del carrito se cargarán aquí a través de la API.
-            <br>
-            <small style="color: #94A3B8; margin-top: 8px; display: block;">
-                (Espacio reservado para integración del carrito)
-            </small>
-        </p>
-    `;
+    try {
+        // Mostrar loading
+        productsContainer.innerHTML = `
+            <p class="empty-message">Cargando productos...</p>
+        `;
+
+        const response = await fetch('../api/cart.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ action: 'get' }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            if (!data.cart || data.cart.length === 0) {
+                // Carrito vacío
+                productsContainer.innerHTML = `
+                    <div class="empty-message">
+                        <p>No hay productos en el carrito</p>
+                        <a href="catalog.php" style="color: #0EA5E9; text-decoration: none; margin-top: 12px; display: inline-block;">
+                            Ir al catálogo
+                        </a>
+                    </div>
+                `;
+                if (productCount) {
+                    productCount.textContent = '(0)';
+                }
+            } else {
+                // Renderizar productos
+                renderProducts(data.cart);
+                
+                // Actualizar contador
+                if (productCount) {
+                    productCount.textContent = `(${data.cart.length})`;
+                }
+            }
+        } else {
+            throw new Error(data.error || 'Error al cargar productos');
+        }
+    } catch (error) {
+        console.error('Error al cargar productos del carrito:', error);
+        productsContainer.innerHTML = `
+            <p class="empty-message" style="color: #EF4444;">
+                Error al cargar los productos. Por favor, intenta nuevamente.
+            </p>
+        `;
+    }
 }
 
 function renderProducts(products) {
@@ -275,13 +315,24 @@ function renderProducts(products) {
     products.forEach(product => {
         const productElement = document.createElement('div');
         productElement.className = 'product-item';
+        
+        // Construir ruta de imagen
+        const imagePath = product.image 
+            ? `../assets/img/${product.image}` 
+            : '../assets/img/placeholder.jpg';
+        
+        // Generar SKU
+        const sku = `MED-${String(product.id).padStart(3, '0')}`;
+        
         productElement.innerHTML = `
             <div class="product-image">
-                <img src="${product.image || '../assets/img/placeholder.jpg'}" alt="${product.name}">
+                <img src="${imagePath}" 
+                     alt="${product.name}"
+                     onerror="this.onerror=null; this.src='../assets/img/placeholder.jpg';">
             </div>
             <div class="product-details">
                 <div class="product-name">${product.name}</div>
-                <div class="product-id">ID: ${product.id}</div>
+                <div class="product-id">ID: ${sku}</div>
                 <div class="product-quantity">Cantidad: ${product.quantity} unidad${product.quantity > 1 ? 'es' : ''}</div>
             </div>
         `;
