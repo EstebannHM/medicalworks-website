@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/env_loader.php'; // Cargar el .env
+date_default_timezone_set('America/Costa_Rica');
 
 // Conexión PDO
 try {

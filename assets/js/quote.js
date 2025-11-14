@@ -7,7 +7,6 @@ const formData = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Quote.js cargado correctamente');
     initializeQuoteForm();
     setupEventListeners();
 });
@@ -368,27 +367,44 @@ function handleGenerateQuote() {
     processQuote();
 }
 
-function processQuote() {
-    // Deshabilitar botón para evitar doble envío
+async function processQuote() {
     const btn = document.getElementById('btn-generate-quote');
-    if (btn) {
-        btn.disabled = true;
-        const originalHTML = btn.innerHTML;
-        btn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-            </svg>
-            Generando...
-        `;
+    if (!btn) return;
+    
+    // Cambio de boton cuando carga
+    btn.disabled = true;
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+            <circle cx="12" cy="12" r="10"/>
+        </svg>
+        Generando PDF...
+    `;
 
-        // Implementacion de la API
+    try {
+        const response = await fetch('../api/quote.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                fullName: formData.fullName,
+                email: formData.email,
+                phone: formData.phone
+            }),
+        });
 
-        // Simulación temporal (reemplazar con la API de generación de cotización)
-        setTimeout(() => {
+        const data = await response.json();
+
+        if (data.success) {
             goToStep(3);
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-        }, 1500);
+        } else {
+            throw new Error(data.error || 'Error al generar la cotización');
+        }
+        
+    } catch (error) {
+        console.error('Error completo:', error);
+        alert('Error al generar la cotización: ' + error.message);
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
     }
 }
 

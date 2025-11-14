@@ -128,7 +128,7 @@
                             </div>
                         </div>
 
-                        <!-- Productos (espacio para API del carrito) -->
+                        <!-- Productos carrito del cliente -->
                         <div class="summary-section">
                             <h3>Productos <span class="product-count" id="product-count">(0)</span></h3>
                             <div id="products-summary" class="products-list">
