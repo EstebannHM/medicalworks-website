@@ -13,6 +13,13 @@ const removePreviewBtn = document.querySelector('.remove-preview');
 const formError = document.getElementById('formError');
 const toggleStatus = document.getElementById('productStatus');
 const statusText = document.querySelector('.status-text');
+const modalTitle = document.getElementById('modalTitle');
+const modalSubtitle = document.getElementById('modalSubtitle');
+
+// Variable para rastrear el modo del modal (crear o editar)
+let modalMode = 'create'; // 'create' o 'edit'
+let editingProductId = null;
+let existingImagePath = null;
 
 // Cambiar texto del estado
 if (toggleStatus && statusText) {
@@ -21,12 +28,21 @@ if (toggleStatus && statusText) {
   });
 }
 
-// Abre el modal
+// Abre el modal en modo crear
 if (btnOpen) {
   btnOpen.addEventListener('click', () => {
-    openModal();
+    openModal('create');
   });
 }
+
+// Función para abrir el modal en modo editar (será llamada desde dashboard.js)
+window.openEditProductModal = function(product) {
+  modalMode = 'edit';
+  editingProductId = product.id_product;
+  existingImagePath = product.image_path;
+  
+  openModal('edit', product);
+};
 
 // Cierra el modal
 if (btnClose) {
@@ -53,14 +69,117 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-function openModal() {
+function openModal(mode = 'create', productData = null) {
+  modalMode = mode;
+  
   modal.classList.add('active');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
   
+  // Actualiza título y subtítulo del modal
+  if (modalTitle && modalSubtitle) {
+    if (mode === 'edit') {
+      modalTitle.textContent = 'Editar Producto';
+      modalSubtitle.textContent = 'Modifica los datos del producto existente';
+      
+      // Determina si la imagen es requerida según si el producto ya tiene una
+      const hasExistingImage = productData && productData.image_path;
+      
+      if (imageInput) {
+        const imageLabel = document.querySelector('label[for="productImage"]');
+        
+        if (hasExistingImage) {
+          // Si ya tiene imagen, es opcional
+          imageInput.removeAttribute('required');
+          if (imageLabel) {
+            imageLabel.innerHTML = 'Cambiar Imagen <span style="color: #64748b; font-weight: 400;">(opcional)</span>';
+          }
+        } else {
+          // Si NO tiene imagen, es requerida
+          imageInput.setAttribute('required', 'required');
+          if (imageLabel) {
+            imageLabel.innerHTML = 'Imagen del Producto <span class="required">*</span>';
+          }
+        }
+      }
+    } else {
+      modalTitle.textContent = 'Crear Nuevo Producto';
+      modalSubtitle.textContent = 'Completa los campos para agregar un producto';
+      // Asegura que sea required en modo crear
+      if (imageInput) {
+        imageInput.setAttribute('required', 'required');
+        // Restaura el label con asterisco rojo
+        const imageLabel = document.querySelector('label[for="productImage"]');
+        if (imageLabel) {
+          imageLabel.innerHTML = 'Imagen del Producto <span class="required">*</span>';
+        }
+      }
+    }
+  }
+  
+  // Actualiza texto del botón
+  if (btnSave) {
+    if (mode === 'edit') {
+      btnSave.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+        </svg>
+        Actualizar Producto
+      `;
+    } else {
+      btnSave.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z"/>
+        </svg>
+        Guardar Producto
+      `;
+    }
+  }
+  
   // Carga categorías y proveedores
   loadCategoriesForModal();
   loadProvidersForModal();
+  
+  // Si es modo editar, prellenar los campos
+  if (mode === 'edit' && productData) {
+    setTimeout(() => fillFormWithProductData(productData), 100);
+  }
+}
+
+function fillFormWithProductData(product) {
+  // Rellena campos del formulario
+  document.getElementById('productTitle').value = product.name || '';
+  document.getElementById('productSku').value = product.sku || '';
+  document.getElementById('productDescription').value = product.description || '';
+  
+  // Selecciona categoría
+  const categorySelect = document.getElementById('productCategory');
+  if (categorySelect && product.id_category) {
+    categorySelect.value = product.id_category;
+  }
+  
+  // Selecciona proveedor
+  const providerSelect = document.getElementById('productProvider');
+  if (providerSelect && product.id_provider) {
+    providerSelect.value = product.id_provider;
+  }
+  
+  // Establece estado
+  const statusCheckbox = document.getElementById('productStatus');
+  if (statusCheckbox) {
+    statusCheckbox.checked = Number(product.status) === 1;
+    if (statusText) {
+      statusText.textContent = statusCheckbox.checked ? 'Activo' : 'Inactivo';
+    }
+  }
+  
+  // Mostrar imagen actual si existe
+  if (product.image_path) {
+    const imgSrc = `/assets/img/${product.image_path}`;
+    imagePreview.src = imgSrc;
+    imagePreviewContainer.style.display = 'block';
+    existingImagePath = product.image_path;
+  }
 }
 
 function closeModal() {
@@ -73,7 +192,12 @@ function closeModal() {
   imagePreviewContainer.style.display = 'none';
   hideError();
   
-  // Reseteo botón de guardar (esto porque cuando uno crea el primer producto, el segundo producto a la hora de guardarlo, el botón quedaba pegado)
+  // Resetear variables de modo
+  modalMode = 'create';
+  editingProductId = null;
+  existingImagePath = null;
+  
+  // Reseteo botón de guardar
   if (btnSave) {
     btnSave.disabled = false;
     btnSave.innerHTML = `
@@ -164,30 +288,46 @@ if (imageInput) {
   });
 }
 
-// Remueve el preview
 if (removePreviewBtn) {
   removePreviewBtn.addEventListener('click', () => {
+    // Si estamos en modo editar y se quiere eliminar la imagen existente, no permitr eliminarla
+    if (modalMode === 'edit' && existingImagePath && !imageInput.files[0]) {
+      showError('El producto debe tener una imagen. Si desea cambiarla, suba una nueva.');
+      return;
+    }
+    
     imageInput.value = '';
     imagePreview.src = '';
     imagePreviewContainer.style.display = 'none';
+    
+    // Si eliminamos una  imagen seleccionada pero hay una existente, mostrar la nueva
+    if (modalMode === 'edit' && existingImagePath) {
+      const imgSrc = `/assets/img/${existingImagePath}`;
+      imagePreview.src = imgSrc;
+      imagePreviewContainer.style.display = 'block';
+    }
   });
 }
 
-// Botón de previsualizar (provisional)
+// Botón de previsualizar
 if (btnPreview) {
   btnPreview.addEventListener('click', () => {
     const formData = new FormData(form);
     const data = {
+      modo: modalMode === 'edit' ? 'Edición' : 'Creación',
+      id: editingProductId || 'Nuevo',
       nombre: formData.get('name'),
       sku: formData.get('sku'),
       categoria: document.getElementById('productCategory').selectedOptions[0]?.text || '',
       proveedor: document.getElementById('productProvider').selectedOptions[0]?.text || '',
       descripcion: formData.get('description'),
       status: formData.get('status') ? 'Activo' : 'Inactivo',
-      imagen: imageInput.files[0] ? imageInput.files[0].name : 'Sin imagen'
+      imagen: imageInput.files[0] ? imageInput.files[0].name : (existingImagePath ? 'Imagen actual' : 'Sin imagen')
     };
     
     const preview = `
+      Modo: ${data.modo}
+      ID: ${data.id}
       Producto: ${data.nombre}
       SKU: ${data.sku}
       Categoría: ${data.categoria}
@@ -214,8 +354,19 @@ if (form) {
     const description = document.getElementById('productDescription').value.trim();
     const image = imageInput.files[0];
     
-    if (!name || !sku || !category || !provider || !description || !image) {
+    if (!name || !sku || !category || !provider || !description) {
       showError('Por favor complete todos los campos requeridos');
+      return;
+    }
+    
+    // Valida la imagen: es requerida en modo crear O en modo editar si no hay imagen existente
+    if (modalMode === 'create' && !image) {
+      showError('La imagen del producto es requerida');
+      return;
+    }
+    
+    if (modalMode === 'edit' && !image && !existingImagePath) {
+      showError('Debe subir una imagen para el producto');
       return;
     }
     
@@ -227,15 +378,23 @@ if (form) {
           <animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="1s" repeatCount="indefinite"/>
         </circle>
       </svg>
-      Guardando...
+      ${modalMode === 'edit' ? 'Actualizando...' : 'Guardando...'}
     `;
     
     try {
       // Crear FormData
       const formData = new FormData(form);
       
+      // Si estamos en modo editar, agregar el ID del producto
+      if (modalMode === 'edit' && editingProductId) {
+        formData.append('id_product', editingProductId);
+      }
+      
+      // Determinar la URL del endpoint
+      const apiUrl = modalMode === 'edit' ? '/api/update_product.php' : '/api/create_product.php';
+      
       // Enviar a la API
-      const response = await fetch('/api/create_product.php', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         body: formData
       });
@@ -243,36 +402,55 @@ if (form) {
       const result = await response.json();
       
       if (result.success) {
-
-        showSuccess('Producto agregado exitosamente');
+        const successMessage = modalMode === 'edit' 
+          ? 'Producto actualizado exitosamente' 
+          : 'Producto agregado exitosamente';
+        
+        showSuccess(successMessage);
         
         // Recarga productos
         setTimeout(async () => {
           await loadProducts();
           updateProductsKPI();
-          renderPage(1, false);
+          renderPage(PAGE, false);
           closeModal();
         }, 1000);
       } else {
         showError(result.message || 'Error al guardar el producto');
         btnSave.disabled = false;
-        btnSave.innerHTML = `
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z"/>
-          </svg>
-          Guardar Producto
-        `;
+        
+        const btnText = modalMode === 'edit' 
+          ? 'Actualizar Producto'
+          : 'Guardar Producto';
+        
+        const btnIcon = modalMode === 'edit'
+          ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+            </svg>`
+          : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z"/>
+            </svg>`;
+        
+        btnSave.innerHTML = `${btnIcon} ${btnText}`;
       }
     } catch (error) {
       console.error('Error:', error);
       showError('Error al conectar con el servidor');
       btnSave.disabled = false;
-      btnSave.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z"/>
-        </svg>
-        Guardar Producto
-      `;
+      
+      const btnText = modalMode === 'edit' 
+        ? 'Actualizar Producto'
+        : 'Guardar Producto';
+      
+      const btnIcon = modalMode === 'edit'
+        ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+          </svg>`
+        : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z"/>
+          </svg>`;
+      
+      btnSave.innerHTML = `${btnIcon} ${btnText}`;
     }
   });
 }
@@ -281,6 +459,9 @@ function showError(message) {
   if (formError) {
     formError.textContent = message;
     formError.style.display = 'block';
+    formError.style.background = '#fee2e2';
+    formError.style.borderColor = '#fecaca';
+    formError.style.color = '#7f1d1d';
   }
 }
 

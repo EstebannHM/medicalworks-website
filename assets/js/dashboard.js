@@ -2,6 +2,7 @@
  * Dashboard Admin - Tabla de Productos
  * - Consume /api/products.php, /api/categories.php, /api/providers.php
  * - Renderiza tabla con paginación similar a catalog.js
+ * - Incluye funcionalidad de editar productos
  */
 
 let A_PRODUCTS = [];
@@ -229,7 +230,7 @@ async function updateProductStatus(idProduct, newStatus) {
     }
 }
 
-// Delegación de eventos (toggle y editar) sobre el contenedor de la tabla
+// Delega eventos (agregar y editar) sobre el contenedor de la tabla
 function setupDelegatedActions() {
   const mount = document.getElementById('tableMount');
   if (!mount) return;
@@ -251,7 +252,7 @@ function setupDelegatedActions() {
       btn.disabled = true;
       try {
         await updateProductStatus(productId, newStatus);
-        // Recargar productos desde el servidor para obtener datos actualizados
+        // Recarga productos desde el servidor para obtener datos actualizados
         await loadProducts();
         updateProductsKPI();
         renderPage(PAGE, false);
@@ -261,8 +262,19 @@ function setupDelegatedActions() {
       }
     } else if (btn.classList.contains('btn-edit')) {
       e.preventDefault();
-      console.log('Editar producto:', productId);
-      // TODO: Implementar edición
+      // Buscar el producto completo en el array
+      const product = A_PRODUCTS.find(p => Number(p.id_product) === productId);
+      if (!product) {
+        console.error('Producto no encontrado:', productId);
+        return;
+      }
+      
+      // Abre el modal en modo editar
+      if (typeof window.openEditProductModal === 'function') {
+        window.openEditProductModal(product);
+      } else {
+        console.error('La función openEditProductModal no está disponible');
+      }
     }
   });
 }
