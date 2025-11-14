@@ -76,7 +76,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
-                    <input type="text" class="search-input" placeholder="Buscar por nombre, descripción o ID...">
+                    <input type="text" class="search-input" placeholder="Buscar por nombre, descripción o SKU...">
                 </div>
 
                 <div class="filter-section">

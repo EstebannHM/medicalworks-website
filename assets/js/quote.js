@@ -246,7 +246,6 @@ function loadSummary() {
 }
 
 async function loadCartProducts() {
-    // Por ahora, muestra un mensaje
     
     const productsContainer = document.getElementById('products-summary');
     const productCount = document.getElementById('product-count');
@@ -320,9 +319,6 @@ function renderProducts(products) {
             ? `../assets/img/${product.image}` 
             : '../assets/img/placeholder.jpg';
         
-        // Generar SKU
-        const sku = `MED-${String(product.id).padStart(3, '0')}`;
-        
         productElement.innerHTML = `
             <div class="product-image">
                 <img src="${imagePath}" 
@@ -331,7 +327,7 @@ function renderProducts(products) {
             </div>
             <div class="product-details">
                 <div class="product-name">${product.name}</div>
-                <div class="product-id">ID: ${sku}</div>
+                <div class="product-id">SKU: ${product.sku}</div>
                 <div class="product-quantity">Cantidad: ${product.quantity} unidad${product.quantity > 1 ? 'es' : ''}</div>
             </div>
         `;

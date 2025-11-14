@@ -30,7 +30,7 @@ try {
             }
             
             // Verificar que el producto existe en la BD
-            $stmt = $pdo->prepare('SELECT id_product, name, image_path FROM products WHERE id_product = ? AND status = 1');
+            $stmt = $pdo->prepare('SELECT id_product, name, sku, image_path FROM products WHERE id_product = ? AND status = 1');
             $stmt->execute([$productId]);
             $product = $stmt->fetch(PDO::FETCH_ASSOC);
             
@@ -54,6 +54,7 @@ try {
                     'id' => $productId,
                     'name' => $product['name'],
                     'image' => $product['image_path'], // Guardamos el path completo desde la BD
+                    'sku' => $product['sku'],
                     'quantity' => $quantity,
                     'added_at' => time()
                 ];
