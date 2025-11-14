@@ -27,7 +27,7 @@ header('X-Frame-Options: DENY');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none';");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none';");
 if (is_https()) {
   header('Strict-Transport-Security: max-age=31536000');
 }
@@ -51,9 +51,10 @@ $_SESSION['csrf'] = $csrfToken;
   <meta name="csrf-token" content="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
   <link rel="stylesheet" href="../assets/css/global.css">
   <link rel="stylesheet" href="../assets/css/dashboard.css">
+  <link rel="stylesheet" href="../assets/css/modal-product.css">
 </head>
 <body class="admin-dashboard">
- esto que es  <noscript>
+  <noscript>
     <div style="background:#fee2e2;color:#7f1d1d;padding:10px;text-align:center;">
       Para usar el panel administrativo necesitas habilitar JavaScript.
     </div>
@@ -205,6 +206,132 @@ $_SESSION['csrf'] = $csrfToken;
       </section>
     </section>
   </main>
+
+  <!-- Modal Agregar Producto -->
+  <div id="modalAddProduct" class="modal-overlay" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 id="modalTitle">Agregar Nuevo Producto</h2>
+        <p class="modal-subtitle">Complete los datos del producto</p>
+        <button type="button" class="modal-close" aria-label="Cerrar modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+          </svg>
+        </button>
+      </div>
+
+      <form id="formAddProduct" class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productTitle">Título del Producto <span class="required">*</span></label>
+            <input type="text" id="productTitle" name="name" placeholder="Ej. Estetoscopio Profesional" required maxlength="255">
+          </div>
+
+          <div class="form-group">
+            <label for="productSku">Código SKU <span class="required">*</span></label>
+            <input type="text" id="productSku" name="sku" placeholder="Ej. MED-001" required maxlength="50">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productCategory">Categoría <span class="required">*</span></label>
+            <select id="productCategory" name="id_category" required>
+              <option value="">Seleccionar categoría</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="productProvider">Proveedor <span class="required">*</span></label>
+            <select id="productProvider" name="id_provider" required>
+              <option value="">Seleccionar proveedor</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="productDescription">Descripción <span class="required">*</span></label>
+          <textarea id="productDescription" name="description" rows="4" placeholder="Describa las características y beneficios del producto..." required maxlength="1000"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productImage">Imagen del Producto <span class="required">*</span></label>
+            <div class="file-upload-wrapper">
+              <input type="file" id="productImage" name="image" accept="image/jpeg,image/png,image/jpg" required>
+              <div class="file-upload-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                  <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                </svg>
+                <span class="file-label">Subir Imagen</span>
+                <span class="file-hint">JPG, PNG (Máx. 5MB)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productPdf">Ficha Técnica (PDF)</label>
+            <div class="file-upload-wrapper">
+              <input type="file" id="productPdf" name="pdf" accept="application/pdf">
+              <div class="file-upload-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                  <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                </svg>
+                <span class="file-label">Subir PDF</span>
+                <span class="file-hint">Ficha técnica del producto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-group-status">
+          <label>Estado <span class="required">*</span></label>
+          <div class="status-toggle">
+            <input type="checkbox" id="productStatus" name="status" class="status-checkbox" checked>
+            <label for="productStatus" class="status-toggle-label"></label>
+            <span class="status-text">Activo</span>
+          </div>
+        </div>
+
+        <div id="imagePreviewContainer" class="image-preview-container" style="display: none;">
+          <label>Vista Previa</label>
+          <div class="image-preview">
+            <img id="imagePreview" src="" alt="Vista previa">
+            <button type="button" class="remove-preview" aria-label="Eliminar imagen">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="formError" class="form-error" style="display: none;"></div>
+      </form>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-preview" id="btnPreview">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+          </svg>
+          Previsualizar
+        </button>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnCancelProduct">Cancelar</button>
+          <button type="submit" form="formAddProduct" class="btn-save" id="btnSaveProduct">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z"/>
+            </svg>
+            Guardar Producto
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="../assets/js/dashboard.js" defer></script>
+  <script src="../assets/js/modal-product.js" defer></script>
 </body>
 </html>
