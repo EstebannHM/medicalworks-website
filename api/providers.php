@@ -7,7 +7,7 @@ require_once __DIR__ . '/../config/config.php';
 header('Content-Type: application/json');
 
 try {
-    $sql = "SELECT id_provider, name, description, image_path, status FROM providers ORDER BY name ASC";
+    $sql = "SELECT id_provider, name, status FROM providers ORDER BY name ASC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $providers = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -17,8 +17,6 @@ try {
         return [
             'id_provider' => (int)$provider['id_provider'],
             'name' => htmlspecialchars($provider['name'], ENT_QUOTES, 'UTF-8'),
-            'description' => htmlspecialchars($provider['description'], ENT_QUOTES, 'UTF-8'),
-            'image_path' => htmlspecialchars($provider['image_path'], ENT_QUOTES, 'UTF-8'),
             'status' => (int)$provider['status']
         ];
     }, $providers);

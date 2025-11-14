@@ -174,7 +174,6 @@
 
                 <div class="swiper providers-swiper">
                     <div class="swiper-wrapper">
-                        
                         <?php
                         // Consulta: Solo proveedores con status = 1 (activos)
                         $stmt = $pdo->prepare("
