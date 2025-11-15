@@ -53,8 +53,8 @@ $_SESSION['csrf'] = $csrfToken;
   <title>Panel administrativo</title>
   <meta name="csrf-token" content="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
   <link rel="stylesheet" href="../assets/css/global.css">
-  <link rel="stylesheet" href="../assets/css/dashboard.css">
-  <link rel="stylesheet" href="../assets/css/modal-product.css">
+  <link rel="stylesheet" href="../assets/css/admin/dashboard.css">
+  <link rel="stylesheet" href="../assets/css/admin/modal-product.css">
   <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 

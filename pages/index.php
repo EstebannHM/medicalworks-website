@@ -12,12 +12,12 @@
 
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="../assets/css/carousel.css">
-    <link rel="stylesheet" href="../assets/css/about-section.css">
-    <link rel="stylesheet" href="../assets/css/product-card.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
-    <link rel="stylesheet" href="../assets/css/whatsapp-fab.css">
+    <link rel="stylesheet" href="../assets/css/components/carousel.css">
+    <link rel="stylesheet" href="../assets/css/components/product-card.css">
+    <link rel="stylesheet" href="../assets/css/components/header.css">
+    <link rel="stylesheet" href="../assets/css/components/footer.css">
+    <link rel="stylesheet" href="../assets/css/components/whatsapp-fab.css">
+    <link rel="stylesheet" href="../assets/css/pages/about-section.css">
     <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 

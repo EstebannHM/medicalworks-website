@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Acceso administrador</title>
   <link rel="stylesheet" href="../assets/css/global.css">
-  <link rel="stylesheet" href="../assets/css/admin.css">
+  <link rel="stylesheet" href="../assets/css/admin/admin.css">
   <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 <body class="admin-login">

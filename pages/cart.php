@@ -9,10 +9,10 @@
     <title>Medical Works - Carrito</title>
 
     <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
-    <link rel="stylesheet" href="../assets/css/cart.css">
-    <link rel="stylesheet" href="../assets/css/whatsapp-fab.css">
+    <link rel="stylesheet" href="../assets/css/components/header.css">
+    <link rel="stylesheet" href="../assets/css/components/footer.css">
+    <link rel="stylesheet" href="../assets/css/components/whatsapp-fab.css">
+    <link rel="stylesheet" href="../assets/css/pages/cart.css">
     <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
