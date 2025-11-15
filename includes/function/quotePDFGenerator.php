@@ -139,7 +139,7 @@ class QuotePDFGenerator
             </div>
             
             <div class="footer">
-                <p>Esta es una cotización preliminar. Un asesor se pondrá en contacto contigo para confirmar precios y disponibilidad.</p>
+                <p>Esta es una cotización preliminar. Un asesor se pondrá en contacto con usted para confirmar precios y disponibilidad.</p>
                 <p class="footer-note">Documento generado automáticamente por Medical Works</p>
             </div>
         </body>
@@ -150,7 +150,7 @@ class QuotePDFGenerator
     private function buildProductRows(array $products): string 
     {
         $rows = array_map(function($product) {
-            $sku = $product['sku'] ?? 'MED-' . str_pad($product['id'], 3, '0', STR_PAD_LEFT);
+            $sku = $product['sku'];
             $name = htmlspecialchars($product['name']);
             $qty = intval($product['quantity']);
             
