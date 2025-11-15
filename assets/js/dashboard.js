@@ -15,12 +15,12 @@ let PROVIDER_MAP = new Map(); // id_provider -> nombre
 
 // Utilidad simple para evitar inyecciones en nombres
 function esc(s) {
-    return String(s)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -36,15 +36,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
 function tableHTML(rows) {
-    return `
+  return `
     <table class="products-table" aria-label="Listado de productos">
       <thead>
         <tr>
           <th style="width:32px"><input type="checkbox" aria-label="Seleccionar todos"></th>
           <th>Producto</th>
-          <th style="width:110px">ID</th>
+          <th style="width:110px">SKU</th>
           <th style="width:140px">Categoría</th>
           <th style="width:200px">Proveedor</th>
           <th style="width:120px">Estado</th>
@@ -59,115 +58,129 @@ function tableHTML(rows) {
 }
 
 async function loadProducts() {
-    const res = await fetch("/api/products.php");
-    const data = await res.json();
-    if (!data.success) throw new Error("No se pudieron cargar productos");
-    A_PRODUCTS = data.products;
-    A_FILTERED = [...A_PRODUCTS];
+  const res = await fetch("/api/products.php");
+  const data = await res.json();
+  if (!data.success) throw new Error("No se pudieron cargar productos");
+  A_PRODUCTS = data.products;
+  A_FILTERED = [...A_PRODUCTS];
 }
 
 function updateProductsKPI() {
-const label = document.getElementById('kpi-productos-label');
-if (!label) return;
+  const label = document.getElementById("kpi-productos-label");
+  if (!label) return;
 
-const card = label.closest('.kpi-card');
-if (!card) return;
+  const card = label.closest(".kpi-card");
+  if (!card) return;
 
-const valueEl = card.querySelector('.kpi-value');
-if (!valueEl) return;
+  const valueEl = card.querySelector(".kpi-value");
+  if (!valueEl) return;
 
-valueEl.textContent = String(A_PRODUCTS.length);
+  valueEl.textContent = String(A_PRODUCTS.length);
 }
 
 async function loadCategories() {
-    const res = await fetch("/api/categories.php");
-    const data = await res.json();
-    if (data.success && Array.isArray(data.categories)) {
-        CATEGORY_MAP = new Map(data.categories.map(c => [Number(c.id_category), c.name]));
-    }
+  const res = await fetch("/api/categories.php");
+  const data = await res.json();
+  if (data.success && Array.isArray(data.categories)) {
+    CATEGORY_MAP = new Map(
+      data.categories.map((c) => [Number(c.id_category), c.name])
+    );
+  }
 }
 
 async function loadProviders() {
-    const res = await fetch("/api/providers.php");
-    const data = await res.json();
-    if (data.success && Array.isArray(data.providers)) {
-        PROVIDER_MAP = new Map(data.providers.map(p => [Number(p.id_provider), p.name]));
-    }
+  const res = await fetch("/api/providers.php");
+  const data = await res.json();
+  if (data.success && Array.isArray(data.providers)) {
+    PROVIDER_MAP = new Map(
+      data.providers.map((p) => [Number(p.id_provider), p.name])
+    );
+  }
 }
 
 // Actualiza el KPI de proveedores usando el tamaño del PROVIDER_MAP
 function updateProvidersKPI() {
-  const label = document.getElementById('kpi-proveedores-label');
+  const label = document.getElementById("kpi-proveedores-label");
   if (!label) return;
-  const card = label.closest('.kpi-card');
+  const card = label.closest(".kpi-card");
   if (!card) return;
-  const valueEl = card.querySelector('#kpiProvidersValue');
+  const valueEl = card.querySelector("#kpiProvidersValue");
   if (!valueEl) return;
   valueEl.textContent = String(PROVIDER_MAP.size);
 }
 
 function renderPage(page, shouldScroll = true) {
-    PAGE = page;
+  PAGE = page;
 
-    const start = (PAGE - 1) * ROWS_PER_PAGE;
-    const end = start + ROWS_PER_PAGE;
-    const rows = A_FILTERED.slice(start, end);
+  const start = (PAGE - 1) * ROWS_PER_PAGE;
+  const end = start + ROWS_PER_PAGE;
+  const rows = A_FILTERED.slice(start, end);
 
-    const mount = document.getElementById('tableMount');
-    if (!mount) return;
+  const mount = document.getElementById("tableMount");
+  if (!mount) return;
 
-    mount.innerHTML = tableHTML(rows);
+  mount.innerHTML = tableHTML(rows);
 
-    const total = A_FILTERED.length;
-    const info = document.getElementById("tablePageInfo");
-    if (info) info.textContent = `${start + 1}-${Math.min(end, total)} de ${total} productos`;
+  const total = A_FILTERED.length;
+  const info = document.getElementById("tablePageInfo");
+  if (info)
+    info.textContent = `${start + 1}-${Math.min(
+      end,
+      total
+    )} de ${total} productos`;
 
-    renderPagination();
+  renderPagination();
 
-    if (shouldScroll) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+  if (shouldScroll) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 }
 
 function renderPagination() {
-    const totalPages = Math.ceil(A_FILTERED.length / ROWS_PER_PAGE) || 1;
-    const cont = document.getElementById("tablePagination");
-    if (!cont) return;
+  const totalPages = Math.ceil(A_FILTERED.length / ROWS_PER_PAGE) || 1;
+  const cont = document.getElementById("tablePagination");
+  if (!cont) return;
 
-    let btns = [];
-    if (PAGE > 1) btns.push(`<button class="page-btn" data-go="${PAGE - 1}">‹</button>`);
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === 1 || i === totalPages || (i >= PAGE - 1 && i <= PAGE + 1)) {
-            const active = i === PAGE ? "active" : "";
-            btns.push(`<button class="page-btn ${active}" data-go="${i}">${i}</button>`);
-        } else if (i === PAGE - 2 || i === PAGE + 2) {
-            btns.push(`<span class="page-dots">...</span>`);
-        }
+  let btns = [];
+  if (PAGE > 1)
+    btns.push(`<button class="page-btn" data-go="${PAGE - 1}">‹</button>`);
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= PAGE - 1 && i <= PAGE + 1)) {
+      const active = i === PAGE ? "active" : "";
+      btns.push(
+        `<button class="page-btn ${active}" data-go="${i}">${i}</button>`
+      );
+    } else if (i === PAGE - 2 || i === PAGE + 2) {
+      btns.push(`<span class="page-dots">...</span>`);
     }
-    if (PAGE < totalPages) btns.push(`<button class="page-btn" data-go="${PAGE + 1}">›</button>`);
+  }
+  if (PAGE < totalPages)
+    btns.push(`<button class="page-btn" data-go="${PAGE + 1}">›</button>`);
 
-    cont.innerHTML = btns.join("");
-    cont.onclick = (e) => {
-        const b = e.target.closest('button.page-btn');
-        if (!b) return;
-        const go = Number(b.getAttribute('data-go'));
-        if (!Number.isNaN(go)) renderPage(go);
-    };
+  cont.innerHTML = btns.join("");
+  cont.onclick = (e) => {
+    const b = e.target.closest("button.page-btn");
+    if (!b) return;
+    const go = Number(b.getAttribute("data-go"));
+    if (!Number.isNaN(go)) renderPage(go);
+  };
 }
 
 function renderRow(p) {
-    const sku = p.sku || `MED-${String(p.id_product).padStart(3, "0")}`;
-    const category = CATEGORY_MAP.get(Number(p.id_category)) || `#${p.id_category}`;
-    const provider = PROVIDER_MAP.get(Number(p.id_provider)) || `#${p.id_provider}`;
-    const status = Number(p.status) === 1 ? 'Activo' : 'Inactivo';
+  const sku = p.sku || `MED-${String(p.id_product).padStart(3, "0")}`;
+  const category =
+    CATEGORY_MAP.get(Number(p.id_category)) || `#${p.id_category}`;
+  const provider =
+    PROVIDER_MAP.get(Number(p.id_provider)) || `#${p.id_provider}`;
+  const status = Number(p.status) === 1 ? "Activo" : "Inactivo";
 
-    return `
+  return `
     <tr data-product-id="${p.id_product}">
       <td><input type="checkbox" aria-label="Seleccionar"></td>
       <td>
         <div class="prod-cell">
           <div class="prod-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+            <svg width="16" height="16" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
               <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2zm3.564 1.426L5.596 5 8 5.961 14.154 3.5zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z"/>
             </svg>
           </div>
@@ -180,20 +193,22 @@ function renderRow(p) {
       <td><span class="badge badge-cat">${esc(category)}</span></td>
       <td><span class="text-provider">${esc(provider)}</span></td>
       <td>
-        <span class="status ${status === 'Activo' ? 'ok' : 'off'}">
+        <span class="status ${status === "Activo" ? "ok" : "off"}">
           <span class="dot"></span>${status}
         </span>
       </td>
       <td>
         <div class="row-actions">
-            <button class="action-btn btn-toggle-status" data-action="toggle" title="${status === 'Activo' ? 'Inactivar' : 'Activar'}" aria-label="${status === 'Activo' ? 'Inactivar' : 'Activar'}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
-  <path d="M7.5 1v7h1V1z"/>
-  <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812"/>
-</svg>
+            <button class="action-btn btn-toggle-status" data-action="toggle" title="${
+              status === "Activo" ? "Inactivar" : "Activar"
+            }" aria-label="${status === "Activo" ? "Inactivar" : "Activar"}">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
+                <path d="M7.5 1v7h1V1z"/>
+                <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812"/>
+              </svg>
           </button>
           <button class="action-btn btn-edit" data-action="edit" title="Editar" aria-label="Editar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
               <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
             </svg>
           </button>
@@ -205,48 +220,50 @@ function renderRow(p) {
 
 // Función para actualizar el status de un producto
 async function updateProductStatus(idProduct, newStatus) {
-    try {
-        const res = await fetch('/api/update_product_status.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id_product: idProduct,
-                status: newStatus
-            })
-        });
+  try {
+    const res = await fetch("/api/update_product_status.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id_product: idProduct,
+        status: newStatus,
+      }),
+    });
 
-        const data = await res.json();
+    const data = await res.json();
 
-        if (!data.success) {
-            throw new Error(data.message || 'Error al actualizar el status');
-        }
-
-        return data;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
+    if (!data.success) {
+      throw new Error(data.message || "Error al actualizar el status");
     }
+
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
 }
 
 // Delega eventos (agregar y editar) sobre el contenedor de la tabla
 function setupDelegatedActions() {
-  const mount = document.getElementById('tableMount');
+  const mount = document.getElementById("tableMount");
   if (!mount) return;
 
-  mount.addEventListener('click', async (e) => {
-    const btn = e.target.closest('button.action-btn');
+  mount.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button.action-btn");
     if (!btn) return;
-    const row = btn.closest('tr');
+    const row = btn.closest("tr");
     if (!row) return;
-    const productId = Number(row.getAttribute('data-product-id'));
+    const productId = Number(row.getAttribute("data-product-id"));
     if (!productId) return;
 
     // Toggle status
-    if (btn.classList.contains('btn-toggle-status')) {
+    if (btn.classList.contains("btn-toggle-status")) {
       e.preventDefault();
-      const product = A_PRODUCTS.find(p => Number(p.id_product) === productId);
+      const product = A_PRODUCTS.find(
+        (p) => Number(p.id_product) === productId
+      );
       if (!product) return;
       const newStatus = Number(product.status) === 1 ? 0 : 1;
       btn.disabled = true;
@@ -257,23 +274,25 @@ function setupDelegatedActions() {
         updateProductsKPI();
         renderPage(PAGE, false);
       } catch (error) {
-        alert('Error al cambiar el estado del producto: ' + error.message);
+        alert("Error al cambiar el estado del producto: " + error.message);
         btn.disabled = false;
       }
-    } else if (btn.classList.contains('btn-edit')) {
+    } else if (btn.classList.contains("btn-edit")) {
       e.preventDefault();
       // Buscar el producto completo en el array
-      const product = A_PRODUCTS.find(p => Number(p.id_product) === productId);
+      const product = A_PRODUCTS.find(
+        (p) => Number(p.id_product) === productId
+      );
       if (!product) {
-        console.error('Producto no encontrado:', productId);
+        console.error("Producto no encontrado:", productId);
         return;
       }
-      
+
       // Abre el modal en modo editar
-      if (typeof window.openEditProductModal === 'function') {
+      if (typeof window.openEditProductModal === "function") {
         window.openEditProductModal(product);
       } else {
-        console.error('La función openEditProductModal no está disponible');
+        console.error("La función openEditProductModal no está disponible");
       }
     }
   });
