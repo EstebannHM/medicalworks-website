@@ -13,7 +13,8 @@ function renderProductCard($product)
     $name = htmlspecialchars($product['name']);
     $description = htmlspecialchars($product['description']);
     $image = htmlspecialchars($product['image_path']);
-    $sku = isset($product['sku']) ? htmlspecialchars($product['sku']) : 'MED-' . str_pad($id, 3, '0', STR_PAD_LEFT);
+    $sku = htmlspecialchars($product['sku']);
+    
 
     // Limitar descripción a 100 caracteres
     $shortDescription = strlen($description) > 100
@@ -36,7 +37,7 @@ function renderProductCard($product)
         </div>
         <div class="product-info">
             <div class="product-header">
-                <span class="product-id">ID: <?php echo $sku; ?></span>
+                <span class="product-id">SKU: <?php echo $sku; ?></span>
                 <h3 class="product-name">
                     <a href="<?php echo htmlspecialchars($detailLink, ENT_QUOTES, 'UTF-8'); ?>" data-product-id="<?php echo $id; ?>">
                         <?php echo $name; ?>

@@ -17,7 +17,6 @@ async function loadCart() {
       updateSummary(data.cartCount, data.totalItems);
 
       updateCartBadge(data.totalItems);
-
     }
   } catch (error) {
     console.error("Error al cargar el carrito:", error);
@@ -43,17 +42,17 @@ function renderCart(cart) {
   let html = `
         <div class="cart-table-header">
             <div>Producto</div>
-            <div>ID</div>
+            <div>SKU</div>
             <div>Cantidad</div>
             <div>Acciones</div>
         </div>
     `;
 
   cart.forEach((item) => {
-    const imagePath = item.image 
-      ? `../assets/img/${item.image}` 
+    const imagePath = item.image
+      ? `../assets/img/${item.image}`
       : "../assets/img/placeholder.jpg";
-    
+
     html += `
             <div class="cart-item" data-product-id="${item.id}">
                 <div class="product-info">
@@ -66,16 +65,22 @@ function renderCart(cart) {
                     </div>
                 </div>
                 
-                <div class="product-id">MED-${String(item.id).padStart(3, "0")}</div>
+                <div class="product-id">${item.sku}</div>
                 
                 <div class="quantity-controls">
-                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">−</button>
+                    <button class="quantity-btn" onclick="updateQuantity(${
+                      item.id
+                    }, ${item.quantity - 1})">−</button>
                     <span class="quantity-value">${item.quantity}</span>
-                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                    <button class="quantity-btn" onclick="updateQuantity(${
+                      item.id
+                    }, ${item.quantity + 1})">+</button>
                 </div>
                 
                 <div>
-                    <button class="delete-btn" onclick="removeItem(${item.id})" title="Eliminar">
+                    <button class="delete-btn" onclick="removeItem(${
+                      item.id
+                    })" title="Eliminar">
                         <svg viewBox="0 0 24 24">
                             <path d="M10 2L9 3H4v2h16V3h-5l-1-1h-4zM5 7v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V7H5zm3 2h2v9H8V9zm4 0h2v9h-2V9z"/>
                         </svg>

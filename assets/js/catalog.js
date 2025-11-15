@@ -50,7 +50,7 @@ async function loadCategories() {
 
     if (data.success && Array.isArray(data.categories)) {
       renderCategories(data.categories);
-      setupFilterListeners(0, 'category');
+      setupFilterListeners(0, "category");
     } else {
       console.warn("No se recibieron categorías");
     }
@@ -66,7 +66,7 @@ async function loadProviders() {
 
     if (data.success && Array.isArray(data.providers)) {
       renderProviders(data.providers);
-      setupFilterListeners(1, 'provider');
+      setupFilterListeners(1, "provider");
     } else {
       console.warn("No se recibieron proveedores");
     }
@@ -74,7 +74,6 @@ async function loadProviders() {
     console.error("Error al cargar proveedores:", err);
   }
 }
-
 
 function setupSearchListener() {
   const input = document.querySelector(".search-input");
@@ -91,59 +90,68 @@ function setupSearchListener() {
 }
 
 function setupFilterListeners(sectionIndex, filterType) {
-    if (filterType === 'category') {
-        const section = document.querySelectorAll('.filter-section')[sectionIndex];
-        if (!section) return;
+  if (filterType === "category") {
+    const section = document.querySelectorAll(".filter-section")[sectionIndex];
+    if (!section) return;
 
-        section.addEventListener('click', (e) => {
-            const btn = e.target.closest('.filter-btn');
-            if (!btn) return;
+    section.addEventListener("click", (e) => {
+      const btn = e.target.closest(".filter-btn");
+      if (!btn) return;
 
-            section.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+      section
+        .querySelectorAll(".filter-btn")
+        .forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
 
-            const value = btn.getAttribute('data-category');
-            currentCategoryId = value === 'all' ? 'all' : parseInt(btn.getAttribute('data-category-id'), 10);
-            applyFilters();
-        });
-    } 
-    else if (filterType === 'provider') {
-        const dropdown = document.getElementById('providerDropdown');
-        const menu = document.getElementById('providerDropdownMenu');
-        if (!dropdown || !menu) return;
+      const value = btn.getAttribute("data-category");
+      currentCategoryId =
+        value === "all"
+          ? "all"
+          : parseInt(btn.getAttribute("data-category-id"), 10);
+      applyFilters();
+    });
+  } else if (filterType === "provider") {
+    const dropdown = document.getElementById("providerDropdown");
+    const menu = document.getElementById("providerDropdownMenu");
+    if (!dropdown || !menu) return;
 
-        dropdown.onclick = (e) => {
-            e.stopPropagation();
-            dropdown.classList.toggle('active');
-            menu.classList.toggle('show');
-        };
+    dropdown.onclick = (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle("active");
+      menu.classList.toggle("show");
+    };
 
-        menu.onclick = (e) => {
-            const item = e.target.closest('.dropdown-item'); //Buscar item clickeado
-            if (!item) return;
+    menu.onclick = (e) => {
+      const item = e.target.closest(".dropdown-item"); //Buscar item clickeado
+      if (!item) return;
 
-            //Actualiza la seleccion
-            menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            //Actualiza el texto dentro del dropdown
-            dropdown.querySelector('.dropdown-text').textContent = item.textContent.trim();
-            //Cierra dropdown
-            dropdown.classList.remove('active');
-            menu.classList.remove('show');
+      //Actualiza la seleccion
+      menu
+        .querySelectorAll(".dropdown-item")
+        .forEach((i) => i.classList.remove("active"));
+      item.classList.add("active");
+      //Actualiza el texto dentro del dropdown
+      dropdown.querySelector(".dropdown-text").textContent =
+        item.textContent.trim();
+      //Cierra dropdown
+      dropdown.classList.remove("active");
+      menu.classList.remove("show");
 
-            //Aplica filtro
-            const value = item.getAttribute('data-provider');
-            currentProviderId = value === 'all' ? 'all' : parseInt(item.getAttribute('data-provider-id'), 10);
-            applyFilters();
-        };
-        //Cerrar dropdwon al hacer click fuera
-        document.onclick = () => {
-            dropdown.classList.remove('active');
-            menu.classList.remove('show');
-        };
-    }
+      //Aplica filtro
+      const value = item.getAttribute("data-provider");
+      currentProviderId =
+        value === "all"
+          ? "all"
+          : parseInt(item.getAttribute("data-provider-id"), 10);
+      applyFilters();
+    };
+    //Cerrar dropdwon al hacer click fuera
+    document.onclick = () => {
+      dropdown.classList.remove("active");
+      menu.classList.remove("show");
+    };
+  }
 }
-
 
 function applyFilters() {
   const searchTerm =
@@ -177,8 +185,7 @@ function applyFilters() {
     const normalizedSearch = normalizeText(searchTerm);
 
     base = base.filter((product) => {
-      const sku =
-        product.sku || `MED-${String(product.id_product).padStart(3, "0")}`;
+      const sku = product.sku;
       const name = product.name || "";
       const description = product.description || "";
 
@@ -194,7 +201,6 @@ function applyFilters() {
   filteredProducts = base;
   renderPage(1, false);
 }
-
 
 function renderPage(page, shouldScroll = true) {
   currentPage = page;
@@ -286,7 +292,7 @@ function renderPagination() {
 }
 
 function createProductCard(p) {
-  const sku = p.sku || `MED-${String(p.id_product).padStart(3, "0")}`;
+  const sku = p.sku;
   const desc =
     p.description.length > 100
       ? p.description.substring(0, 100) + "..."
@@ -306,7 +312,7 @@ function createProductCard(p) {
             </div>
             <div class="product-info">
                 <div class="product-header">
-                    <span class="product-id">ID: ${sku}</span>
+                    <span class="product-id">SKU: ${sku}</span>
                     <h3 class="product-name">
                         <a href="${detailLink}" data-product-id=${p.id_product}>
                             ${p.name}
@@ -336,7 +342,6 @@ function createProductCard(p) {
         </div>
     `;
 }
-
 
 // Renderizar botones de categorías
 function renderCategories(categories) {

@@ -9,11 +9,11 @@
     <title>Medical Works - Productos</title>
 
     <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <link rel="stylesheet" href="../assets/css/footer.css">
-    <link rel="stylesheet" href="/assets/css/product-card.css">
-    <link rel="stylesheet" href="/assets/css/catalog.css">
-    <link rel="stylesheet" href="../assets/css/whatsapp-fab.css">
+    <link rel="stylesheet" href="../assets/css/components/header.css">
+    <link rel="stylesheet" href="../assets/css/components/footer.css">
+    <link rel="stylesheet" href="../assets/css/components/whatsapp-fab.css">
+    <link rel="stylesheet" href="../assets/css/components/product-card.css">
+    <link rel="stylesheet" href="../assets/css/pages/catalog.css">
     <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
@@ -76,7 +76,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
-                    <input type="text" class="search-input" placeholder="Buscar por nombre, descripción o ID...">
+                    <input type="text" class="search-input" placeholder="Buscar por nombre, descripción o SKU...">
                 </div>
 
                 <div class="filter-section">
