@@ -4,6 +4,14 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 
+// Verificar autenticación de administrador
+session_start();
+if (empty($_SESSION['admin_auth'])) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'No autorizado']);
+    exit;
+}
+
 // Validar método POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   http_response_code(405);
