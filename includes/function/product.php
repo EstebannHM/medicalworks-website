@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/config.php';
 
-/**
- */
 
 function getProducts($pdo, $params = []){
 
@@ -16,7 +14,7 @@ function getProducts($pdo, $params = []){
             $idValidate = filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
             if ($idValidate == false) return [];
             
-            //Consulta
+            
             $stmt = $pdo->prepare('SELECT * FROM products WHERE id_product = :id AND status = 1 LIMIT 1');
             $stmt->bindValue(':id', $idValidate, PDO::PARAM_INT);
             $stmt->execute();

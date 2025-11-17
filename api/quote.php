@@ -6,6 +6,7 @@
 session_start();
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../includes/function/QuotePDFGenerator.php';
+require_once __DIR__ . '/../includes/function/QuoteRepository.php';
 
 header('Content-Type: application/json');
 
@@ -38,16 +39,20 @@ try {
     
     // Generar PDF
     $generator = new QuotePDFGenerator();
-    $result = $generator->generateQuotePDF($userData, $products);
+    $pdfResult = $generator->generateQuotePDF($userData, $products);
     
-    if (!$result['success']) {
-        throw new Exception($result['error']);
+    if (!$pdfResult['success']) {
+        throw new Exception($pdfResult['error']);
     }
+
+    $quoteRepo = new QuoteRepository($pdo);
+    $quoteId = $quoteRepo->saveQuote($userData, $products, $pdfResult['filename']);
     
     echo json_encode([
         'success' => true,
         'message' => 'Cotización generada correctamente',
-        'filename' => $result['filename'],
+        'quoteId' => $quoteId,
+        'filename' => $pdfResult['filename'],
         'data' => [
             'customerName' => $userData['fullName'],
             'totalProducts' => count($products),
