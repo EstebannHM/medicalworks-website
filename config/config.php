@@ -18,4 +18,15 @@ try {
 } catch (PDOException $e) {
     die("Error de conexión: " . $e->getMessage());
 }
+
+// Definir constantes para usar en el proyecto
+define('SMTP_HOST', $_ENV['SMTP_HOST']);
+define('SMTP_PORT', $_ENV['SMTP_PORT']);
+define('SMTP_USERNAME', $_ENV['SMTP_USERNAME']);
+define('SMTP_PASSWORD', $_ENV['SMTP_PASSWORD']);
+define('SMTP_FROM_EMAIL', $_ENV['SMTP_FROM_EMAIL']);
+define('SMTP_FROM_NAME', $_ENV['SMTP_FROM_NAME']);
+
+define('PDF_STORAGE_PATH', __DIR__ . '/../' . $_ENV['PDF_STORAGE_PATH']);
+
 ?>

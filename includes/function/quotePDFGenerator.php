@@ -52,7 +52,6 @@ class QuotePDFGenerator
             
             return [
                 'success' => true,
-                'filename' => $filename,
                 'filepath' => $filepath,
                 'message' => 'PDF generado correctamente'
             ];
