@@ -141,8 +141,8 @@ try {
         $imagePath = 'productos/' . $newFileName;
     }
     
-    // ========== MANEJO DE LA FICHA TÉCNICA (PDF) - RF-039 ==========
-    $datasheetPath = $existingProduct['pdf_path']; // Mantiene ficha actual por defecto
+    // MANEJO DE LA FICHA TÉCNICA
+    $datasheetPath = $existingProduct['pdf_path'];
     
     if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
         $datasheetFile = $_FILES['pdf'];
@@ -173,10 +173,9 @@ try {
             throw new Exception('La ficha técnica no debe superar los 10MB');
         }
         
-        // Genera nombre único para el PDF basado en nombre del producto y SKU
-        // Sanitiza el nombre para que sea válido como nombre de archivo
+        // Genera nombre unico para el PDF basado en nombre del producto y SKU
         $sanitizedName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $name);
-        $sanitizedName = preg_replace('/_+/', '_', $sanitizedName); // Elimina guiones bajos múltiples
+        $sanitizedName = preg_replace('/_+/', '_', $sanitizedName);
         $sanitizedName = trim($sanitizedName, '_');
         $sanitizedSku = preg_replace('/[^a-zA-Z0-9_-]/', '_', $sku);
         
@@ -199,7 +198,7 @@ try {
             throw new Exception('Error al guardar la ficha técnica');
         }
         
-        // Eliminar ficha técnica anterior si existe (evita referencias duplicadas)
+        // Elimina ficha técnica anterior si existe
         if (!empty($existingProduct['pdf_path'])) {
             $oldDatasheetPath = __DIR__ . '/../assets/docs/' . $existingProduct['pdf_path'];
             if (file_exists($oldDatasheetPath)) {
@@ -207,11 +206,11 @@ try {
             }
         }
         
-        // Guardar ruta relativa en la BD
+        // Guardar ruta en la BD
         $datasheetPath = 'fichas/' . $newPdfFileName;
     }
     
-    // ========== ACTUALIZAR EN BASE DE DATOS ==========
+    // Actualiza base de datos 
     $sql = "UPDATE products 
             SET name = :name, 
                 description = :description, 
