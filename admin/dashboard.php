@@ -137,7 +137,7 @@ $_SESSION['csrf'] = $csrfToken;
             </svg>
           </div>
           <p id="kpi-productos-label" class="kpi-label">TOTAL PRODUCTOS</p>
-          <p class="kpi-value">48</p>
+          <p class="kpi-value"></p>
         </div>
         <div class="kpi-card" aria-labelledby="kpi-proveedores-label">
           <div class="kpi-icon gradient-green" aria-hidden="true">
@@ -146,7 +146,7 @@ $_SESSION['csrf'] = $csrfToken;
             </svg>
           </div>
           <p id="kpi-proveedores-label" class="kpi-label">PROVEEDORES</p>
-          <p class="kpi-value" id="kpiProvidersValue" aria-live="polite">--</p>
+          <p class="kpi-value" id="kpiProvidersValue" aria-live="polite"></p>
         </div>
         <div class="kpi-card" aria-labelledby="kpi-cotizaciones-label">
           <div class="kpi-icon gradient-purple" aria-hidden="true">
@@ -155,7 +155,7 @@ $_SESSION['csrf'] = $csrfToken;
             </svg>
           </div>
           <p id="kpi-cotizaciones-label" class="kpi-label">COTIZACIONES</p>
-          <p class="kpi-value">124</p>
+          <p class="kpi-value"></p>
         </div>
       </div>
       <!-- Barra de búsqueda y filtros + Tabla de productos -->
@@ -167,24 +167,45 @@ $_SESSION['csrf'] = $csrfToken;
               <input type="text" id="productSearch" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos">
             </div>
             <div class="filters-group" aria-label="Filtros">
-              <button type="button" class="btn-filter" id="btnFilterCategory" title="Filtrar por categoría" aria-label="Filtrar por categoría">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
-                </svg>
-                <span>Todas las categorías</span>
-              </button>
-              <button type="button" class="btn-filter" id="btnFilterProvider" title="Filtrar por proveedor" aria-label="Filtrar por proveedor">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
-                </svg>
-                <span>Todos los proveedores</span>
-              </button>
-              <button type="button" class="btn-filter" id="btnFilterStatus" title="Filtrar por estado" aria-label="Filtrar por estado">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
-                </svg>
-                <span>Todos los estados</span>
-              </button>
+              <div class="dropdown-wrapper">
+                <button class="dropdown-toggle" id="categoryDropdown">
+                  <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                  </svg>
+                  <span class="dropdown-text">Todas las categorías</span>
+                </button>
+                <div class="dropdown-menu" id="categoryDropdownMenu">
+                  <button class="dropdown-item active" data-category="all">Todas las categorías</button>
+                  <div id="categoriesContainer"></div>
+                </div>
+              </div>
+              <div class="dropdown-wrapper">
+                <button class="dropdown-toggle" id="providerDropdown">
+                  <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                  </svg>
+                  <span class="dropdown-text">Todos los proveedores</span>
+                </button>
+                <div class="dropdown-menu" id="providerDropdownMenu">
+                  <button class="dropdown-item active" data-provider="all">Todos los proveedores</button>
+                  <div id="providersContainer"></div>
+                </div>
+              </div>
+              <div class="filter-section">
+                <div class="dropdown-wrapper">
+                  <button class="dropdown-toggle" id="statusDropdown">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                    </svg>
+                    <span class="dropdown-text">Todos los estados</span>
+                  </button>
+                  <div class="dropdown-menu" id="statusDropdownMenu">
+                    <button class="dropdown-item active" data-status="all">Todos los estados</button>
+                    <button class="dropdown-item" data-status="active">Activo</button>
+                    <button class="dropdown-item" data-status="inactive">Inactivo</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="toolbar-right">
