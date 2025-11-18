@@ -17,7 +17,10 @@ function sanitizeProduct($product) {
         'sku' => isset($product['sku']) 
             ? htmlspecialchars($product['sku'], ENT_QUOTES, 'UTF-8') 
             : null,
-        'status' => (int)$product['status']
+        'status' => (int)$product['status'],
+        'pdf_path' => isset($product['pdf_path']) && $product['pdf_path']
+            ? htmlspecialchars($product['pdf_path'], ENT_QUOTES, 'UTF-8')
+            : null
     ];
 }
 
