@@ -120,14 +120,14 @@ try {
     // Guardar ruta relativa en la BD
     $imagePath = 'productos/' . $newFileName;
     
-    // ========== PROCESAMIENTO DE FICHA TÉCNICA (PDF) - RF-039 ==========
+    // FICHA TÉCNICA (PDF)
     $datasheetPath = null;
     
     if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
         $datasheetFile = $_FILES['pdf'];
         
         if ($datasheetFile['error'] !== UPLOAD_ERR_OK) {
-            // Si falla, eliminar la imagen subida
+            // Si falla, elimina la imagen subida
             if (file_exists($uploadPath)) {
                 unlink($uploadPath);
             }
@@ -138,7 +138,6 @@ try {
         $pdfExtension = strtolower(pathinfo($datasheetFile['name'], PATHINFO_EXTENSION));
         
         if ($pdfExtension !== 'pdf') {
-            // Si falla, eliminar la imagen subida
             if (file_exists($uploadPath)) {
                 unlink($uploadPath);
             }
@@ -151,7 +150,6 @@ try {
         finfo_close($finfoDatasheet);
         
         if ($pdfMimeType !== 'application/pdf') {
-            // Si falla, eliminar la imagen subida
             if (file_exists($uploadPath)) {
                 unlink($uploadPath);
             }
@@ -161,29 +159,26 @@ try {
         // Validacion del tamaño (10MB para PDFs)
         $maxPdfSize = 10 * 1024 * 1024;
         if ($datasheetFile['size'] > $maxPdfSize) {
-            // Si falla, eliminar la imagen subida
             if (file_exists($uploadPath)) {
                 unlink($uploadPath);
             }
             throw new Exception('La ficha técnica no debe superar los 10MB');
         }
         
-        // Genera nombre único para el PDF basado en nombre del producto y SKU
-        // Sanitiza el nombre para que sea válido como nombre de archivo
+        // Genera nombre unico para el PDF basado en nombre del producto y SKU
         $sanitizedName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $name);
-        $sanitizedName = preg_replace('/_+/', '_', $sanitizedName); // Elimina guiones bajos múltiples
+        $sanitizedName = preg_replace('/_+/', '_', $sanitizedName);
         $sanitizedName = trim($sanitizedName, '_');
         $sanitizedSku = preg_replace('/[^a-zA-Z0-9_-]/', '_', $sku);
         
         $newPdfFileName = $sanitizedName . '_' . $sanitizedSku . '.pdf';
         
-        // Define ruta de destino para PDFs
+        // Define ruta de destino para el PDF
         $pdfUploadDir = __DIR__ . '/../assets/docs/fichas/';
         
         // Crea directorio si no existe
         if (!is_dir($pdfUploadDir)) {
             if (!mkdir($pdfUploadDir, 0755, true)) {
-                // Si falla, eliminar la imagen subida
                 if (file_exists($uploadPath)) {
                     unlink($uploadPath);
                 }
@@ -195,18 +190,17 @@ try {
         
         // Mueve el archivo PDF
         if (!move_uploaded_file($datasheetFile['tmp_name'], $pdfUploadPath)) {
-            // Si falla, eliminar la imagen subida
             if (file_exists($uploadPath)) {
                 unlink($uploadPath);
             }
             throw new Exception('Error al guardar la ficha técnica');
         }
         
-        // Guardar ruta relativa en la BD
+        // Guardar la ruta 
         $datasheetPath = 'fichas/' . $newPdfFileName;
     }
     
-    // ========== INSERTAR EN BASE DE DATOS ==========
+    // Inserta en la base de datos
     $sql = "INSERT INTO products (name, description, image_path, id_category, id_provider, sku, status, pdf_path) 
             VALUES (:name, :description, :image_path, :id_category, :id_provider, :sku, :status, :pdf_path)";
     

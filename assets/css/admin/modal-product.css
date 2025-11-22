@@ -329,7 +329,6 @@
   transform: scale(1.05);
 }
 
-/* RF-039: Estilos para ficha técnica (PDF) */
 .datasheet-preview-container {
   display: none;
   align-items: center;
@@ -510,7 +509,6 @@
     transform: translateX(22px);
   }
   
-  /* RF-039: Responsive para ficha técnica */
   .datasheet-preview-container {
     flex-wrap: wrap;
   }

@@ -334,7 +334,7 @@ if (removePreviewBtn) {
   });
 }
 
-// RF-039: Preview de ficha técnica (PDF)
+// Preview de ficha técnica (PDF)
 if (datasheetInput) {
   datasheetInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -355,7 +355,7 @@ if (datasheetInput) {
         return;
       }
       
-      // Mostrar preview con nombre del archivo
+      // Muestra el preview con nombre del archivo
       if (datasheetFileName && datasheetPreviewContainer) {
         datasheetFileName.textContent = file.name;
         datasheetPreviewContainer.style.display = 'flex';
@@ -366,7 +366,7 @@ if (datasheetInput) {
   });
 }
 
-// RF-039: Remover ficha técnica
+// Remover ficha técnica
 if (removeDatasheetBtn) {
   removeDatasheetBtn.addEventListener('click', () => {
     datasheetInput.value = '';
@@ -378,7 +378,7 @@ if (removeDatasheetBtn) {
       datasheetFileName.textContent = '';
     }
     
-    // Si estamos en modo editar y había una ficha existente, mostrarla de nuevo
+    // Si estamos en modo editar y había una ficha existente, la muestra de nuevo
     if (modalMode === 'edit' && existingDatasheetPath) {
       const pdfName = existingDatasheetPath.split('/').pop();
       datasheetFileName.textContent = pdfName;
