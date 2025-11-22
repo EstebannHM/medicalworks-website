@@ -11,6 +11,7 @@
 # Imágenes de productos y proveedores
 /assets/img/productos/
 /assets/img/providers/
+/assets/docs/
 
 # Logs del sistema
 /logs/

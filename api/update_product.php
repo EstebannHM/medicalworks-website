@@ -39,7 +39,7 @@ try {
     }
     
     // Verifica que el producto existe
-    $stmt = $pdo->prepare("SELECT id_product, image_path FROM products WHERE id_product = ?");
+    $stmt = $pdo->prepare("SELECT id_product, image_path, pdf_path FROM products WHERE id_product = ?");
     $stmt->execute([$id_product]);
     $existingProduct = $stmt->fetch();
     
@@ -75,7 +75,7 @@ try {
         throw new Exception('Ya existe otro producto con ese SKU');
     }
     
-    // Manejo de la imagen (opcional en edición)
+    // ========== MANEJO DE LA IMAGEN (opcional en edición) ==========
     $imagePath = $existingProduct['image_path']; // Mantiene imagen actual por defecto
     
     if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
@@ -141,7 +141,76 @@ try {
         $imagePath = 'productos/' . $newFileName;
     }
     
-    // Actualiza producto en la base de datos
+    // MANEJO DE LA FICHA TÉCNICA
+    $datasheetPath = $existingProduct['pdf_path'];
+    
+    if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $datasheetFile = $_FILES['pdf'];
+        
+        if ($datasheetFile['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception('Error al subir la ficha técnica');
+        }
+        
+        // Validacion de extensión PDF
+        $pdfExtension = strtolower(pathinfo($datasheetFile['name'], PATHINFO_EXTENSION));
+        
+        if ($pdfExtension !== 'pdf') {
+            throw new Exception('La ficha técnica debe ser un archivo PDF');
+        }
+        
+        // Validación del MIME type para PDF
+        $finfoDatasheet = finfo_open(FILEINFO_MIME_TYPE);
+        $pdfMimeType = finfo_file($finfoDatasheet, $datasheetFile['tmp_name']);
+        finfo_close($finfoDatasheet);
+        
+        if ($pdfMimeType !== 'application/pdf') {
+            throw new Exception('El archivo no es un PDF válido');
+        }
+        
+        // Validacion del tamaño (10MB para PDFs)
+        $maxPdfSize = 10 * 1024 * 1024;
+        if ($datasheetFile['size'] > $maxPdfSize) {
+            throw new Exception('La ficha técnica no debe superar los 10MB');
+        }
+        
+        // Genera nombre unico para el PDF basado en nombre del producto y SKU
+        $sanitizedName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $name);
+        $sanitizedName = preg_replace('/_+/', '_', $sanitizedName);
+        $sanitizedName = trim($sanitizedName, '_');
+        $sanitizedSku = preg_replace('/[^a-zA-Z0-9_-]/', '_', $sku);
+        
+        $newPdfFileName = $sanitizedName . '_' . $sanitizedSku . '.pdf';
+        
+        // Define ruta de destino para PDFs
+        $pdfUploadDir = __DIR__ . '/../assets/docs/fichas/';
+        
+        // Crea directorio si no existe
+        if (!is_dir($pdfUploadDir)) {
+            if (!mkdir($pdfUploadDir, 0755, true)) {
+                throw new Exception('No se pudo crear el directorio de fichas técnicas');
+            }
+        }
+        
+        $pdfUploadPath = $pdfUploadDir . $newPdfFileName;
+        
+        // Mueve el archivo PDF
+        if (!move_uploaded_file($datasheetFile['tmp_name'], $pdfUploadPath)) {
+            throw new Exception('Error al guardar la ficha técnica');
+        }
+        
+        // Elimina ficha técnica anterior si existe
+        if (!empty($existingProduct['pdf_path'])) {
+            $oldDatasheetPath = __DIR__ . '/../assets/docs/' . $existingProduct['pdf_path'];
+            if (file_exists($oldDatasheetPath)) {
+                unlink($oldDatasheetPath);
+            }
+        }
+        
+        // Guardar ruta en la BD
+        $datasheetPath = 'fichas/' . $newPdfFileName;
+    }
+    
+    // Actualiza base de datos 
     $sql = "UPDATE products 
             SET name = :name, 
                 description = :description, 
@@ -149,7 +218,8 @@ try {
                 id_category = :id_category, 
                 id_provider = :id_provider, 
                 sku = :sku, 
-                status = :status
+                status = :status,
+                pdf_path = :pdf_path
             WHERE id_product = :id_product";
     
     $stmt = $pdo->prepare($sql);
@@ -161,6 +231,7 @@ try {
         ':id_provider' => $id_provider,
         ':sku' => $sku,
         ':status' => $status,
+        ':pdf_path' => $datasheetPath,
         ':id_product' => $id_product
     ]);
     
@@ -178,6 +249,7 @@ try {
             'name' => $name,
             'sku' => $sku,
             'image_path' => $imagePath,
+            'pdf_path' => $datasheetPath,
             'id_category' => $id_category,
             'id_provider' => $id_provider,
             'status' => $status

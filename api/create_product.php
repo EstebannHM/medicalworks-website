@@ -65,6 +65,7 @@ try {
         throw new Exception('Ya existe un producto con ese SKU');
     }
     
+    // ========== PROCESAMIENTO DE IMAGEN ==========
     $imageFile = $_FILES['image'];
     
     if ($imageFile['error'] !== UPLOAD_ERR_OK) {
@@ -99,7 +100,7 @@ try {
     // Genera nombre único para la imagen
     $newFileName = 'product_' . time() . '_' . bin2hex(random_bytes(8)) . '.' . $extension;
     
-    // Definie ruta de destino
+    // Define ruta de destino
     $uploadDir = __DIR__ . '/../assets/img/productos/';
     
     // Crea directorio si no existe
@@ -111,7 +112,7 @@ try {
     
     $uploadPath = $uploadDir . $newFileName;
     
-    // Mueve el  archivo
+    // Mueve el archivo
     if (!move_uploaded_file($imageFile['tmp_name'], $uploadPath)) {
         throw new Exception('Error al guardar la imagen');
     }
@@ -119,9 +120,89 @@ try {
     // Guardar ruta relativa en la BD
     $imagePath = 'productos/' . $newFileName;
     
-    // Inserta producto en la base de datos
-    $sql = "INSERT INTO products (name, description, image_path, id_category, id_provider, sku, status) 
-            VALUES (:name, :description, :image_path, :id_category, :id_provider, :sku, :status)";
+    // FICHA TÉCNICA (PDF)
+    $datasheetPath = null;
+    
+    if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $datasheetFile = $_FILES['pdf'];
+        
+        if ($datasheetFile['error'] !== UPLOAD_ERR_OK) {
+            // Si falla, elimina la imagen subida
+            if (file_exists($uploadPath)) {
+                unlink($uploadPath);
+            }
+            throw new Exception('Error al subir la ficha técnica');
+        }
+        
+        // Validacion de extensión PDF
+        $pdfExtension = strtolower(pathinfo($datasheetFile['name'], PATHINFO_EXTENSION));
+        
+        if ($pdfExtension !== 'pdf') {
+            if (file_exists($uploadPath)) {
+                unlink($uploadPath);
+            }
+            throw new Exception('La ficha técnica debe ser un archivo PDF');
+        }
+        
+        // Validación del MIME type para PDF
+        $finfoDatasheet = finfo_open(FILEINFO_MIME_TYPE);
+        $pdfMimeType = finfo_file($finfoDatasheet, $datasheetFile['tmp_name']);
+        finfo_close($finfoDatasheet);
+        
+        if ($pdfMimeType !== 'application/pdf') {
+            if (file_exists($uploadPath)) {
+                unlink($uploadPath);
+            }
+            throw new Exception('El archivo no es un PDF válido');
+        }
+        
+        // Validacion del tamaño (10MB para PDFs)
+        $maxPdfSize = 10 * 1024 * 1024;
+        if ($datasheetFile['size'] > $maxPdfSize) {
+            if (file_exists($uploadPath)) {
+                unlink($uploadPath);
+            }
+            throw new Exception('La ficha técnica no debe superar los 10MB');
+        }
+        
+        // Genera nombre unico para el PDF basado en nombre del producto y SKU
+        $sanitizedName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $name);
+        $sanitizedName = preg_replace('/_+/', '_', $sanitizedName);
+        $sanitizedName = trim($sanitizedName, '_');
+        $sanitizedSku = preg_replace('/[^a-zA-Z0-9_-]/', '_', $sku);
+        
+        $newPdfFileName = $sanitizedName . '_' . $sanitizedSku . '.pdf';
+        
+        // Define ruta de destino para el PDF
+        $pdfUploadDir = __DIR__ . '/../assets/docs/fichas/';
+        
+        // Crea directorio si no existe
+        if (!is_dir($pdfUploadDir)) {
+            if (!mkdir($pdfUploadDir, 0755, true)) {
+                if (file_exists($uploadPath)) {
+                    unlink($uploadPath);
+                }
+                throw new Exception('No se pudo crear el directorio de fichas técnicas');
+            }
+        }
+        
+        $pdfUploadPath = $pdfUploadDir . $newPdfFileName;
+        
+        // Mueve el archivo PDF
+        if (!move_uploaded_file($datasheetFile['tmp_name'], $pdfUploadPath)) {
+            if (file_exists($uploadPath)) {
+                unlink($uploadPath);
+            }
+            throw new Exception('Error al guardar la ficha técnica');
+        }
+        
+        // Guardar la ruta 
+        $datasheetPath = 'fichas/' . $newPdfFileName;
+    }
+    
+    // Inserta en la base de datos
+    $sql = "INSERT INTO products (name, description, image_path, id_category, id_provider, sku, status, pdf_path) 
+            VALUES (:name, :description, :image_path, :id_category, :id_provider, :sku, :status, :pdf_path)";
     
     $stmt = $pdo->prepare($sql);
     $result = $stmt->execute([
@@ -131,13 +212,17 @@ try {
         ':id_category' => $id_category,
         ':id_provider' => $id_provider,
         ':sku' => $sku,
-        ':status' => $status
+        ':status' => $status,
+        ':pdf_path' => $datasheetPath
     ]);
     
     if (!$result) {
-        // Si falla, eliminar la imagen subida
+        // Si falla, eliminar archivos subidos
         if (file_exists($uploadPath)) {
             unlink($uploadPath);
+        }
+        if ($datasheetPath && file_exists($pdfUploadDir . basename($datasheetPath))) {
+            unlink($pdfUploadDir . basename($datasheetPath));
         }
         throw new Exception('Error al guardar el producto en la base de datos');
     }
@@ -154,6 +239,7 @@ try {
             'name' => $name,
             'sku' => $sku,
             'image_path' => $imagePath,
+            'pdf_path' => $datasheetPath,
             'id_category' => $id_category,
             'id_provider' => $id_provider,
             'status' => $status

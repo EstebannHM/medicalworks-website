@@ -367,14 +367,13 @@ async function processQuote() {
     const btn = document.getElementById('btn-generate-quote');
     if (!btn) return;
     
-    // Cambio de boton cuando carga
     btn.disabled = true;
     const originalHTML = btn.innerHTML;
     btn.innerHTML = `
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
             <circle cx="12" cy="12" r="10"/>
         </svg>
-        Generando PDF...
+        Generando cotización...
     `;
 
     try {
