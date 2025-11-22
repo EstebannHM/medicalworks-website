@@ -16,10 +16,17 @@ const statusText = document.querySelector('.status-text');
 const modalTitle = document.getElementById('modalTitle');
 const modalSubtitle = document.getElementById('modalSubtitle');
 
+// Variables para ficha técnica (RF-039)
+const datasheetInput = document.getElementById('productPdf');
+const datasheetPreviewContainer = document.getElementById('pdfPreviewContainer');
+const datasheetFileName = document.getElementById('pdfFileName');
+const removeDatasheetBtn = document.getElementById('removePdf');
+
 // Variable para rastrear el modo del modal (crear o editar)
 let modalMode = 'create'; // 'create' o 'edit'
 let editingProductId = null;
 let existingImagePath = null;
+let existingDatasheetPath = null; // RF-039
 
 // Cambiar texto del estado
 if (toggleStatus && statusText) {
@@ -40,6 +47,7 @@ window.openEditProductModal = function(product) {
   modalMode = 'edit';
   editingProductId = product.id_product;
   existingImagePath = product.image_path;
+  existingDatasheetPath = product.pdf_path || null; // RF-039
   
   openModal('edit', product);
 };
@@ -180,6 +188,14 @@ function fillFormWithProductData(product) {
     imagePreviewContainer.style.display = 'block';
     existingImagePath = product.image_path;
   }
+  
+  // RF-039: Mostrar ficha técnica actual si existe
+  if (product.pdf_path && datasheetPreviewContainer && datasheetFileName) {
+    const pdfName = product.pdf_path.split('/').pop();
+    datasheetFileName.textContent = pdfName;
+    datasheetPreviewContainer.style.display = 'flex';
+    existingDatasheetPath = product.pdf_path;
+  }
 }
 
 function closeModal() {
@@ -190,12 +206,22 @@ function closeModal() {
   // Reseteo del form
   form.reset();
   imagePreviewContainer.style.display = 'none';
+  
+  // RF-039: Resetear ficha técnica
+  if (datasheetPreviewContainer) {
+    datasheetPreviewContainer.style.display = 'none';
+  }
+  if (datasheetFileName) {
+    datasheetFileName.textContent = '';
+  }
+  
   hideError();
   
   // Resetear variables de modo
   modalMode = 'create';
   editingProductId = null;
   existingImagePath = null;
+  existingDatasheetPath = null; // RF-039
   
   // Reseteo botón de guardar
   if (btnSave) {
@@ -207,49 +233,50 @@ function closeModal() {
       Guardar Producto
     `;
   }
+  
+  // Resetear estado
+  if (statusText) {
+    statusText.textContent = 'Activo';
+  }
 }
 
 // Carga categorías
 async function loadCategoriesForModal() {
   try {
-    const res = await fetch('/api/categories.php');
-    const data = await res.json();
+    const response = await fetch('/api/categories.php');
+    const result = await response.json();
     
-    if (data.success && Array.isArray(data.categories)) {
+    if (result.success) {
       const select = document.getElementById('productCategory');
-      select.innerHTML = '<option value="">Seleccionar categoría</option>';
-      
-      data.categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat.id_category;
-        option.textContent = cat.name;
-        select.appendChild(option);
-      });
+      if (select) {
+        select.innerHTML = '<option value="">Seleccione una categoría</option>';
+        result.categories.forEach(cat => {
+          select.innerHTML += `<option value="${cat.id_category}">${cat.name}</option>`;
+        });
+      }
     }
   } catch (error) {
-    console.error('Error al cargar categorías:', error);
+    console.error('Error cargando categorías:', error);
   }
 }
 
 // Carga proveedores
 async function loadProvidersForModal() {
   try {
-    const res = await fetch('/api/providers.php');
-    const data = await res.json();
+    const response = await fetch('/api/providers.php');
+    const result = await response.json();
     
-    if (data.success && Array.isArray(data.providers)) {
+    if (result.success) {
       const select = document.getElementById('productProvider');
-      select.innerHTML = '<option value="">Seleccionar proveedor</option>';
-      
-      data.providers.forEach(prov => {
-        const option = document.createElement('option');
-        option.value = prov.id_provider;
-        option.textContent = prov.name;
-        select.appendChild(option);
-      });
+      if (select) {
+        select.innerHTML = '<option value="">Seleccione un proveedor</option>';
+        result.providers.forEach(prov => {
+          select.innerHTML += `<option value="${prov.id_provider}">${prov.name}</option>`;
+        });
+      }
     }
   } catch (error) {
-    console.error('Error al cargar proveedores:', error);
+    console.error('Error cargando proveedores:', error);
   }
 }
 
@@ -259,23 +286,21 @@ if (imageInput) {
     const file = e.target.files[0];
     
     if (file) {
-      // Validacion del tipo de archivo
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-      if (!validTypes.includes(file.type)) {
-        showError('Por favor seleccione una imagen JPG o PNG');
+      // Validaciones en frontend
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        showError('Solo se permiten imágenes JPG y PNG');
         imageInput.value = '';
         return;
       }
       
-      // Validacion del tamaño de la imagen (5MB)
-      const maxSize = 5 * 1024 * 1024;
+      const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
         showError('La imagen no debe superar los 5MB');
         imageInput.value = '';
         return;
       }
       
-      // Mostrar preview
       const reader = new FileReader();
       reader.onload = (e) => {
         imagePreview.src = e.target.result;
@@ -309,6 +334,59 @@ if (removePreviewBtn) {
   });
 }
 
+// RF-039: Preview de ficha técnica (PDF)
+if (datasheetInput) {
+  datasheetInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    
+    if (file) {
+      // Validación de tipo PDF
+      if (file.type !== 'application/pdf') {
+        showError('La ficha técnica debe ser un archivo PDF');
+        datasheetInput.value = '';
+        return;
+      }
+      
+      // Validación de tamaño (10MB)
+      const maxSize = 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        showError('La ficha técnica no debe superar los 10MB');
+        datasheetInput.value = '';
+        return;
+      }
+      
+      // Mostrar preview con nombre del archivo
+      if (datasheetFileName && datasheetPreviewContainer) {
+        datasheetFileName.textContent = file.name;
+        datasheetPreviewContainer.style.display = 'flex';
+      }
+      
+      hideError();
+    }
+  });
+}
+
+// RF-039: Remover ficha técnica
+if (removeDatasheetBtn) {
+  removeDatasheetBtn.addEventListener('click', () => {
+    datasheetInput.value = '';
+    
+    if (datasheetPreviewContainer) {
+      datasheetPreviewContainer.style.display = 'none';
+    }
+    if (datasheetFileName) {
+      datasheetFileName.textContent = '';
+    }
+    
+    // Si estamos en modo editar y había una ficha existente, mostrarla de nuevo
+    if (modalMode === 'edit' && existingDatasheetPath) {
+      const pdfName = existingDatasheetPath.split('/').pop();
+      datasheetFileName.textContent = pdfName;
+      datasheetPreviewContainer.style.display = 'flex';
+    }
+  });
+}
+
 // Botón de previsualizar
 if (btnPreview) {
   btnPreview.addEventListener('click', () => {
@@ -322,7 +400,8 @@ if (btnPreview) {
       proveedor: document.getElementById('productProvider').selectedOptions[0]?.text || '',
       descripcion: formData.get('description'),
       status: formData.get('status') ? 'Activo' : 'Inactivo',
-      imagen: imageInput.files[0] ? imageInput.files[0].name : (existingImagePath ? 'Imagen actual' : 'Sin imagen')
+      imagen: imageInput.files[0] ? imageInput.files[0].name : (existingImagePath ? 'Imagen actual' : 'Sin imagen'),
+      fichaTecnica: datasheetInput && datasheetInput.files[0] ? datasheetInput.files[0].name : (existingDatasheetPath ? 'Ficha actual' : 'Sin ficha técnica')
     };
     
     const preview = `
@@ -335,6 +414,7 @@ if (btnPreview) {
       Descripción: ${data.descripcion}
       Estado: ${data.status}
       Imagen: ${data.imagen}
+      Ficha Técnica: ${data.fichaTecnica}
     `;
     
     alert(preview.trim());
