@@ -13,7 +13,7 @@ const ROWS_PER_PAGE = 10;
 let CATEGORY_MAP = new Map(); // id_category -> nombre
 let PROVIDER_MAP = new Map(); // id_provider -> nombre
 let currentSearchTerm = ""; // Variable para almacenar el término de búsqueda actual
-let currentStatusFilter = "all"; 
+let currentStatusFilter = "all";
 let currentCategoryId = "all";
 let currentProviderId = "all";
 
@@ -30,13 +30,13 @@ function esc(s) {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await Promise.all([loadCategoriesAdmin(), loadProviders()]);
-    await loadProducts(); // Ya incluye updateProductsKPIFromAPI()
+    await loadProducts();
     updateProvidersKPI();
     setupDelegatedActions();
-    setupSearchListener(); // Configurar listener de búsqueda
-    setupStatusFilterListener(); // Nuevo: listener para el filtro de estado
-    setupCategoryFilterListener(); // Nuevo: listener para el filtro de categoría
-    setupProviderFilterListener(); // Nuevo: listener para el filtro de proveedor
+    setupSearchListener();
+    setupStatusFilterListener();
+    setupCategoryFilterListener();
+    setupProviderFilterListener();
     renderPage(1, false);
   } catch (e) {
     console.error(e);
@@ -50,14 +50,12 @@ async function loadProducts() {
   if (!data.success) throw new Error("No se pudieron cargar productos");
   A_PRODUCTS = data.products;
   A_FILTERED = [...A_PRODUCTS];
-  
-  
+
   updateProductsKPIFromAPI(data.stats); // Actualizar KPI usando las estadísticas de la API
 }
 
-
 // Carga categorías y las renderiza en el dropdown
- async function loadCategoriesAdmin() {
+async function loadCategoriesAdmin() {
   const res = await fetch("/api/categories_admin.php");
   const data = await res.json();
   if (data.success && Array.isArray(data.categories)) {
@@ -79,7 +77,6 @@ async function loadProviders() {
   }
 }
 
-
 // Aplicar filtro de búsqueda y estado
 function applySearchAndStatusFilter() {
   const searchInput = document.getElementById("productSearch");
@@ -97,12 +94,16 @@ function applySearchAndStatusFilter() {
 
   // Filtrar por categoría
   if (currentCategoryId !== "all") {
-    filtered = filtered.filter((product) => Number(product.id_category) === Number(currentCategoryId));
+    filtered = filtered.filter(
+      (product) => Number(product.id_category) === Number(currentCategoryId)
+    );
   }
 
   // Filtrar por proveedor
   if (currentProviderId !== "all") {
-    filtered = filtered.filter((product) => Number(product.id_provider) === Number(currentProviderId));
+    filtered = filtered.filter(
+      (product) => Number(product.id_provider) === Number(currentProviderId)
+    );
   }
 
   // Filtrar por búsqueda si hay término
@@ -132,8 +133,6 @@ function applySearchAndStatusFilter() {
   A_FILTERED = filtered;
   renderPage(1, false); // Volver a la primera página y renderizar
 }
-
-
 
 function tableHTML(rows) {
   return `
@@ -265,7 +264,6 @@ function renderPagination() {
   };
 }
 
-
 // Renderizar botones de categorías con data-category-id
 function renderCategories(categories) {
   const container = document.getElementById("categoriesContainer");
@@ -273,7 +271,9 @@ function renderCategories(categories) {
   container.innerHTML = categories
     .map(
       (c) => `
-    <button class="dropdown-item" data-category-id="${c.id_category}" data-category="${esc(c.name)}">
+    <button class="dropdown-item" data-category-id="${
+      c.id_category
+    }" data-category="${esc(c.name)}">
       ${esc(c.name)}
     </button>
   `
@@ -288,14 +288,15 @@ function renderProviders(providers) {
   container.innerHTML = providers
     .map(
       (p) => `
-    <button class="dropdown-item" data-provider-id="${p.id_provider}" data-provider="${esc(p.name)}">
+    <button class="dropdown-item" data-provider-id="${
+      p.id_provider
+    }" data-provider="${esc(p.name)}">
       ${esc(p.name)}
     </button>
   `
     )
     .join("");
 }
-
 
 // Función para configurar el listener del filtro de categoría
 function setupCategoryFilterListener() {
@@ -314,10 +315,14 @@ function setupCategoryFilterListener() {
     const item = e.target.closest(".dropdown-item");
     if (!item) return;
     // Remover clase active de todos
-    dropdownMenu.querySelectorAll(".dropdown-item").forEach(btn => btn.classList.remove("active"));
+    dropdownMenu
+      .querySelectorAll(".dropdown-item")
+      .forEach((btn) => btn.classList.remove("active"));
     item.classList.add("active");
     // Actualizar filtro y texto
-    const catId = item.getAttribute("data-category-id") || item.getAttribute("data-category");
+    const catId =
+      item.getAttribute("data-category-id") ||
+      item.getAttribute("data-category");
     currentCategoryId = catId;
     let text = "Todas las categorías";
     if (catId !== "all") {
@@ -330,12 +335,14 @@ function setupCategoryFilterListener() {
 
   // Cerrar menú al hacer click fuera
   document.addEventListener("click", (e) => {
-    if (!dropdownMenu.contains(e.target) && !dropdownToggle.contains(e.target)) {
+    if (
+      !dropdownMenu.contains(e.target) &&
+      !dropdownToggle.contains(e.target)
+    ) {
       dropdownMenu.classList.remove("show");
     }
   });
 }
-
 
 // Función para configurar el listener del filtro de proveedor
 function setupProviderFilterListener() {
@@ -354,10 +361,14 @@ function setupProviderFilterListener() {
     const item = e.target.closest(".dropdown-item");
     if (!item) return;
     // Remover clase active de todos
-    dropdownMenu.querySelectorAll(".dropdown-item").forEach(btn => btn.classList.remove("active"));
+    dropdownMenu
+      .querySelectorAll(".dropdown-item")
+      .forEach((btn) => btn.classList.remove("active"));
     item.classList.add("active");
     // Actualizar filtro y texto
-    const provId = item.getAttribute("data-provider-id") || item.getAttribute("data-provider");
+    const provId =
+      item.getAttribute("data-provider-id") ||
+      item.getAttribute("data-provider");
     currentProviderId = provId;
     let text = "Todos los proveedores";
     if (provId !== "all") {
@@ -370,12 +381,14 @@ function setupProviderFilterListener() {
 
   // Cerrar menú al hacer click fuera
   document.addEventListener("click", (e) => {
-    if (!dropdownMenu.contains(e.target) && !dropdownToggle.contains(e.target)) {
+    if (
+      !dropdownMenu.contains(e.target) &&
+      !dropdownToggle.contains(e.target)
+    ) {
       dropdownMenu.classList.remove("show");
     }
   });
 }
-
 
 // Función para configurar el listener del filtro de estado
 function setupStatusFilterListener() {
@@ -394,7 +407,9 @@ function setupStatusFilterListener() {
     const item = e.target.closest(".dropdown-item");
     if (!item) return;
     // Remover clase active de todos
-    dropdownMenu.querySelectorAll(".dropdown-item").forEach(btn => btn.classList.remove("active"));
+    dropdownMenu
+      .querySelectorAll(".dropdown-item")
+      .forEach((btn) => btn.classList.remove("active"));
     item.classList.add("active");
     // Actualizar filtro y texto
     const status = item.getAttribute("data-status");
@@ -409,12 +424,14 @@ function setupStatusFilterListener() {
 
   // Cerrar menú al hacer click fuera
   document.addEventListener("click", (e) => {
-    if (!dropdownMenu.contains(e.target) && !dropdownToggle.contains(e.target)) {
+    if (
+      !dropdownMenu.contains(e.target) &&
+      !dropdownToggle.contains(e.target)
+    ) {
       dropdownMenu.classList.remove("show");
     }
   });
 }
-
 
 // Configurar listener para la barra de búsqueda
 function setupSearchListener() {
@@ -432,7 +449,6 @@ function setupSearchListener() {
   searchInput.setAttribute("enterkeyhint", "search");
 }
 
-
 // Delega eventos (agregar y editar) sobre el contenedor de la tabla
 function setupDelegatedActions() {
   const mount = document.getElementById("tableMount");
@@ -447,7 +463,7 @@ function setupDelegatedActions() {
     if (!productId) return;
 
     // Toggle status
-  if (btn.classList.contains("btn-toggle-status")) {
+    if (btn.classList.contains("btn-toggle-status")) {
       e.preventDefault();
       const product = A_PRODUCTS.find(
         (p) => Number(p.id_product) === productId
@@ -458,8 +474,8 @@ function setupDelegatedActions() {
       try {
         await updateProductStatus(productId, newStatus);
         // Recarga productos desde el servidor para obtener datos actualizados
-  await loadProducts();
-  applySearchAndStatusFilter();
+        await loadProducts();
+        applySearchAndStatusFilter();
       } catch (error) {
         alert("Error al cambiar el estado del producto: " + error.message);
         btn.disabled = false;
@@ -483,8 +499,7 @@ function setupDelegatedActions() {
       }
     }
   });
-} 
-
+}
 
 // Función para actualizar el status de un producto
 async function updateProductStatus(idProduct, newStatus) {
@@ -524,7 +539,6 @@ function updateProductsKPIFromAPI(stats) {
   const valueEl = card.querySelector(".kpi-value");
   if (!valueEl) return;
 
-  
   valueEl.textContent = String(stats.active); // Mostrar solo productos activos usando las estadísticas de la API
 }
 
