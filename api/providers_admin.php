@@ -19,7 +19,7 @@ if (empty($_SESSION['admin_auth'])) {
 }
 
 try {
-    $sql = "SELECT id_provider, name FROM providers ORDER BY name ASC";
+    $sql = "SELECT id_provider, name, website_url, image_path, status FROM providers ORDER BY name ASC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $providers = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -28,14 +28,27 @@ try {
     $sanitizedProviders = array_map(function($provider) {
         return [
             'id_provider' => (int)$provider['id_provider'],
-            'name' => htmlspecialchars($provider['name'], ENT_QUOTES, 'UTF-8')
+            'name' => htmlspecialchars($provider['name'], ENT_QUOTES, 'UTF-8'),
+            'website_url' => isset($provider['website_url']) ? htmlspecialchars($provider['website_url'], ENT_QUOTES, 'UTF-8') : '',
+            'image_path' => isset($provider['image_path']) ? htmlspecialchars($provider['image_path'], ENT_QUOTES, 'UTF-8') : '',
+            'status' => isset($provider['status']) ? (int)$provider['status'] : 1
         ];
     }, $providers);
-    
+
+    // Calcular estadísticas
+    $total = count($sanitizedProviders);
+    $active = count(array_filter($sanitizedProviders, fn($p) => $p['status'] === 1));
+    $inactive = count(array_filter($sanitizedProviders, fn($p) => $p['status'] === 0));
+
     echo json_encode([
         'success' => true,
         'providers' => $sanitizedProviders,
-        'total' => count($sanitizedProviders)
+        'total' => $total,
+        'stats' => [
+            'active' => $active,
+            'inactive' => $inactive,
+            'total' => $total
+        ]
     ]);
     
 } catch (Exception $e) {

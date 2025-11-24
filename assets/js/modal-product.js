@@ -518,8 +518,12 @@ if (form) {
 
         // Recarga productos
         setTimeout(async () => {
-          await loadProducts();
-          renderPage(PAGE, false);
+          if (typeof loadProducts === 'function') {
+            await loadProducts();
+          }
+          if (typeof renderPage === 'function') {
+            renderPage('productos', 1, false);
+          }
           closeModal();
         }, 1000);
       } else {
