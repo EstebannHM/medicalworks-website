@@ -435,7 +435,11 @@ $_SESSION['csrf'] = $csrfToken;
     </div>
   </div>
 
-  <script src="../assets/js/dashboard.js" defer></script>
+  <script src="../assets/js/admin/dashboard-common.js" defer></script>
+  <script src="../assets/js/admin/dashboard-products.js" defer></script>
+  <script src="../assets/js/admin/dashboard-categories.js" defer></script>
+  <script src="../assets/js/admin/dashboard-providers.js" defer></script>
+  <script src="../assets/js/admin/dashboard.js" defer></script>
   <script src="../assets/js/modal-product.js" defer></script>
 </body>
 
