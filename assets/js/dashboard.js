@@ -14,10 +14,15 @@ let CATEGORY_MAP = new Map(); // id_category -> nombre
 let PROVIDER_MAP = new Map(); // id_provider -> nombre
 let A_CATEGORIES = [];
 let A_PROVIDERS = [];
+let A_FILTERED_CATEGORIES = []; // Categorías filtradas
+let A_FILTERED_PROVIDERS = []; // Proveedores filtrados
 let currentSearchTerm = ""; // Variable para almacenar el término de búsqueda actual
 let currentStatusFilter = "all";
 let currentCategoryId = "all";
 let currentProviderId = "all";
+let currentCategorySearchTerm = ""; // Búsqueda de categorías
+let currentProviderSearchTerm = ""; // Búsqueda de proveedores
+let currentProviderStatusFilter = "all"; // Filtro de estado para proveedores
 
 // Utilidad simple para evitar inyecciones en nombres
 function esc(s) {
@@ -38,6 +43,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupStatusFilterListener();
     setupCategoryFilterListener();
     setupProviderFilterListener();
+    setupCategorySearchListener(); // Búsqueda de categorías
+    setupProviderSearchListener(); // Búsqueda de proveedores
+    setupProviderStatusFilterListener(); // Filtro de estado para proveedores
     setupMenuSectionListener(); // Agregado
     renderPage('productos', 1, false);
   } catch (e) {
@@ -66,6 +74,7 @@ async function loadCategoriesAdmin() {
       data.categories.map((c) => [Number(c.id_category), c.name])
     );
     A_CATEGORIES = data.categories;
+    A_FILTERED_CATEGORIES = [...A_CATEGORIES]; // Inicializar filtradas
     renderCategories(data.categories);
   }
 }
@@ -78,6 +87,7 @@ async function loadProviders() {
       data.providers.map((p) => [Number(p.id_provider), p.name])
     );
     A_PROVIDERS = data.providers;
+    A_FILTERED_PROVIDERS = [...A_PROVIDERS]; // Inicializar filtradas
   renderProviders(data.providers);
     if (data.stats) {
       updateProvidersKPIFromAPI(data.stats);
@@ -222,7 +232,7 @@ function renderRow(p, tipo) {
         <td>
           <div class="prod-cell">
             <div class="prod-icon" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
                 <path d="M3 2v4.586l7 7L14.586 9l-7-7zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586z"/>
                 <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1z"/>
               </svg>
@@ -241,7 +251,7 @@ function renderRow(p, tipo) {
         <td>
           <div class="prod-cell">
             <div class="prod-icon" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
                 <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
               </svg>
             </div>
@@ -280,10 +290,10 @@ function renderPage(tipo, page = 1, shouldScroll = true) {
     datos = A_FILTERED;
     label = 'productos';
   } else if (tipo === 'categorias') {
-    datos = A_CATEGORIES;
+    datos = A_FILTERED_CATEGORIES;
     label = 'categorías';
   } else if (tipo === 'proveedores') {
-    datos = A_PROVIDERS;
+    datos = A_FILTERED_PROVIDERS;
     label = 'proveedores';
   }
 
@@ -638,22 +648,155 @@ function setupMenuSectionListener() {
     item.addEventListener('click', function(e) {
       e.preventDefault();
       const section = item.getAttribute('data-section');
+      
       // Quitar clase active de todos y poner solo al seleccionado
       menuItems.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
-      // Mostrar/ocultar filtros según la sección
-      const toolbar = document.querySelector('.products-toolbar');
+      
+      // Mostrar/ocultar toolbars según la sección
+      const toolbarProductos = document.getElementById('toolbarProductos');
+      const toolbarCategorias = document.getElementById('toolbarCategorias');
+      const toolbarProveedores = document.getElementById('toolbarProveedores');
+      
       if (section === 'productos') {
-        if (toolbar) toolbar.style.display = '';
+        if (toolbarProductos) toolbarProductos.style.display = '';
+        if (toolbarCategorias) toolbarCategorias.style.display = 'none';
+        if (toolbarProveedores) toolbarProveedores.style.display = 'none';
         renderPage('productos', 1, false);
       } else if (section === 'categorias') {
-        if (toolbar) toolbar.style.display = 'none';
+        if (toolbarProductos) toolbarProductos.style.display = 'none';
+        if (toolbarCategorias) toolbarCategorias.style.display = '';
+        if (toolbarProveedores) toolbarProveedores.style.display = 'none';
         renderPage('categorias', 1, false);
       } else if (section === 'proveedores') {
-        if (toolbar) toolbar.style.display = 'none';
+        if (toolbarProductos) toolbarProductos.style.display = 'none';
+        if (toolbarCategorias) toolbarCategorias.style.display = 'none';
+        if (toolbarProveedores) toolbarProveedores.style.display = '';
         renderPage('proveedores', 1, false);
       }
     });
   });
+}
+
+// ==================== BÚSQUEDA Y FILTROS PARA CATEGORÍAS ====================
+
+// Aplicar filtro de búsqueda para categorías
+function applyCategorySearchFilter() {
+  const searchInput = document.getElementById("categorySearch");
+  if (!searchInput) return;
+
+  currentCategorySearchTerm = searchInput.value.trim();
+  let filtered = [...A_CATEGORIES];
+
+  // Filtrar por búsqueda si hay término
+  if (currentCategorySearchTerm !== "") {
+    const normalizeText = (text) =>
+      String(text)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+    const normalizedSearch = normalizeText(currentCategorySearchTerm);
+
+    filtered = filtered.filter((category) => {
+      const name = category.name || "";
+      return normalizeText(name).includes(normalizedSearch);
+    });
+  }
+
+  A_FILTERED_CATEGORIES = filtered;
+  renderPage('categorias', 1, false);
+}
+
+// Configurar listener para búsqueda de categorías
+function setupCategorySearchListener() {
+  const searchInput = document.getElementById("categorySearch");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      applyCategorySearchFilter();
+    }
+  });
+
+  searchInput.setAttribute("enterkeyhint", "search");
+}
+
+// ==================== BÚSQUEDA Y FILTROS PARA PROVEEDORES ====================
+
+// Aplicar filtro de búsqueda y estado para proveedores
+function applyProviderSearchAndStatusFilter() {
+  const searchInput = document.getElementById("providerSearch");
+  if (!searchInput) return;
+
+  currentProviderSearchTerm = searchInput.value.trim();
+  let filtered = [...A_PROVIDERS];
+
+  // Filtrar por estado
+  if (currentProviderStatusFilter === "active") {
+    filtered = filtered.filter((provider) => Number(provider.status) === 1);
+  } else if (currentProviderStatusFilter === "inactive") {
+    filtered = filtered.filter((provider) => Number(provider.status) === 0);
+  }
+
+  // Filtrar por búsqueda si hay término
+  if (currentProviderSearchTerm !== "") {
+    const normalizeText = (text) =>
+      String(text)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+    const normalizedSearch = normalizeText(currentProviderSearchTerm);
+
+    filtered = filtered.filter((provider) => {
+      const name = provider.name || "";
+      return normalizeText(name).includes(normalizedSearch);
+    });
+  }
+
+  A_FILTERED_PROVIDERS = filtered;
+  renderPage('proveedores', 1, false);
+}
+
+// Configurar listener para búsqueda de proveedores
+function setupProviderSearchListener() {
+  const searchInput = document.getElementById("providerSearch");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      applyProviderSearchAndStatusFilter();
+    }
+  });
+
+  searchInput.setAttribute("enterkeyhint", "search");
+}
+
+// Configurar listener para filtro de estado de proveedores
+function setupProviderStatusFilterListener() {
+  setupDropdownFilterListener({
+    dropdownToggleId: "providerStatusDropdown",
+    dropdownMenuId: "providerStatusDropdownMenu",
+    getValue: (item) => item.getAttribute("data-status"),
+    getText: (item) => {
+      const status = item.getAttribute("data-status");
+      if (status === "active") return "Solo activos";
+      if (status === "inactive") return "Solo inactivos";
+      return "Todos los estados";
+    },
+    setFilter: (val) => { currentProviderStatusFilter = val; },
+    defaultText: "Todos los estados"
+  });
+  
+  // Aplicar filtros al cambiar el estado
+  const dropdownMenu = document.getElementById("providerStatusDropdownMenu");
+  if (dropdownMenu) {
+    dropdownMenu.addEventListener("click", () => {
+      setTimeout(() => applyProviderSearchAndStatusFilter(), 100);
+    });
+  }
 }
 

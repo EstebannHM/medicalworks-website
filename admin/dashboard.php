@@ -113,7 +113,7 @@ $_SESSION['csrf'] = $csrfToken;
           <li>
             <a href="#categorias" class="menu-item active" data-section="categorias">
               <span class="icon" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
+                <svg width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
                   <path d="M3 2v4.586l7 7L14.586 9l-7-7zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586z" />
                   <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1z" />
                 </svg>
@@ -172,9 +172,11 @@ $_SESSION['csrf'] = $csrfToken;
           <p class="kpi-value"></p>
         </div>
       </div>
-      <!-- Barra de búsqueda y filtros + Tabla de productos -->
-      <section id="adminProducts" class="admin-products">
-        <div class="products-toolbar" aria-label="Búsqueda y filtros">
+      <!-- Sección Principal con Toolbars Dinámicas -->
+      <section id="adminContent" class="admin-content">
+        
+        <!-- Toolbar para PRODUCTOS -->
+        <div class="products-toolbar" id="toolbarProductos" aria-label="Búsqueda y filtros de productos">
           <div class="toolbar-left">
             <div class="search-box">
               <label for="productSearch" class="visually-hidden">Buscar productos</label>
@@ -231,6 +233,61 @@ $_SESSION['csrf'] = $csrfToken;
             </button>
           </div>
         </div>
+
+        <!-- Toolbar para CATEGORÍAS -->
+        <div class="products-toolbar" id="toolbarCategorias" style="display: none;" aria-label="Búsqueda y filtros de categorías">
+          <div class="toolbar-left">
+            <div class="search-box">
+              <label for="categorySearch" class="visually-hidden">Buscar categorías</label>
+              <input type="text" id="categorySearch" placeholder="Buscar categorías..." autocomplete="off" aria-label="Buscar categorías">
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <button type="button" class="btn-create-product" id="btnCreateCategory" title="Nueva Categoría" aria-label="Nueva Categoría">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+              </svg>
+              <span class="btn-label">Nueva Categoría</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Toolbar para PROVEEDORES -->
+        <div class="products-toolbar" id="toolbarProveedores" style="display: none;" aria-label="Búsqueda y filtros de proveedores">
+          <div class="toolbar-left">
+            <div class="search-box">
+              <label for="providerSearch" class="visually-hidden">Buscar proveedores</label>
+              <input type="text" id="providerSearch" placeholder="Buscar proveedores..." autocomplete="off" aria-label="Buscar proveedores">
+            </div>
+            <div class="filters-group" aria-label="Filtros">
+              <div class="filter-section">
+                <div class="dropdown-wrapper">
+                  <button class="dropdown-toggle" id="providerStatusDropdown">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                    </svg>
+                    <span class="dropdown-text">Todos los estados</span>
+                  </button>
+                  <div class="dropdown-menu" id="providerStatusDropdownMenu">
+                    <button class="dropdown-item active" data-status="all">Todos los estados</button>
+                    <button class="dropdown-item" data-status="active">Activo</button>
+                    <button class="dropdown-item" data-status="inactive">Inactivo</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <button type="button" class="btn-create-product" id="btnCreateProvider" title="Nuevo Proveedor" aria-label="Nuevo Proveedor">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+              </svg>
+              <span class="btn-label">Nuevo Proveedor</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla Universal (se reutiliza para todo) -->
         <div class="table-wrapper" id="tableMount"></div>
         <div class="table-footer">
           <div id="tablePageInfo" class="page-info" aria-live="polite"></div>
@@ -319,13 +376,13 @@ $_SESSION['csrf'] = $csrfToken;
 
             <!-- Preview del PDF -->
             <div class="datasheet-preview-container" id="pdfPreviewContainer">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
                 <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029z" />
               </svg>
               <span class="datasheet-file-name" id="pdfFileName"></span>
               <button type="button" class="remove-datasheet" id="removePdf" title="Eliminar ficha técnica">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
                   <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                 </svg>
               </button>
