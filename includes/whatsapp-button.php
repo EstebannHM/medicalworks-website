@@ -1,5 +1,5 @@
 <div class="whatsapp-fab pulse animate-in">
-    <a href="https://wa.me/50684186031?text=Hola,%20me%20gustaría%20obtener%20más%20información%20sobre%20Medical%20Works" 
+    <a href="https://wa.me/50689471791?text=Hola,%20me%20gustaría%20obtener%20más%20información%20sobre%20Medical%20Works" 
        class="whatsapp-fab-link"
        target="_blank" 
        rel="noopener noreferrer"

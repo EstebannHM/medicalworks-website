@@ -36,23 +36,29 @@
                     <div class="mv-card">
                         <div class="mv-icon mv-icon-blue">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                             </svg>
                         </div>
                         <h2>Nuestra Misión</h2>
-                        <p>Proveer equipamiento médico de alta calidad a hospitales, clínicas y consultorios en toda Costa Rica, garantizando productos seguros, confiables y a precios competitivos, acompañados de un servicio excepcional</p>
+                        <p>Brindar a nuestros clientes los mejores productos en el área de la salud, a través de la
+                            representación de empresas internacionales con productos de alta calidad y tecnología
+                            avanzada, que proporcionen soluciones a los especialistas para sus pacientes en busca de
+                            calidad de vida para ellos y sus familias. Unido a un trato personalizado y dedicado, que
+                            garantice la satisfacción de nuestros clientes, y de los usuarios finales de nuestros productos
+                            y marcas representadas</p>
                     </div>
 
                     <!-- Visión -->
                     <div class="mv-card">
                         <div class="mv-icon mv-icon-green">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 6v6l4 2"/>
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6v6l4 2" />
                             </svg>
                         </div>
                         <h2>Nuestra Visión</h2>
-                        <p>Ser la empresa líder en distribución de equipamiento médico en Centroamérica, reconocida por nuestra excelencia, innovación constante y nuestro compromiso con la mejora continua del sector salud</p>
+                        <p>Ser una de las empresas líderes del país en el campo de la salud. Llevar nuestras marcas
+                            representadas a todos los rincones del país y posicionarlas en mercados internacionales</p>
                     </div>
                 </div>
             </div>
@@ -67,7 +73,7 @@
                     <div class="value-card">
                         <div class="value-icon">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                             </svg>
                         </div>
                         <h3>Excelencia</h3>
@@ -78,7 +84,7 @@
                     <div class="value-card">
                         <div class="value-icon">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
                         </div>
                         <h3>Integridad</h3>
@@ -89,10 +95,10 @@
                     <div class="value-card">
                         <div class="value-icon">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                             </svg>
                         </div>
                         <h3>Compromiso</h3>
@@ -107,10 +113,10 @@
             <div class="container">
                 <h2 class="section-title">Nuestra Experiencia</h2>
                 <p class="section-subtitle">Un recorrido de crecimiento y compromiso</p>
-                
+
                 <div class="timeline">
                     <div class="timeline-item">
-                        <div class="timeline-year">2010</div>
+                        <div class="timeline-year">2004</div>
                         <div class="timeline-content">
                             <p>Fundación de Medical Works en San José, Costa Rica</p>
                         </div>
@@ -152,13 +158,13 @@
             <div class="container">
                 <h2 class="section-title">Certificaciones</h2>
                 <p class="section-subtitle">Respaldados por las certificaciones más importantes del sector</p>
-                
+
                 <div class="certifications-grid">
                     <div class="cert-card">
                         <div class="cert-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                <path d="M9 12l2 2 4-4" />
                             </svg>
                         </div>
                         <h3>ISO 9001</h3>
@@ -168,8 +174,8 @@
                     <div class="cert-card">
                         <div class="cert-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                <path d="M9 12l2 2 4-4" />
                             </svg>
                         </div>
                         <h3>ISO 13485</h3>
@@ -179,8 +185,8 @@
                     <div class="cert-card">
                         <div class="cert-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                <path d="M9 12l2 2 4-4" />
                             </svg>
                         </div>
                         <h3>CE</h3>
@@ -190,8 +196,8 @@
                     <div class="cert-card">
                         <div class="cert-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                <path d="M9 12l2 2 4-4" />
                             </svg>
                         </div>
                         <h3>FDA</h3>
