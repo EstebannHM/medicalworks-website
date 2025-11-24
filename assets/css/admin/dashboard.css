@@ -305,11 +305,6 @@
 	}
 }
 
-
-.admin-products {
-	padding: 8px 20px 48px 32px;
-}
-
 .table-wrapper {
 	background: var(--color-white);
 	border: 1px solid rgba(0, 0, 0, 0.08);
@@ -564,13 +559,16 @@
 	background: var(--color-white);
 }
 
+.admin-content {
+	padding: 8px 20px 48px 32px;
+}
 
 .products-toolbar {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: 16px;
-	padding: 12px 4px 16px;
+	padding: 20px 4px 20px;
 }
 
 .toolbar-left {
