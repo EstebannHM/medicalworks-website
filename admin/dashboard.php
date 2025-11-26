@@ -55,6 +55,7 @@ $_SESSION['csrf'] = $csrfToken;
   <link rel="stylesheet" href="../assets/css/global.css">
   <link rel="stylesheet" href="../assets/css/admin/dashboard.css">
   <link rel="stylesheet" href="../assets/css/admin/modal-product.css">
+  <link rel="stylesheet" href="/assets/css/admin/modal-provider.css">
   <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
@@ -434,6 +435,88 @@ $_SESSION['csrf'] = $csrfToken;
       </div>
     </div>
   </div>
+<!-- Modal Agregar/Editar Proveedor -->
+<div id="modalAddProvider" class="modal-overlay" role="dialog" aria-labelledby="modalProviderTitle" aria-hidden="true">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 id="modalProviderTitle">Crear Nuevo Proveedor</h2>
+      <p id="modalProviderSubtitle" class="modal-subtitle">Completa los campos para agregar un proveedor</p>
+      <button type="button" class="modal-close" aria-label="Cerrar modal" id="btnCloseProviderModal">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+        </svg>
+      </button>
+    </div>
+
+    <form id="formAddProvider" class="modal-body" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="providerName">Nombre del Proveedor <span class="required">*</span></label>
+        <input type="text" id="providerName" name="name" placeholder="Ej. Medline Industries" required maxlength="150">
+      </div>
+
+      <div class="form-group">
+        <label for="providerWebsite">Sitio Web</label>
+        <input type="url" id="providerWebsite" name="website_url" placeholder="https://ejemplo.com" maxlength="500">
+      </div>
+
+      <div class="form-group">
+        <label for="providerDescription">Descripción <span class="required">*</span></label>
+        <textarea id="providerDescription" name="description" rows="4" placeholder="Describa al proveedor, sus productos principales y características..." required maxlength="1000"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="providerImage">Imagen/Logo del Proveedor <span class="required">*</span></label>
+        <div class="file-upload-wrapper">
+          <input type="file" id="providerImage" name="image" accept="image/jpeg,image/png,image/jpg,image/avif,image/webp" required>
+          <div class="file-upload-content">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+              <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+            </svg>
+            <span class="file-label">Subir Imagen</span>
+            <span class="file-hint">JPG, PNG (Máx. 5MB)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group form-group-status">
+        <label>Estado <span class="required">*</span></label>
+        <div class="status-toggle">
+          <input type="checkbox" id="providerStatus" name="status" class="status-checkbox" checked>
+          <label for="providerStatus" class="status-toggle-label"></label>
+          <span class="status-text">Activo</span>
+        </div>
+      </div>
+
+      <div id="providerImagePreviewContainer" class="image-preview-container" style="display: none;">
+        <label>Vista Previa</label>
+        <div class="image-preview">
+          <img id="providerImagePreview" src="" alt="Vista previa">
+          <button type="button" class="remove-preview" id="btnRemoveProviderPreview" aria-label="Eliminar imagen">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="formProviderError" class="form-error" style="display: none;"></div>
+    </form>
+
+    <div class="modal-footer">
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="btnCancelProvider">Cancelar</button>
+        <button type="submit" form="formAddProvider" class="btn-save" id="btnSaveProvider">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z" />
+          </svg>
+          Guardar Proveedor
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <script src="../assets/js/admin/dashboard-common.js" defer></script>
   <script src="../assets/js/admin/dashboard-products.js" defer></script>
@@ -441,6 +524,7 @@ $_SESSION['csrf'] = $csrfToken;
   <script src="../assets/js/admin/dashboard-providers.js" defer></script>
   <script src="../assets/js/admin/dashboard.js" defer></script>
   <script src="../assets/js/modal-product.js" defer></script>
+  <script src="../assets/js/modal-provider.js"></script>
 </body>
 
 </html>
