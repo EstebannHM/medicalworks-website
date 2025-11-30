@@ -125,7 +125,7 @@ function renderRow(p, tipo) {
   } else if (tipo === 'proveedores') {
     const status = Number(p.status) === 1 ? 'Activo' : 'Inactivo';
     return `
-      <tr>
+      <tr data-provider-id="${p.id_provider}">
         <td>
           <div class="prod-cell">
             <div class="prod-icon" aria-hidden="true">
@@ -149,6 +149,11 @@ function renderRow(p, tipo) {
               <svg width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
                 <path d="M7.5 1v7h1V1z"/>
                 <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812"/>
+              </svg>
+            </button>
+            <button class="action-btn btn-edit-provider" data-action="edit-provider" data-provider-id="${p.id_provider || ''}" title="Editar" aria-label="Editar">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
               </svg>
             </button>
           </div>

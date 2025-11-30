@@ -95,39 +95,57 @@ function setupProviderStatusFilterListener() {
   }
 }
 
-/**
- * Configura acciones para proveedores (toggle status)
- */
+let providerActionsSetup = false;
+
 function setupProviderActions() {
+  if (providerActionsSetup) return;
+  
   const mount = document.getElementById("tableMount");
   if (!mount) return;
 
   mount.addEventListener("click", async (e) => {
-    const btn = e.target.closest("button.btn-toggle-provider-status");
+    const btn = e.target.closest("button.action-btn");
     if (!btn) return;
-    
     const row = btn.closest("tr");
     if (!row) return;
 
-    const providerId = Number(btn.getAttribute("data-provider-id"));
+    const providerId = Number(row.getAttribute("data-provider-id"));
     if (!providerId) return;
 
-    e.preventDefault();
-    // Obtener el status actual
-    const statusCell = row.querySelector(".status");
-    const statusText = statusCell ? statusCell.textContent.trim() : "";
-    const currentStatus = statusText === "Activo" ? 1 : 0;
-    const newStatus = currentStatus === 1 ? 0 : 1;
-    btn.disabled = true;
-    try {
-      await updateProviderStatus(providerId, newStatus);
-      await loadProviders();
-      renderPage('proveedores', PAGE, false);
-    } catch (error) {
-      alert("Error al cambiar el estado del proveedor: " + error.message);
-      btn.disabled = false;
+    if (btn.classList.contains("btn-toggle-provider-status")) {
+      e.preventDefault();
+      const provider = A_PROVIDERS.find(
+        (p) => Number(p.id_provider) === providerId
+      );
+      if (!provider) return;
+      const newStatus = Number(provider.status) === 1 ? 0 : 1;
+      btn.disabled = true;
+      try {
+        await updateProviderStatus(providerId, newStatus);
+        await loadProviders();
+        applyProviderSearchAndStatusFilter();
+      } catch (error) {
+        alert("Error al cambiar el estado del proveedor: " + error.message);
+        btn.disabled = false;
+      }
+    } else if (btn.classList.contains("btn-edit-provider")) {
+      e.preventDefault();
+      const provider = A_PROVIDERS.find(
+        (p) => Number(p.id_provider) === providerId
+      );
+      if (!provider) {
+        console.error("Proveedor no encontrado:", providerId);
+        return;
+      }
+      if (typeof window.openEditProviderModal === "function") {
+        window.openEditProviderModal(provider);
+      } else {
+        console.error("La función openEditProviderModal no está disponible");
+      }
     }
   });
+  
+  providerActionsSetup = true;
 }
 
 async function updateProviderStatus(idProvider, newStatus) {
