@@ -56,6 +56,7 @@ $_SESSION['csrf'] = $csrfToken;
   <link rel="stylesheet" href="../assets/css/admin/dashboard.css">
   <link rel="stylesheet" href="../assets/css/admin/modal-product.css">
   <link rel="stylesheet" href="/assets/css/admin/modal-provider.css">
+  <link rel="stylesheet" href="/assets/css/admin/modal-category.css">
   <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
@@ -517,6 +518,42 @@ $_SESSION['csrf'] = $csrfToken;
     </div>
   </div>
 
+  <!-- Modal: Agregar/Editar Categoría -->
+  <div id="modalAddCategory" class="modal-overlay" role="dialog" aria-labelledby="modalCategoryTitle" aria-hidden="true">
+    <div class="modal-container modal-container-small">
+      <div class="modal-header">
+        <h2 id="modalCategoryTitle">Crear Nueva Categoría</h2>
+        <p id="modalCategorySubtitle" class="modal-subtitle">Completa el campo para agregar una categoría</p>
+        <button type="button" class="modal-close" aria-label="Cerrar modal" id="btnCloseCategoryModal">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="formAddCategory" class="modal-body">
+        <div class="form-group">
+          <label for="categoryName">Nombre de la Categoría <span class="required">*</span></label>
+          <input type="text" id="categoryName" name="name" placeholder="Ej. Equipos Médicos" required maxlength="100">
+        </div>
+
+        <div id="formCategoryError" class="form-error" style="display: none;"></div>
+      </form>
+
+      <div class="modal-footer">
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnCancelCategory">Cancelar</button>
+          <button type="submit" form="formAddCategory" class="btn-save" id="btnSaveCategory">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z" />
+            </svg>
+            Guardar Categoría
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="../assets/js/admin/dashboard-common.js" defer></script>
   <script src="../assets/js/admin/dashboard-products.js" defer></script>
   <script src="../assets/js/admin/dashboard-categories.js" defer></script>
@@ -524,6 +561,7 @@ $_SESSION['csrf'] = $csrfToken;
   <script src="../assets/js/admin/dashboard.js" defer></script>
   <script src="../assets/js/modal-product.js" defer></script>
   <script src="../assets/js/modal-provider.js" defer></script>
+  <script src="../assets/js/modal-category.js" defer></script>
 </body>
 
 </html>

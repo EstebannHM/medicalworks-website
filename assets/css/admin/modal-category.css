@@ -1,0 +1,13 @@
+/* Modal de Categoría - Versión compacta */
+
+.modal-container-small {
+  max-width: 450px;
+}
+
+.modal-container-small .modal-body {
+  padding: 1.5rem;
+}
+
+.modal-container-small .form-group {
+  margin-bottom: 0;
+}

@@ -57,3 +57,24 @@ function setupCategorySearchListener() {
 
   searchInput.setAttribute("enterkeyhint", "search");
 }
+
+/**
+ * Configura acciones delegadas para categorías (editar)
+ */
+function setupCategoryActions() {
+  const tableMount = document.getElementById("tableMount");
+  if (!tableMount) return;
+
+  tableMount.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-edit-category");
+    if (!btn) return;
+
+    const row = btn.closest("tr");
+    const categoryId = Number(row.getAttribute("data-category-id"));
+    
+    const category = A_CATEGORIES.find((c) => Number(c.id_category) === categoryId);
+    if (category && typeof openEditCategoryModal === "function") {
+      openEditCategoryModal(category);
+    }
+  });
+}

@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     // Configurar listeners de categorías
     setupCategorySearchListener();
+    setupCategoryActions();
     
     // Configurar listeners de proveedores
     setupProviderSearchListener();
