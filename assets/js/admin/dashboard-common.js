@@ -35,7 +35,6 @@ function tableHTML(rows, tipo) {
   let thead = '';
   if (tipo === 'productos') {
     thead = `<tr>
-      <th style="width:32px"><input type="checkbox" aria-label="Seleccionar todos"></th>
       <th>Producto</th>
       <th style="width:110px">SKU</th>
       <th style="width:140px">Categoría</th>
@@ -66,7 +65,6 @@ function renderRow(p, tipo) {
     const status = Number(p.status) === 1 ? "Activo" : "Inactivo";
     return `
       <tr data-product-id="${p.id_product}">
-        <td><input type="checkbox" aria-label="Seleccionar"></td>
         <td>
           <div class="prod-cell">
             <div class="prod-icon" aria-hidden="true">
