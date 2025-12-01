@@ -19,7 +19,7 @@ if (empty($_SESSION['admin_auth'])) {
 }
 
 try {
-    $sql = "SELECT id_provider, name, description, website_url, image_path, status FROM providers ORDER BY name ASC";
+    $sql = "SELECT id_provider, name, website_url, image_path, status FROM providers ORDER BY name ASC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $providers = $stmt->fetchAll(PDO::FETCH_ASSOC);
