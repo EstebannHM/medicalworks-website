@@ -150,12 +150,16 @@ function openModal(mode = "create", productData = null) {
   }
 
   // Carga categorías y proveedores
-  loadCategoriesForModal();
-  loadProvidersForModal();
+  const loadPromises = [
+    loadCategoriesForModal(),
+    loadProvidersForModal()
+  ];
 
-  // Si es modo editar, prellenar los campos
+  // Si es modo editar, prellenar los campos DESPUÉS de cargar categorías y proveedores
   if (mode === "edit" && productData) {
-    setTimeout(() => fillFormWithProductData(productData), 100);
+    Promise.all(loadPromises).then(() => {
+      fillFormWithProductData(productData);
+    });
   }
 }
 

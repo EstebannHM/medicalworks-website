@@ -194,9 +194,6 @@ if (formCategory) {
         renderPage('categorias', 1, false);
       }
 
-      // Mostrar notificación (opcional)
-      alert(data.message || 'Categoría guardada exitosamente');
-
     } catch (error) {
       console.error('Error:', error);
       showError(error.message || 'Error al guardar la categoría');
