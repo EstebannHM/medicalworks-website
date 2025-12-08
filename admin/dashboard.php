@@ -164,19 +164,10 @@ $_SESSION['csrf'] = $csrfToken;
           <p id="kpi-proveedores-label" class="kpi-label">PROVEEDORES</p>
           <p class="kpi-value" id="kpiProvidersValue" aria-live="polite"></p>
         </div>
-        <div class="kpi-card" aria-labelledby="kpi-cotizaciones-label">
-          <div class="kpi-icon gradient-purple" aria-hidden="true">
-            <svg width="20" height="20" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
-              <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
-            </svg>
-          </div>
-          <p id="kpi-cotizaciones-label" class="kpi-label">COTIZACIONES</p>
-          <p class="kpi-value"></p>
-        </div>
       </div>
       <!-- Sección Principal con Toolbars Dinámicas -->
       <section id="adminContent" class="admin-content">
-        
+
         <!-- Toolbar para PRODUCTOS -->
         <div class="products-toolbar" id="toolbarProductos" aria-label="Búsqueda y filtros de productos">
           <div class="toolbar-left">
@@ -471,8 +462,8 @@ $_SESSION['csrf'] = $csrfToken;
             <input type="file" id="providerImage" name="image" accept="image/jpeg,image/png,image/jpg,image/avif,image/webp" required>
             <div class="file-upload-content">
               <svg width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
-                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
               </svg>
               <span class="file-label">Subir imagen</span>
               <span class="file-hint">JPG, PNG, AVIF o WebP - Máximo 5MB</span>
