@@ -130,11 +130,9 @@ function openProviderModal(mode = 'create', providerData = null) {
 function fillFormWithProviderData(provider) {
   const nameInput = document.getElementById('providerName');
   const websiteInput = document.getElementById('providerWebsite');
-  const descriptionInput = document.getElementById('providerDescription');
   
   if (nameInput) nameInput.value = provider.name || '';
   if (websiteInput) websiteInput.value = provider.website_url || '';
-  if (descriptionInput) descriptionInput.value = provider.description || '';
   
   if (toggleStatusProvider) {
     toggleStatusProvider.checked = Number(provider.status) === 1;
@@ -244,18 +242,16 @@ if (formProvider) {
     e.preventDefault();
     
     const nameInput = document.getElementById('providerName');
-    const descriptionInput = document.getElementById('providerDescription');
     
-    if (!nameInput || !descriptionInput || !imageInputProvider) {
+    if (!nameInput || !imageInputProvider) {
       showProviderError('Error: no se encontraron los campos del formulario');
       return;
     }
     
     const name = nameInput.value.trim();
-    const description = descriptionInput.value.trim();
     const image = imageInputProvider.files[0];
     
-    if (!name || !description) {
+    if (!name) {
       showProviderError('Por favor complete todos los campos requeridos');
       return;
     }

@@ -445,11 +445,6 @@ $_SESSION['csrf'] = $csrfToken;
         </div>
 
         <div class="form-group">
-          <label for="providerDescription">Descripción <span class="required">*</span></label>
-          <textarea id="providerDescription" name="description" placeholder="Descripción del proveedor" required maxlength="1000"></textarea>
-        </div>
-
-        <div class="form-group">
           <label for="providerImage">Imagen/Logo del Proveedor <span class="required">*</span></label>
           <div class="file-upload-wrapper">
             <input type="file" id="providerImage" name="image" accept="image/jpeg,image/png,image/jpg,image/avif,image/webp" required>
@@ -543,9 +538,9 @@ $_SESSION['csrf'] = $csrfToken;
   <script src="../assets/js/admin/dashboard-categories.js" defer></script>
   <script src="../assets/js/admin/dashboard-providers.js" defer></script>
   <script src="../assets/js/admin/dashboard.js" defer></script>
-  <script src="../assets/js/modal-product.js" defer></script>
-  <script src="../assets/js/modal-provider.js" defer></script>
-  <script src="../assets/js/modal-category.js" defer></script>
+  <script src="../assets/js/admin/modal-product.js" defer></script>
+  <script src="../assets/js/admin/modal-provider.js" defer></script>
+  <script src="../assets/js/admin/modal-category.js" defer></script>
 </body>
 
 </html>

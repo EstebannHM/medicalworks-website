@@ -36,12 +36,7 @@ try {
         throw new Exception('El nombre del proveedor es requerido');
     }
     
-    if (empty($_POST['description'])) {
-        throw new Exception('La descripción es requerida');
-    }
-    
     $name = trim($_POST['name']);
-    $description = trim($_POST['description']);
     $website_url = !empty($_POST['website_url']) ? trim($_POST['website_url']) : null;
     $status = isset($_POST['status']) ? 1 : 0;
     
@@ -80,7 +75,7 @@ try {
         $sanitizedName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $name);
         $newImageName = 'provider_' . $sanitizedName . '_' . time() . '.' . $fileExtension;
         
-        $uploadDir = __DIR__ . '/../assets/img/proveedores/';
+        $uploadDir = __DIR__ . '/../assets/img/providers/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
@@ -91,7 +86,7 @@ try {
             throw new Exception('Error al subir la imagen');
         }
         
-        $imagePath = 'proveedores/' . $newImageName;
+        $imagePath = 'providers/' . $newImageName;
         
         if (!empty($existingProvider['image_path'])) {
             $oldImagePath = __DIR__ . '/../assets/img/' . $existingProvider['image_path'];
@@ -103,13 +98,12 @@ try {
     
     $stmt = $pdo->prepare("
         UPDATE providers 
-        SET name = ?, description = ?, image_path = ?, website_url = ?, status = ?
+        SET name = ?, image_path = ?, website_url = ?, status = ?
         WHERE id_provider = ?
     ");
     
     $success = $stmt->execute([
         $name,
-        $description,
         $imagePath,
         $website_url,
         $status,

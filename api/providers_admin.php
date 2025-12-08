@@ -29,7 +29,6 @@ try {
         return [
             'id_provider' => (int)$provider['id_provider'],
             'name' => htmlspecialchars($provider['name'], ENT_QUOTES, 'UTF-8'),
-            'description' => isset($provider['description']) ? htmlspecialchars($provider['description'], ENT_QUOTES, 'UTF-8') : '',
             'website_url' => isset($provider['website_url']) ? htmlspecialchars($provider['website_url'], ENT_QUOTES, 'UTF-8') : '',
             'image_path' => isset($provider['image_path']) ? htmlspecialchars($provider['image_path'], ENT_QUOTES, 'UTF-8') : '',
             'status' => isset($provider['status']) ? (int)$provider['status'] : 1

@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 try {
     $name = isset($_POST['name']) ? trim($_POST['name']) : '';
-    $description = isset($_POST['description']) ? trim($_POST['description']) : '';
     $website_url = isset($_POST['website_url']) ? trim($_POST['website_url']) : null;
     $status = isset($_POST['status']) ? 1 : 0;
 
@@ -38,10 +37,6 @@ try {
 
     if (strlen($name) > 150) {
         throw new Exception('El nombre no puede exceder 150 caracteres');
-    }
-
-    if (empty($description)) {
-        throw new Exception('La descripción es requerida');
     }
 
     if (!empty($website_url) && strlen($website_url) > 500) {
@@ -83,7 +78,7 @@ try {
     $newImageName = 'provider_' . $sanitizedName . '_' . $timestamp . '.' . $extension;
 
     // Directorio de destino
-    $uploadDir = __DIR__ . '/../assets/img/proveedores/';
+    $uploadDir = __DIR__ . '/../assets/img/providers/';
 
     $uploadPath = $uploadDir . $newImageName;
 
@@ -91,14 +86,13 @@ try {
         throw new Exception('Error al guardar la imagen');
     }
 
-    $imagePath = 'proveedores/' . $newImageName;
+    $imagePath = 'providers/' . $newImageName;
 
-    $sql = "INSERT INTO providers (name, description, website_url, image_path, status) 
-            VALUES (:name, :description, :website_url, :image_path, :status)";
+    $sql = "INSERT INTO providers (name, website_url, image_path, status) 
+            VALUES (:name, :website_url, :image_path, :status)";
     
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':website_url', $website_url, PDO::PARAM_STR);
     $stmt->bindParam(':image_path', $imagePath, PDO::PARAM_STR);
     $stmt->bindParam(':status', $status, PDO::PARAM_INT);
@@ -118,7 +112,6 @@ try {
         'provider' => [
             'id_provider' => (int)$providerId,
             'name' => $name,
-            'description' => $description,
             'website_url' => $website_url,
             'image_path' => $imagePath,
             'status' => $status
