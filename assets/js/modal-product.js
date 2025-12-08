@@ -5,7 +5,6 @@ const btnOpen = document.getElementById("btnCreateProduct");
 const btnClose = document.querySelector(".modal-close");
 const btnCancel = document.getElementById("btnCancelProduct");
 const btnSave = document.getElementById("btnSaveProduct");
-const btnPreview = document.getElementById("btnPreview");
 const imageInput = document.getElementById("productImage");
 const imagePreview = document.getElementById("imagePreview");
 const imagePreviewContainer = document.getElementById("imagePreviewContainer");
@@ -396,53 +395,6 @@ if (removeDatasheetBtn) {
   });
 }
 
-// Botón de previsualizar
-if (btnPreview) {
-  btnPreview.addEventListener("click", () => {
-    const formData = new FormData(form);
-    const data = {
-      modo: modalMode === "edit" ? "Edición" : "Creación",
-      id: editingProductId || "Nuevo",
-      nombre: formData.get("name"),
-      sku: formData.get("sku"),
-      categoria:
-        document.getElementById("productCategory").selectedOptions[0]?.text ||
-        "",
-      proveedor:
-        document.getElementById("productProvider").selectedOptions[0]?.text ||
-        "",
-      descripcion: formData.get("description"),
-      status: formData.get("status") ? "Activo" : "Inactivo",
-      imagen: imageInput.files[0]
-        ? imageInput.files[0].name
-        : existingImagePath
-        ? "Imagen actual"
-        : "Sin imagen",
-      fichaTecnica:
-        datasheetInput && datasheetInput.files[0]
-          ? datasheetInput.files[0].name
-          : existingDatasheetPath
-          ? "Ficha actual"
-          : "Sin ficha técnica",
-    };
-
-    const preview = `
-      Modo: ${data.modo}
-      ID: ${data.id}
-      Producto: ${data.nombre}
-      SKU: ${data.sku}
-      Categoría: ${data.categoria}
-      Proveedor: ${data.proveedor}
-      Descripción: ${data.descripcion}
-      Estado: ${data.status}
-      Imagen: ${data.imagen}
-      Ficha Técnica: ${data.fichaTecnica}
-    `;
-
-    alert(preview.trim());
-  });
-}
-
 // Envío del formulario
 if (form) {
   form.addEventListener("submit", async (e) => {
@@ -477,7 +429,7 @@ if (form) {
     // Deshabilita botón
     btnSave.disabled = true;
     btnSave.innerHTML = `
-      <svg class="spinner" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="spinner" width="16" height="16" viewBox="0 0 16 16" fill="none">
         <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="30" stroke-dashoffset="0">
           <animateTransform attributeName="transform" type="rotate" from="0 8 8" to="360 8 8" dur="1s" repeatCount="indefinite"/>
         </circle>
