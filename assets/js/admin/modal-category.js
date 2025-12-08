@@ -181,8 +181,20 @@ if (formCategory) {
         throw new Error(data.message || 'Error al guardar la categoría');
       }
 
-      // Éxito
+      const successMessage =
+        modalCategoryMode === 'edit'
+          ? 'Categoría actualizada exitosamente'
+          : 'Categoría agregada exitosamente';
+
+      // Cerrar modal primero
       closeCategoryModal();
+
+      // Mostrar toast después de cerrar
+      setTimeout(() => {
+        if (typeof showToast === 'function') {
+          showToast(successMessage, 'success');
+        }
+      }, 100);
 
       // Recargar categorías
       if (typeof loadCategoriesAdmin === 'function') {

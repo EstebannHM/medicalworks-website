@@ -298,13 +298,20 @@ if (formProvider) {
         const successMessage = modalProviderMode === 'edit' 
           ? 'Proveedor actualizado exitosamente' 
           : 'Proveedor agregado exitosamente';
-        showProviderSuccess(successMessage);
         
-        setTimeout(async () => {
-          if (typeof loadProviders === 'function') await loadProviders();
-          if (typeof renderPage === 'function') renderPage('proveedores', typeof PAGE !== 'undefined' ? PAGE : 1, false);
-          closeProviderModal();
-        }, 1000);
+        // Cerrar modal primero
+        closeProviderModal();
+        
+        // Mostrar toast después de cerrar
+        setTimeout(() => {
+          if (typeof showToast === 'function') {
+            showToast(successMessage, 'success');
+          }
+        }, 100);
+        
+        // Recargar proveedores
+        if (typeof loadProviders === 'function') await loadProviders();
+        if (typeof renderPage === 'function') renderPage('proveedores', typeof PAGE !== 'undefined' ? PAGE : 1, false);
       } else {
         showProviderError(result.message || 'Error al guardar el proveedor');
         if (btnSaveProvider) {
@@ -350,15 +357,5 @@ function showProviderError(message) {
 function hideProviderError() {
   if (formErrorProvider) {
     formErrorProvider.style.display = 'none';
-  }
-}
-
-function showProviderSuccess(message) {
-  if (formErrorProvider) {
-    formErrorProvider.style.display = 'block';
-    formErrorProvider.style.background = '#d1fae5';
-    formErrorProvider.style.borderColor = '#6ee7b7';
-    formErrorProvider.style.color = '#065f46';
-    formErrorProvider.textContent = message;
   }
 }

@@ -470,18 +470,23 @@ if (form) {
             ? "Producto actualizado exitosamente"
             : "Producto agregado exitosamente";
 
-        showSuccess(successMessage);
+        // Cerrar modal primero
+        closeModal();
 
-        // Recarga productos
-        setTimeout(async () => {
-          if (typeof loadProducts === 'function') {
-            await loadProducts();
+        // Mostrar toast después de cerrar
+        setTimeout(() => {
+          if (typeof showToast === 'function') {
+            showToast(successMessage, 'success');
           }
-          if (typeof renderPage === 'function') {
-            renderPage('productos', 1, false);
-          }
-          closeModal();
-        }, 1000);
+        }, 100);
+
+        // Recargar productos
+        if (typeof loadProducts === 'function') {
+          await loadProducts();
+        }
+        if (typeof renderPage === 'function') {
+          renderPage('productos', 1, false);
+        }
       } else {
         showError(result.message || "Error al guardar el producto");
         btnSave.disabled = false;
@@ -535,15 +540,5 @@ function showError(message) {
 function hideError() {
   if (formError) {
     formError.style.display = "none";
-  }
-}
-
-function showSuccess(message) {
-  if (formError) {
-    formError.style.display = "block";
-    formError.style.background = "#d1fae5";
-    formError.style.borderColor = "#6ee7b7";
-    formError.style.color = "#065f46";
-    formError.textContent = message;
   }
 }
