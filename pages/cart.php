@@ -9,6 +9,7 @@
     <title>Medical Works - Carrito</title>
 
     <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/shared/toast.css">
     <link rel="stylesheet" href="../assets/css/components/header.css">
     <link rel="stylesheet" href="../assets/css/components/footer.css">
     <link rel="stylesheet" href="../assets/css/components/whatsapp-fab.css">
@@ -60,6 +61,9 @@
                 </a>
             </div>
         </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
     </main>
 
     <?php
@@ -67,6 +71,10 @@
     include_once('../includes/whatsapp-button.php');
     ?>
 
+    <!-- Shared Toast System -->
+    <script src="../assets/js/shared/toast.js"></script>
+
+    <!-- Page Scripts -->
     <script src="../assets/js/cart-badge.js"></script>
     <script src="../assets/js/header.js"></script>
     <script src="../assets/js/cart.js"></script>

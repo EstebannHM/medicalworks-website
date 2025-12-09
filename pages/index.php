@@ -11,6 +11,7 @@
     <title>Medical Works - Inicio</title>
 
     <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/shared/toast.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
     <link rel="stylesheet" href="../assets/css/components/carousel.css">
     <link rel="stylesheet" href="../assets/css/components/product-card.css">
@@ -210,6 +211,8 @@
             </div>
         </section>
 
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
     </main>
 
     <?php
@@ -219,6 +222,9 @@
 
     <!-- Librerías externas -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Shared Toast System -->
+    <script src="../assets/js/shared/toast.js"></script>
 
     <!-- Scripts del proyecto -->
     <script src="../assets/js/cart-badge.js"></script>

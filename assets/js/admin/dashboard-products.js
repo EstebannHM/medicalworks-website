@@ -210,7 +210,7 @@ function setupDelegatedActions() {
         await loadProducts();
         applySearchAndStatusFilter();
       } catch (error) {
-        alert("Error al cambiar el estado del producto: " + error.message);
+        Toast.error("Error al cambiar el estado del producto: " + error.message);
         btn.disabled = false;
       }
     } else if (btn.classList.contains("btn-edit")) {

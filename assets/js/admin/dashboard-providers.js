@@ -125,7 +125,7 @@ function setupProviderActions() {
         await loadProviders();
         applyProviderSearchAndStatusFilter();
       } catch (error) {
-        alert("Error al cambiar el estado del proveedor: " + error.message);
+        Toast.error("Error al cambiar el estado del proveedor: " + error.message);
         btn.disabled = false;
       }
     } else if (btn.classList.contains("btn-edit-provider")) {
