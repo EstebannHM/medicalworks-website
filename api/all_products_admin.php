@@ -18,6 +18,9 @@ function sanitizeProduct($product) {
         'name' => htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'),
         'description' => htmlspecialchars($product['description'], ENT_QUOTES, 'UTF-8'),
         'image_path' => htmlspecialchars($product['image_path'], ENT_QUOTES, 'UTF-8'),
+        'pdf_path' => isset($product['pdf_path']) && $product['pdf_path'] 
+            ? htmlspecialchars($product['pdf_path'], ENT_QUOTES, 'UTF-8') 
+            : null,
         'id_category' => (int)$product['id_category'],
         'id_provider' => (int)$product['id_provider'],
         'sku' => isset($product['sku']) 
