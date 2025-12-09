@@ -53,6 +53,7 @@ $_SESSION['csrf'] = $csrfToken;
   <title>Panel administrativo</title>
   <meta name="csrf-token" content="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
   <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/shared/toast.css">
   <link rel="stylesheet" href="../assets/css/admin/dashboard.css">
   <link rel="stylesheet" href="../assets/css/admin/modal-product.css">
   <link rel="stylesheet" href="/assets/css/admin/modal-provider.css">
@@ -536,6 +537,10 @@ $_SESSION['csrf'] = $csrfToken;
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
+  <!-- Shared Toast System -->
+  <script src="../assets/js/shared/toast.js"></script>
+
+  <!-- Admin Dashboard Scripts -->
   <script src="../assets/js/admin/dashboard-common.js" defer></script>
   <script src="../assets/js/admin/dashboard-products.js" defer></script>
   <script src="../assets/js/admin/dashboard-categories.js" defer></script>

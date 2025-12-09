@@ -397,7 +397,7 @@ async function processQuote() {
         
     } catch (error) {
         console.error('Error completo:', error);
-        alert('Error al generar la cotización: ' + error.message);
+        Toast.error(error.message || 'Error al generar la cotización');
         btn.disabled = false;
         btn.innerHTML = originalHTML;
     }
@@ -420,4 +420,53 @@ document.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.type !== 'submit') {
         e.preventDefault();
     }
+});
+
+// Modal de Política de Tratamiento de Datos
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('policyModal');
+    const openBtn = document.getElementById('openPolicyModal');
+    const closeBtn = document.querySelector('.policy-modal-close');
+    const closeBtnFooter = document.getElementById('closePolicyModal');
+    const overlay = document.querySelector('.policy-modal-overlay');
+
+    function openModal(e) {
+        e.preventDefault();
+        if (modal) {
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal() {
+        if (modal) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (openBtn) {
+        openBtn.addEventListener('click', openModal);
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (closeBtnFooter) {
+        closeBtnFooter.addEventListener('click', closeModal);
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closeModal);
+    }
+
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
 });

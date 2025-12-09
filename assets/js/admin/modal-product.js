@@ -475,8 +475,8 @@ if (form) {
 
         // Mostrar toast después de cerrar
         setTimeout(() => {
-          if (typeof showToast === 'function') {
-            showToast(successMessage, 'success');
+          if (typeof Toast !== 'undefined') {
+            Toast.success(successMessage);
           }
         }, 100);
 
