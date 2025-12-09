@@ -57,15 +57,15 @@ try {
             throw new Exception('La imagen no debe superar los 5MB');
         }
         
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/avif', 'image/webp'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mimeType = finfo_file($finfo, $image['tmp_name']);
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->file($image['tmp_name']);
         
         if (!in_array($mimeType, $allowedTypes)) {
-            throw new Exception('Solo se permiten imágenes JPG, PNG, AVIF y WebP. Tipo detectado: ' . $mimeType);
+            throw new Exception('Solo se permiten imágenes JPG, JPEG, PNG y WebP. Tipo detectado: ' . $mimeType);
         }
         
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'avif', 'webp'];
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
         $fileExtension = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
         
         if (!in_array($fileExtension, $allowedExtensions)) {

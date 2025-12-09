@@ -53,16 +53,16 @@ try {
         throw new Exception('Error al subir la imagen');
     }
 
-    $allowedTypes = ['image/jpeg', 'image/png'];
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $mimeType = finfo_file($finfo, $image['tmp_name']);
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($image['tmp_name']);
 
     if (!in_array($mimeType, $allowedTypes)) {
-        throw new Exception('Solo se permiten imágenes JPG y PNG. Tipo detectado: ' . $mimeType);
+        throw new Exception('Solo se permiten imágenes JPG, JPEG, PNG y WebP. Tipo detectado: ' . $mimeType);
     }
 
     $extension = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
-    if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
+    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
         throw new Exception('Extensión de archivo no válida');
     }
 

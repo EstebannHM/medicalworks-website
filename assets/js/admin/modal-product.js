@@ -297,9 +297,9 @@ if (imageInput) {
 
     if (file) {
       // Validaciones en frontend
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
       if (!allowedTypes.includes(file.type)) {
-        showError("Solo se permiten imágenes JPG y PNG");
+        showError("Solo se permiten imágenes JPG, JPEG, PNG y WebP");
         imageInput.value = "";
         return;
       }

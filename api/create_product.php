@@ -73,18 +73,17 @@ try {
     }
     
     // Validacion tipo de archivo por extensión y MIME
-    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
     $extension = strtolower(pathinfo($imageFile['name'], PATHINFO_EXTENSION));
     
     if (!in_array($extension, $allowedExtensions)) {
-        throw new Exception('Solo se permiten imágenes JPG y PNG');
+        throw new Exception('Solo se permiten imágenes JPG, JPEG, PNG y WebP');
     }
     
     // Validación adicional del MIME (más flexible)
-    $allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/pjpeg'];
-    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-    $mimeType = finfo_file($finfo, $imageFile['tmp_name']);
-    finfo_close($finfo);
+    $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->file($imageFile['tmp_name']);
     
     // Si el MIME no es valido pero la extensión si, permitir (algunos servidores detectan mal el MIME)
     if (!in_array($mimeType, $allowedMimeTypes) && !in_array($extension, $allowedExtensions)) {
@@ -145,9 +144,8 @@ try {
         }
         
         // Validación del MIME type para PDF
-        $finfoDatasheet = finfo_open(FILEINFO_MIME_TYPE);
-        $pdfMimeType = finfo_file($finfoDatasheet, $datasheetFile['tmp_name']);
-        finfo_close($finfoDatasheet);
+        $finfoDatasheet = new finfo(FILEINFO_MIME_TYPE);
+        $pdfMimeType = $finfoDatasheet->file($datasheetFile['tmp_name']);
         
         if ($pdfMimeType !== 'application/pdf') {
             if (file_exists($uploadPath)) {

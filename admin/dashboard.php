@@ -290,7 +290,7 @@ $_SESSION['csrf'] = $csrfToken;
       </section>
     </section>
   </main>
-  <!-- Modal Agregar Producto -->
+  <!-- Modal: Crear/Editar Producto -->
   <div id="modalAddProduct" class="modal-overlay" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-container">
       <div class="modal-header">
@@ -341,14 +341,14 @@ $_SESSION['csrf'] = $csrfToken;
           <div class="form-group">
             <label for="productImage">Imagen del Producto <span class="required">*</span></label>
             <div class="file-upload-wrapper">
-              <input type="file" id="productImage" name="image" accept="image/jpeg,image/png,image/jpg" required>
+              <input type="file" id="productImage" name="image" accept="image/jpg,image/jpeg,image/png,image/webp" required>
               <div class="file-upload-content">
                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
                   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
                   <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
                 </svg>
                 <span class="file-label">Subir Imagen</span>
-                <span class="file-hint">JPG, PNG (Máx. 5MB)</span>
+                <span class="file-hint">JPG, JPEG, PNG o WebP (Máx. 5MB)</span>
               </div>
             </div>
           </div>
@@ -421,7 +421,7 @@ $_SESSION['csrf'] = $csrfToken;
     </div>
   </div>
 
-  <!-- Modal Agregar/Editar Proveedor -->
+  <!-- Modal: Crear/Editar Proveedor -->
   <div id="modalAddProvider" class="modal-overlay" role="dialog" aria-labelledby="modalProviderTitle" aria-hidden="true">
     <div class="modal-container">
       <div class="modal-header">
@@ -448,14 +448,14 @@ $_SESSION['csrf'] = $csrfToken;
         <div class="form-group">
           <label for="providerImage">Imagen/Logo del Proveedor <span class="required">*</span></label>
           <div class="file-upload-wrapper">
-            <input type="file" id="providerImage" name="image" accept="image/jpeg,image/png,image/jpg,image/avif,image/webp" required>
+            <input type="file" id="providerImage" name="image" accept="image/jpg,image/jpeg,image/png,image/webp" required>
             <div class="file-upload-content">
               <svg width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
                 <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
               </svg>
               <span class="file-label">Subir imagen</span>
-              <span class="file-hint">JPG, PNG, AVIF o WebP - Máximo 5MB</span>
+              <span class="file-hint">JPG, JPEG, PNG o WebP (Máx. 5MB)</span>
             </div>
           </div>
         </div>

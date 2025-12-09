@@ -192,9 +192,9 @@ if (imageInputProvider) {
     const file = e.target.files[0];
     
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/avif', 'image/webp'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
-        showProviderError('Solo se permiten imágenes JPG, PNG, AVIF y WebP');
+        showProviderError('Solo se permiten imágenes JPG, JPEG, PNG y WebP');
         imageInputProvider.value = '';
         return;
       }
