@@ -140,6 +140,9 @@ function validateField(fieldName) {
                 if (value.length < 3) {
                     errorMessage = 'El nombre debe tener al menos 3 caracteres';
                     isValid = false;
+                } else if (value.length > 100) {
+                    errorMessage = 'El nombre no puede exceder 100 caracteres';
+                    isValid = false;
                 }
                 break;
 
@@ -148,6 +151,9 @@ function validateField(fieldName) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
                     errorMessage = 'El correo debe tener formato válido (ej: usuario@dominio.com)';
+                    isValid = false;
+                } else if (value.length > 200) {
+                    errorMessage = 'El correo no puede exceder 200 caracteres';
                     isValid = false;
                 }
                 break;

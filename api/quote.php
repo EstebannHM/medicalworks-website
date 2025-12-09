@@ -28,12 +28,34 @@ try {
         'phone' => htmlspecialchars(strip_tags($input['phone'] ?? ''), ENT_QUOTES, 'UTF-8')
     ];
 
+    // Validar que los campos no estén vacíos
+    if (empty($userData['fullName']) || empty($userData['email']) || empty($userData['phone'])) {
+        throw new Exception('Todos los campos son requeridos');
+    }
+
+    // Validar longitud del nombre (máximo 100 caracteres)
+    if (strlen($userData['fullName']) > 100) {
+        throw new Exception('El nombre no puede exceder 100 caracteres');
+    }
+
+    // Validar longitud mínima del nombre
+    if (strlen($userData['fullName']) < 3) {
+        throw new Exception('El nombre debe tener al menos 3 caracteres');
+    }
+
+    // Validar email
     if (!filter_var($userData['email'], FILTER_VALIDATE_EMAIL)) {
         throw new Exception('Email inválido');
     }
 
-    if (empty($userData['fullName']) || empty($userData['phone'])) {
-        throw new Exception('Todos los campos son requeridos');
+    // Validar longitud del email (máximo 200 caracteres)
+    if (strlen($userData['email']) > 200) {
+        throw new Exception('El correo no puede exceder 200 caracteres');
+    }
+
+    // Validar formato de teléfono (8 dígitos, opcional +506)
+    if (!preg_match('/^(\+506)?[0-9]{8}$/', $userData['phone'])) {
+        throw new Exception('El teléfono debe tener 8 dígitos numéricos');
     }
 
     // Productos del carrito

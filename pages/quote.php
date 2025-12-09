@@ -57,6 +57,7 @@
                                     name="fullName" 
                                     class="form-control"
                                     placeholder="Ingresa tu nombre completo"
+                                    maxlength="100"
                                     required
                                 >
                                 <span class="error-message" id="fullName-error"></span>
@@ -70,6 +71,7 @@
                                     name="email" 
                                     class="form-control"
                                     placeholder="correo@ejemplo.com"
+                                    maxlength="200"
                                     required
                                 >
                                 <span class="error-message" id="email-error"></span>
