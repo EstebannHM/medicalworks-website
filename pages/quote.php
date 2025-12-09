@@ -9,6 +9,7 @@
     <title>Medical Works - Cotización</title>
 
     <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/shared/toast.css">
     <link rel="stylesheet" href="../assets/css/components/header.css">
     <link rel="stylesheet" href="../assets/css/components/footer.css">
     <link rel="stylesheet" href="../assets/css/components/whatsapp-fab.css">
@@ -56,6 +57,7 @@
                                     name="fullName" 
                                     class="form-control"
                                     placeholder="Ingresa tu nombre completo"
+                                    maxlength="100"
                                     required
                                 >
                                 <span class="error-message" id="fullName-error"></span>
@@ -69,6 +71,7 @@
                                     name="email" 
                                     class="form-control"
                                     placeholder="correo@ejemplo.com"
+                                    maxlength="200"
                                     required
                                 >
                                 <span class="error-message" id="email-error"></span>
@@ -139,7 +142,7 @@
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" id="acceptPolicy" required>
-                                <span>Acepto la <a href="#" target="_blank">política de tratamiento de datos</a></span>
+                                <span>Acepto la <a href="#" id="openPolicyModal">política de tratamiento de datos</a></span>
                             </label>
                             <span class="error-message" id="acceptPolicy-error"></span>
                         </div>
@@ -186,6 +189,39 @@
 
             </div>
         </div>
+
+        <!-- Modal Política de Tratamiento de Datos -->
+        <div id="policyModal" class="policy-modal" role="dialog" aria-labelledby="policyModalTitle" aria-hidden="true">
+            <div class="policy-modal-overlay"></div>
+            <div class="policy-modal-content">
+                <div class="policy-modal-header">
+                    <h2 id="policyModalTitle">Política de Tratamiento de Datos Personales</h2>
+                    <button type="button" class="policy-modal-close" aria-label="Cerrar modal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="policy-modal-body">
+                    <p>El usuario declara que ha sido informado y autoriza expresamente a <strong>Medical Works Ltda</strong> para recopilar, almacenar y dar tratamiento a los datos personales ingresados en este formulario (nombre completo, correo electrónico y número telefónico), con el único fin de brindar la cotización solicitada, dar seguimiento a la consulta y llevar control interno del servicio.</p>
+                    
+                    <p><strong>Medical Works Ltda</strong>, como responsable del tratamiento de la información, garantiza la confidencialidad y protección adecuada de los datos suministrados, en cumplimiento de la Ley de Protección de la Persona Frente al Tratamiento de sus Datos Personales, Ley No. 8968 de 2011.</p>
+                    
+                    <p>Los datos no serán cedidos, vendidos ni utilizados para fines distintos a los relacionados con la cotización del servicio, salvo obligación legal. Solo tendrán acceso a esta información los colaboradores estrictamente autorizados dentro del giro de la empresa.</p>
+                    
+                    <p>El usuario podrá solicitar la modificación, actualización o eliminación de sus datos, mediante solicitud al correo <a href="mailto:info@medicalworks.cr">info@medicalworks.cr</a>.</p>
+                    
+                    <p><strong>Al marcar la casilla de aceptación, manifiesto que he leído y acepto los términos anteriores sobre el tratamiento de mis datos personales.</strong></p>
+                </div>
+                <div class="policy-modal-footer">
+                    <button type="button" class="btn-primary" id="closePolicyModal">Entendido</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
     </main>
 
     <?php
@@ -193,6 +229,10 @@
     include_once('../includes/whatsapp-button.php');
     ?>
 
+    <!-- Shared Toast System -->
+    <script src="../assets/js/shared/toast.js"></script>
+
+    <!-- Page Scripts -->
     <script src="../assets/js/header.js"></script>
     <script src="../assets/js/quote.js"></script>
 

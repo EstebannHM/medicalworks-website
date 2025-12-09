@@ -41,7 +41,7 @@
                     </div>
                     <h3>Teléfono</h3>
                     <p class="subtitle">Llámanos de lunes a sábado</p>
-                    <a href="tel:+50684186031">+506 8418 6031</a>
+                    <a href="tel:+50622308023">+506 2230 8023</a>
                 </div>
 
                 <!-- Email Card -->
@@ -54,7 +54,7 @@
                     </div>
                     <h3>Correo Electrónico</h3>
                     <p class="subtitle">Respuesta en 24 horas</p>
-                    <a href="mailto:info@medicalworks.com">info@medicalworks.com</a>
+                    <a href="mailto:info@medworkcr.com">info@medworkcr.com</a>
                 </div>
 
                 <!-- Location Card -->
@@ -67,7 +67,7 @@
                     </div>
                     <h3>Dirección</h3>
                     <p class="subtitle">Ubicación central</p>
-                    <p>San José, Costa Rica</p>
+                    <p>San José, Aserrí.</p>
                 </div>
             </div>
 
@@ -77,11 +77,11 @@
                 <div class="map-container">
                     <div class="map-header">
                         <h3>Nuestra ubicación</h3>
-                        <p>San José, Costa Rica</p>
+                        <p>San José, Aserrí</p>
                     </div>
                     <div id="map"></div>
                 </div>
-
+                
                 <!-- Hours Card -->
                 <div class="hours-card">
                     <div class="hours-header">
@@ -96,11 +96,11 @@
                     <ul class="hours-list">
                         <li class="hours-item">
                             <span class="day">Lunes - Viernes</span>
-                            <span class="time">8:00 AM - 6:00 PM</span>
+                            <span class="time">8:00 AM - 5:00 PM</span>
                         </li>
                         <li class="hours-item">
                             <span class="day">Sábado</span>
-                            <span class="time">9:00 AM - 1:00 PM</span>
+                            <span class="time">Cerrado</span>
                         </li>
                         <li class="hours-item">
                             <span class="day">Domingo</span>
@@ -118,13 +118,13 @@
                 <h2>¿Tienes alguna consulta?</h2>
                 <p>Nuestro equipo está listo para ayudarte. Comunícate con nosotros por teléfono, correo o WhatsApp y te responderemos a la brevedad.</p>
                 <div class="cta-buttons">
-                    <a href="tel:+50684186031" class="btn btn-primary">
+                    <a href="tel:+50622308023" class="btn btn-primary">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>
                         Llamar ahora
                     </a>
-                    <a href="https://wa.me/50686496475?text=Hola,%20me%20gustaría%20obtener%20más%20información%20sobre%20sus%20productos"
+                    <a href="https://wa.me/50689471791?text=Hola,%20me%20gustaría%20obtener%20más%20información%20sobre%20sus%20productos"
                         class="btn btn-whatsapp"
                         target="_blank"
                         rel="noopener noreferrer">

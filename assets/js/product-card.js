@@ -80,11 +80,11 @@ async function addToCart(productId, quantity, button) {
             }, 2000);
             
         } else {
-            alert('Error: ' + data.error);
+            Toast.error('Error: ' + data.error);
         }
         
     } catch (error) {
         console.error('Error al agregar al carrito:', error);
-        alert('Error al agregar el producto al carrito');
+        Toast.error('Error al agregar el producto al carrito');
     }
 }

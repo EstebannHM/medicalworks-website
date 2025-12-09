@@ -88,17 +88,6 @@
     display: block;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 .step-card {
     background: white;
     border-radius: 12px;
@@ -124,7 +113,7 @@
 }
 
 .form-group label {
-    display: block;
+    display: flex;
     font-size: 14px;
     font-weight: 600;
     color: #1E293B;
@@ -355,12 +344,8 @@
 }
 
 .checkbox-label {
-    display: flex;
     align-items: flex-start;
     gap: 12px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #475569;
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -412,7 +397,153 @@
     margin: 0 auto;
 }
 
-/* Efecto de carga */
+
+/* Modal de Política de Tratamiento de Datos */
+.policy-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.policy-modal.active {
+    display: flex;
+}
+
+.policy-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+.policy-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+.policy-modal-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.policy-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1F2937;
+    line-height: 1.3;
+}
+
+.policy-modal-close {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    background: #F3F4F6;
+    color: #6B7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.policy-modal-close:hover {
+    background: #E5E7EB;
+    color: #374151;
+}
+
+.policy-modal-body {
+    padding: 28px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.policy-modal-body p {
+    margin: 0 0 16px 0;
+    line-height: 1.7;
+    color: #374151;
+    font-size: 15px;
+    text-align: justify;
+}
+
+.policy-modal-body p:last-child {
+    margin-bottom: 0;
+}
+
+.policy-modal-body strong {
+    color: #1F2937;
+    font-weight: 600;
+}
+
+.policy-modal-body a {
+    color: #0EA5E9;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.policy-modal-body a:hover {
+    text-decoration: underline;
+}
+
+.policy-modal-footer {
+    padding: 20px 28px;
+    border-top: 1px solid #E5E7EB;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.policy-modal-footer .btn-primary {
+    min-width: 140px;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -469,6 +600,34 @@
 
     .confirmation-card h2 {
         font-size: 24px;
+    }
+
+    .policy-modal {
+        padding: 10px;
+    }
+
+    .policy-modal-content {
+        max-height: 90vh;
+    }
+
+    .policy-modal-header {
+        padding: 20px;
+    }
+
+    .policy-modal-header h2 {
+        font-size: 18px;
+    }
+
+    .policy-modal-body {
+        padding: 20px;
+    }
+
+    .policy-modal-body p {
+        font-size: 14px;
+    }
+
+    .policy-modal-footer {
+        padding: 16px 20px;
     }
 }
 

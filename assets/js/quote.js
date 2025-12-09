@@ -140,6 +140,9 @@ function validateField(fieldName) {
                 if (value.length < 3) {
                     errorMessage = 'El nombre debe tener al menos 3 caracteres';
                     isValid = false;
+                } else if (value.length > 100) {
+                    errorMessage = 'El nombre no puede exceder 100 caracteres';
+                    isValid = false;
                 }
                 break;
 
@@ -148,6 +151,9 @@ function validateField(fieldName) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
                     errorMessage = 'El correo debe tener formato válido (ej: usuario@dominio.com)';
+                    isValid = false;
+                } else if (value.length > 200) {
+                    errorMessage = 'El correo no puede exceder 200 caracteres';
                     isValid = false;
                 }
                 break;
@@ -397,7 +403,7 @@ async function processQuote() {
         
     } catch (error) {
         console.error('Error completo:', error);
-        alert('Error al generar la cotización: ' + error.message);
+        Toast.error(error.message || 'Error al generar la cotización');
         btn.disabled = false;
         btn.innerHTML = originalHTML;
     }
@@ -420,4 +426,53 @@ document.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.type !== 'submit') {
         e.preventDefault();
     }
+});
+
+// Modal de Política de Tratamiento de Datos
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('policyModal');
+    const openBtn = document.getElementById('openPolicyModal');
+    const closeBtn = document.querySelector('.policy-modal-close');
+    const closeBtnFooter = document.getElementById('closePolicyModal');
+    const overlay = document.querySelector('.policy-modal-overlay');
+
+    function openModal(e) {
+        e.preventDefault();
+        if (modal) {
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeModal() {
+        if (modal) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (openBtn) {
+        openBtn.addEventListener('click', openModal);
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (closeBtnFooter) {
+        closeBtnFooter.addEventListener('click', closeModal);
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closeModal);
+    }
+
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
 });

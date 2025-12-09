@@ -123,11 +123,11 @@ async function updateQuantity(productId, newQuantity) {
     if (data.success) {
       await loadCart();
     } else {
-      alert("Error al actualizar cantidad: " + data.error);
+      Toast.error("Error al actualizar cantidad: " + data.error);
     }
   } catch (error) {
     console.error("Error:", error);
-    alert("Error al actualizar el producto");
+    Toast.error("Error al actualizar el producto");
   }
 }
 
@@ -149,10 +149,10 @@ async function removeItem(productId) {
     if (data.success) {
       await loadCart();
     } else {
-      alert("Error al eliminar producto: " + data.error);
+      Toast.error("Error al eliminar producto: " + data.error);
     }
   } catch (error) {
     console.error("Error:", error);
-    alert("Error al eliminar el producto");
+    Toast.error("Error al eliminar el producto");
   }
 }

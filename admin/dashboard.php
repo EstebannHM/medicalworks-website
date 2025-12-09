@@ -53,8 +53,11 @@ $_SESSION['csrf'] = $csrfToken;
   <title>Panel administrativo</title>
   <meta name="csrf-token" content="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
   <link rel="stylesheet" href="../assets/css/global.css">
+  <link rel="stylesheet" href="../assets/css/shared/toast.css">
   <link rel="stylesheet" href="../assets/css/admin/dashboard.css">
   <link rel="stylesheet" href="../assets/css/admin/modal-product.css">
+  <link rel="stylesheet" href="/assets/css/admin/modal-provider.css">
+  <link rel="stylesheet" href="/assets/css/admin/modal-category.css">
   <link rel="icon" href="../assets/img/logo.jpeg" type="image/jpeg">
 </head>
 
@@ -110,6 +113,20 @@ $_SESSION['csrf'] = $csrfToken;
               </span>
             </a>
           </li>
+          <li>
+            <a href="#categorias" class="menu-item active" data-section="categorias">
+              <span class="icon" aria-hidden="true">
+                <svg width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
+                  <path d="M3 2v4.586l7 7L14.586 9l-7-7zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586z" />
+                  <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1z" />
+                </svg>
+              </span>
+              <span class="text-group">
+                <span class="label">Categorías</span>
+                <span class="sublabel">Gestionar categorías</span>
+              </span>
+            </a>
+          </li>
         </ul>
       </nav>
       <div class="sidebar-spacer" aria-hidden="true"></div>
@@ -148,19 +165,12 @@ $_SESSION['csrf'] = $csrfToken;
           <p id="kpi-proveedores-label" class="kpi-label">PROVEEDORES</p>
           <p class="kpi-value" id="kpiProvidersValue" aria-live="polite"></p>
         </div>
-        <div class="kpi-card" aria-labelledby="kpi-cotizaciones-label">
-          <div class="kpi-icon gradient-purple" aria-hidden="true">
-            <svg width="20" height="20" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
-              <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
-            </svg>
-          </div>
-          <p id="kpi-cotizaciones-label" class="kpi-label">COTIZACIONES</p>
-          <p class="kpi-value"></p>
-        </div>
       </div>
-      <!-- Barra de búsqueda y filtros + Tabla de productos -->
-      <section id="adminProducts" class="admin-products">
-        <div class="products-toolbar" aria-label="Búsqueda y filtros">
+      <!-- Sección Principal con Toolbars Dinámicas -->
+      <section id="adminContent" class="admin-content">
+
+        <!-- Toolbar para PRODUCTOS -->
+        <div class="products-toolbar" id="toolbarProductos" aria-label="Búsqueda y filtros de productos">
           <div class="toolbar-left">
             <div class="search-box">
               <label for="productSearch" class="visually-hidden">Buscar productos</label>
@@ -217,6 +227,61 @@ $_SESSION['csrf'] = $csrfToken;
             </button>
           </div>
         </div>
+
+        <!-- Toolbar para CATEGORÍAS -->
+        <div class="products-toolbar" id="toolbarCategorias" style="display: none;" aria-label="Búsqueda y filtros de categorías">
+          <div class="toolbar-left">
+            <div class="search-box">
+              <label for="categorySearch" class="visually-hidden">Buscar categorías</label>
+              <input type="text" id="categorySearch" placeholder="Buscar categorías..." autocomplete="off" aria-label="Buscar categorías">
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <button type="button" class="btn-create-product" id="btnCreateCategory" title="Nueva Categoría" aria-label="Nueva Categoría">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+              </svg>
+              <span class="btn-label">Nueva Categoría</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Toolbar para PROVEEDORES -->
+        <div class="products-toolbar" id="toolbarProveedores" style="display: none;" aria-label="Búsqueda y filtros de proveedores">
+          <div class="toolbar-left">
+            <div class="search-box">
+              <label for="providerSearch" class="visually-hidden">Buscar proveedores</label>
+              <input type="text" id="providerSearch" placeholder="Buscar proveedores..." autocomplete="off" aria-label="Buscar proveedores">
+            </div>
+            <div class="filters-group" aria-label="Filtros">
+              <div class="filter-section">
+                <div class="dropdown-wrapper">
+                  <button class="dropdown-toggle" id="providerStatusDropdown">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+                    </svg>
+                    <span class="dropdown-text">Todos los estados</span>
+                  </button>
+                  <div class="dropdown-menu" id="providerStatusDropdownMenu">
+                    <button class="dropdown-item active" data-status="all">Todos los estados</button>
+                    <button class="dropdown-item" data-status="active">Activo</button>
+                    <button class="dropdown-item" data-status="inactive">Inactivo</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <button type="button" class="btn-create-product" id="btnCreateProvider" title="Nuevo Proveedor" aria-label="Nuevo Proveedor">
+              <svg width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+              </svg>
+              <span class="btn-label">Nuevo Proveedor</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla Universal (se reutiliza para todo) -->
         <div class="table-wrapper" id="tableMount"></div>
         <div class="table-footer">
           <div id="tablePageInfo" class="page-info" aria-live="polite"></div>
@@ -225,8 +290,7 @@ $_SESSION['csrf'] = $csrfToken;
       </section>
     </section>
   </main>
-
-  <!-- Modal Agregar Producto -->
+  <!-- Modal: Crear/Editar Producto -->
   <div id="modalAddProduct" class="modal-overlay" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-container">
       <div class="modal-header">
@@ -277,14 +341,14 @@ $_SESSION['csrf'] = $csrfToken;
           <div class="form-group">
             <label for="productImage">Imagen del Producto <span class="required">*</span></label>
             <div class="file-upload-wrapper">
-              <input type="file" id="productImage" name="image" accept="image/jpeg,image/png,image/jpg" required>
+              <input type="file" id="productImage" name="image" accept="image/jpg,image/jpeg,image/png,image/webp" required>
               <div class="file-upload-content">
                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
                   <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
                   <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
                 </svg>
                 <span class="file-label">Subir Imagen</span>
-                <span class="file-hint">JPG, PNG (Máx. 5MB)</span>
+                <span class="file-hint">JPG, JPEG, PNG o WebP (Máx. 5MB)</span>
               </div>
             </div>
           </div>
@@ -295,24 +359,24 @@ $_SESSION['csrf'] = $csrfToken;
               <input type="file" id="productPdf" name="pdf" accept="application/pdf">
               <div class="file-upload-content">
                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                  <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029z"/>
+                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                  <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029z" />
                 </svg>
                 <span class="file-label">Subir PDF</span>
                 <span class="file-hint">Ficha técnica (Máx. 10MB)</span>
               </div>
             </div>
-            
+
             <!-- Preview del PDF -->
             <div class="datasheet-preview-container" id="pdfPreviewContainer">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029z"/>
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029z" />
               </svg>
               <span class="datasheet-file-name" id="pdfFileName"></span>
               <button type="button" class="remove-datasheet" id="removePdf" title="Eliminar ficha técnica">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                 </svg>
               </button>
             </div>
@@ -344,13 +408,6 @@ $_SESSION['csrf'] = $csrfToken;
       </form>
 
       <div class="modal-footer">
-        <button type="button" class="btn-preview" id="btnPreview">
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
-            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
-          </svg>
-          Previsualizar
-        </button>
         <div class="modal-actions">
           <button type="button" class="btn-cancel" id="btnCancelProduct">Cancelar</button>
           <button type="submit" form="formAddProduct" class="btn-save" id="btnSaveProduct">
@@ -364,8 +421,134 @@ $_SESSION['csrf'] = $csrfToken;
     </div>
   </div>
 
-  <script src="../assets/js/dashboard.js" defer></script>
-  <script src="../assets/js/modal-product.js" defer></script>
+  <!-- Modal: Crear/Editar Proveedor -->
+  <div id="modalAddProvider" class="modal-overlay" role="dialog" aria-labelledby="modalProviderTitle" aria-hidden="true">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 id="modalProviderTitle">Crear Nuevo Proveedor</h2>
+        <p id="modalProviderSubtitle" class="modal-subtitle">Completa los campos para agregar un proveedor</p>
+        <button type="button" class="modal-close" aria-label="Cerrar modal" id="btnCloseProviderModal">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="formAddProvider" class="modal-body" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="providerName">Nombre del Proveedor <span class="required">*</span></label>
+          <input type="text" id="providerName" name="name" placeholder="Ej. Medline Industries" required maxlength="150">
+        </div>
+
+        <div class="form-group">
+          <label for="providerWebsite">Sitio Web</label>
+          <input type="url" id="providerWebsite" name="website_url" placeholder="https://ejemplo.com" maxlength="500">
+        </div>
+
+        <div class="form-group">
+          <label for="providerImage">Imagen/Logo del Proveedor <span class="required">*</span></label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="providerImage" name="image" accept="image/jpg,image/jpeg,image/png,image/webp" required>
+            <div class="file-upload-content">
+              <svg width="48" height="48" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+              </svg>
+              <span class="file-label">Subir imagen</span>
+              <span class="file-hint">JPG, JPEG, PNG o WebP (Máx. 5MB)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group-status">
+          <label>Estado <span class="required">*</span></label>
+          <div class="status-toggle">
+            <input type="checkbox" id="providerStatus" name="status" class="status-checkbox" checked>
+            <label for="providerStatus" class="status-toggle-label"></label>
+            <span class="status-text">Activo</span>
+          </div>
+        </div>
+
+        <div id="providerImagePreviewContainer" class="image-preview-container" style="display: none;">
+          <label>Vista Previa</label>
+          <div class="image-preview">
+            <img id="providerImagePreview" src="" alt="Vista previa">
+            <button type="button" class="remove-preview" id="btnRemoveProviderPreview" aria-label="Eliminar imagen">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="formProviderError" class="form-error" style="display: none;"></div>
+      </form>
+
+      <div class="modal-footer">
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnCancelProvider">Cancelar</button>
+          <button type="submit" form="formAddProvider" class="btn-save" id="btnSaveProvider">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z" />
+            </svg>
+            Guardar Proveedor
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Agregar/Editar Categoría -->
+  <div id="modalAddCategory" class="modal-overlay" role="dialog" aria-labelledby="modalCategoryTitle" aria-hidden="true">
+    <div class="modal-container modal-container-small">
+      <div class="modal-header">
+        <h2 id="modalCategoryTitle">Crear Nueva Categoría</h2>
+        <p id="modalCategorySubtitle" class="modal-subtitle">Completa el campo para agregar una categoría</p>
+        <button type="button" class="modal-close" aria-label="Cerrar modal" id="btnCloseCategoryModal">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="formAddCategory" class="modal-body">
+        <div class="form-group">
+          <label for="categoryName">Nombre de la Categoría <span class="required">*</span></label>
+          <input type="text" id="categoryName" name="name" placeholder="Ej. Equipos Médicos" required maxlength="100">
+        </div>
+
+        <div id="formCategoryError" class="form-error" style="display: none;"></div>
+      </form>
+
+      <div class="modal-footer">
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnCancelCategory">Cancelar</button>
+          <button type="submit" form="formAddCategory" class="btn-save" id="btnSaveCategory">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1z" />
+            </svg>
+            Guardar Categoría
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Shared Toast System -->
+  <script src="../assets/js/shared/toast.js"></script>
+
+  <!-- Admin Dashboard Scripts -->
+  <script src="../assets/js/admin/dashboard-common.js" defer></script>
+  <script src="../assets/js/admin/dashboard-products.js" defer></script>
+  <script src="../assets/js/admin/dashboard-categories.js" defer></script>
+  <script src="../assets/js/admin/dashboard-providers.js" defer></script>
+  <script src="../assets/js/admin/dashboard.js" defer></script>
+  <script src="../assets/js/admin/modal-product.js" defer></script>
+  <script src="../assets/js/admin/modal-provider.js" defer></script>
+  <script src="../assets/js/admin/modal-category.js" defer></script>
 </body>
 
 </html>

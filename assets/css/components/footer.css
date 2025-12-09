@@ -101,18 +101,6 @@
   font-size: 13px;
 }
 
-.footer-legal a {
-  margin-left: 12px;
-  color: #9fb0da;
-  text-decoration: none;
-}
-
-.footer-legal a:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-
-
 @media (max-width: 768px) {
   .site-footer-container {
     padding-bottom: 6px;
