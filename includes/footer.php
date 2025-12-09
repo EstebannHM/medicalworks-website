@@ -44,9 +44,5 @@
 
   <div class="site-footer-bottom">
     <p>© <?php echo date('Y'); ?> Medical Works. Todos los derechos reservados.</p>
-    <nav class="footer-legal">
-      <a href="#">Política de privacidad</a>
-      <a href="#">Términos de uso</a>
-    </nav>
   </div>
 </footer>
