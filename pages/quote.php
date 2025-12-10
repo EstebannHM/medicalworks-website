@@ -71,7 +71,7 @@
                                     name="email" 
                                     class="form-control"
                                     placeholder="correo@ejemplo.com"
-                                    maxlength="200"
+                                    maxlength="250"
                                     required
                                 >
                                 <span class="error-message" id="email-error"></span>

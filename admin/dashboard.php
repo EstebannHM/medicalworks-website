@@ -307,7 +307,7 @@ $_SESSION['csrf'] = $csrfToken;
         <div class="form-row">
           <div class="form-group">
             <label for="productTitle">Título del Producto <span class="required">*</span></label>
-            <input type="text" id="productTitle" name="name" placeholder="Ej. Estetoscopio Profesional" required maxlength="255">
+            <input type="text" id="productTitle" name="name" placeholder="Ej. Estetoscopio Profesional" required maxlength="120">
           </div>
 
           <div class="form-group">
@@ -442,7 +442,7 @@ $_SESSION['csrf'] = $csrfToken;
 
         <div class="form-group">
           <label for="providerWebsite">Sitio Web</label>
-          <input type="url" id="providerWebsite" name="website_url" placeholder="https://ejemplo.com" maxlength="500">
+          <input type="url" id="providerWebsite" name="website_url" placeholder="https://ejemplo.com" maxlength="255">
         </div>
 
         <div class="form-group">
@@ -514,7 +514,7 @@ $_SESSION['csrf'] = $csrfToken;
       <form id="formAddCategory" class="modal-body">
         <div class="form-group">
           <label for="categoryName">Nombre de la Categoría <span class="required">*</span></label>
-          <input type="text" id="categoryName" name="name" placeholder="Ej. Equipos Médicos" required maxlength="100">
+          <input type="text" id="categoryName" name="name" placeholder="Ej. Equipos Médicos" required maxlength="120">
         </div>
 
         <div id="formCategoryError" class="form-error" style="display: none;"></div>

@@ -48,9 +48,9 @@ try {
         throw new Exception('Email inválido');
     }
 
-    // Validar longitud del email (máximo 200 caracteres)
-    if (strlen($userData['email']) > 200) {
-        throw new Exception('El correo no puede exceder 200 caracteres');
+    // Validar longitud del email (máximo 250 caracteres)
+    if (strlen($userData['email']) > 250) {
+        throw new Exception('El correo no puede exceder 250 caracteres');
     }
 
     // Validar formato de teléfono (8 dígitos, opcional +506)

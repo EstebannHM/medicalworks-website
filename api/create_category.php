@@ -38,8 +38,8 @@ try {
         throw new Exception('El nombre de la categoría es requerido');
     }
 
-    if (strlen($name) > 100) {
-        throw new Exception('El nombre no puede exceder 100 caracteres');
+    if (strlen($name) > 120) {
+        throw new Exception('El nombre no puede exceder 120 caracteres');
     }
 
     // Verificar si ya existe

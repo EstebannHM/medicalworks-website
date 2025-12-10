@@ -44,8 +44,8 @@ try {
         throw new Exception('El nombre no puede exceder 150 caracteres');
     }
     
-    if ($website_url && strlen($website_url) > 500) {
-        throw new Exception('La URL del sitio web no puede exceder 500 caracteres');
+    if ($website_url && strlen($website_url) > 255) {
+        throw new Exception('La URL del sitio web no puede exceder 255 caracteres');
     }
     
     $imagePath = $existingProvider['image_path'];
