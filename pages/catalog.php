@@ -77,7 +77,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
-                    <input type="text" class="search-input" placeholder="Buscar por nombre, descripción o SKU...">
+                    <input type="text" id="productSearch" name="search" class="search-input" placeholder="Buscar por nombre, descripción o SKU...">
                 </div>
 
                 <div class="filter-section">
@@ -123,7 +123,6 @@
             </div>
         </div>
 
-        <!-- Toast Container -->
         <div class="toast-container" id="toastContainer"></div>
     </main>
 
@@ -132,10 +131,9 @@
     include_once('../includes/whatsapp-button.php');
     ?>
 
-    <!-- Shared Toast System -->
-    <script src="../assets/js/shared/toast.js"></script>
 
     <!-- Page Scripts -->
+    <script src="../assets/js/shared/toast.js"></script>
     <script src="../assets/js/cart-badge.js"></script>
     <script src="../assets/js/header.js"></script>
     <script src="../assets/js/product-card.js"></script>

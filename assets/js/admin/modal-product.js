@@ -209,6 +209,10 @@ function fillFormWithProductData(product) {
 }
 
 function closeModal() {
+  if (document.activeElement && modal.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
+
   modal.classList.remove("active");
   modal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";

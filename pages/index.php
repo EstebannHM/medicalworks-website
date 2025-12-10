@@ -211,7 +211,6 @@
             </div>
         </section>
 
-        <!-- Toast Container -->
         <div class="toast-container" id="toastContainer"></div>
     </main>
 
@@ -223,10 +222,8 @@
     <!-- Librerías externas -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <!-- Shared Toast System -->
-    <script src="../assets/js/shared/toast.js"></script>
-
     <!-- Scripts del proyecto -->
+    <script src="../assets/js/shared/toast.js"></script>
     <script src="../assets/js/cart-badge.js"></script>
     <script src="../assets/js/carousel.js"></script>
     <script src="../assets/js/product-card.js"></script>

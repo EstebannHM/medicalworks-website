@@ -71,10 +71,8 @@
     include_once('../includes/whatsapp-button.php');
     ?>
 
-    <!-- Shared Toast System -->
-    <script src="../assets/js/shared/toast.js"></script>
-
     <!-- Page Scripts -->
+    <script src="../assets/js/shared/toast.js"></script>
     <script src="../assets/js/cart-badge.js"></script>
     <script src="../assets/js/header.js"></script>
     <script src="../assets/js/cart.js"></script>

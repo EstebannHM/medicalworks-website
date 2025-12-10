@@ -58,6 +58,7 @@
                                     class="form-control"
                                     placeholder="Ingresa tu nombre completo"
                                     maxlength="100"
+                                    autocomplete="name"
                                     required
                                 >
                                 <span class="error-message" id="fullName-error"></span>
@@ -72,6 +73,7 @@
                                     class="form-control"
                                     placeholder="correo@ejemplo.com"
                                     maxlength="250"
+                                    autocomplete="email"
                                     required
                                 >
                                 <span class="error-message" id="email-error"></span>
@@ -85,6 +87,7 @@
                                     name="phone" 
                                     class="form-control"
                                     placeholder="+50612345678"
+                                    autocomplete="tel"
                                     required
                                 >
                                 <span class="error-message" id="phone-error"></span>
@@ -220,7 +223,6 @@
             </div>
         </div>
 
-        <!-- Toast Container -->
         <div class="toast-container" id="toastContainer"></div>
     </main>
 
@@ -229,10 +231,8 @@
     include_once('../includes/whatsapp-button.php');
     ?>
 
-    <!-- Shared Toast System -->
-    <script src="../assets/js/shared/toast.js"></script>
-
     <!-- Page Scripts -->
+    <script src="../assets/js/shared/toast.js"></script>
     <script src="../assets/js/header.js"></script>
     <script src="../assets/js/quote.js"></script>
 

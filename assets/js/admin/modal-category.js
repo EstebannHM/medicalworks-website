@@ -102,6 +102,10 @@ function openCategoryModal(mode = 'create', categoryData = null) {
  */
 function closeCategoryModal() {
   if (modalCategory) {
+    if (document.activeElement && modalCategory.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+    
     modalCategory.classList.remove('active');
     modalCategory.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';

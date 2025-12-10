@@ -151,6 +151,9 @@ function fillFormWithProviderData(provider) {
 
 function closeProviderModal() {
   if (!modalProvider) return;
+  if (document.activeElement && modalProvider.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
   
   modalProvider.classList.remove('active');
   modalProvider.setAttribute('aria-hidden', 'true');
